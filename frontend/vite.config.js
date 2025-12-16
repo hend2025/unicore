@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import path from 'path'
 
 // 统一配置应用路径，修改这里即可
-const APP_BASE_PATH = '/unicore'
+const APP_BASE_PATH = '/uniportal'
 
 export default defineConfig({
   base: './',

@@ -9,7 +9,7 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>unicore</name>
-    <description>统一门户管理系统</description>
+    <description>统一门户</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
