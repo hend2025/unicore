@@ -3,7 +3,7 @@ import { ElMessage } from 'element-plus'
 import router from '@/router'
 
 const service = axios.create({
-  baseURL: import.meta.env.DEV ? '' : '/unicore',
+  baseURL: import.meta.env.DEV ? '' : __API_BASE_URL__,
   timeout: 30000
 })
 

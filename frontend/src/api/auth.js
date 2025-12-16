@@ -35,8 +35,7 @@ export const AuthAPI = {
       data: formData,
       headers: {
         'Content-Type': 'multipart/form-data'
-      },
-      baseURL: import.meta.env.DEV ? '' : '/unicore'
+      }
     })
   }
 }

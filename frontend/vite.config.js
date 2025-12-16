@@ -2,9 +2,16 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
 
+// 统一配置应用路径，修改这里即可
+const APP_BASE_PATH = '/unicore'
+
 export default defineConfig({
   base: './',
   plugins: [vue()],
+  define: {
+    __BASE_PATH__: JSON.stringify(APP_BASE_PATH),
+    __API_BASE_URL__: JSON.stringify(APP_BASE_PATH.replace(/\/$/, ''))
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src')
@@ -14,15 +21,15 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:7080/unicore',
+        target: 'http://localhost:7080/'+APP_BASE_PATH,
         changeOrigin: true
       },
       '/login': {
-        target: 'http://localhost:7080/unicore',
+        target:  'http://localhost:7080/'+APP_BASE_PATH,
         changeOrigin: true
       },
       '/logout': {
-        target: 'http://localhost:7080/unicore',
+        target:  'http://localhost:7080/'+APP_BASE_PATH,
         changeOrigin: true
       }
     }

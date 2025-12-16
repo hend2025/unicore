@@ -117,7 +117,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory('/unicore/'),
+  history: createWebHistory(__BASE_PATH__),
   routes
 })
 
