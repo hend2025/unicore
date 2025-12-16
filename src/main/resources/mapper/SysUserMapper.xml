@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unicore.mapper.SysUserMapper">
+    
+    <select id="selectPermsByUserId" resultType="java.lang.String">
+        SELECT DISTINCT m.MENU_PERMS
+        FROM sys_menu m
+        LEFT JOIN sys_role_menu rm ON m.MENU_ID = rm.MENU_ID
+        LEFT JOIN sys_user_role ur ON rm.ROLE_ID = ur.ROLE_ID
+        WHERE ur.USER_ID = #{userId}
+        AND m.MENU_PERMS IS NOT NULL
+        AND m.MENU_PERMS != ''
+        AND m.VALI_FLAG = '1'
+        AND m.STAS_FLAG = '1'
+    </select>
+
+    <select id="selectUserList" resultType="com.unicore.entity.SysUser">
+        SELECT u.*, o.ORG_NAME as orgName
+        FROM sys_user u
+        LEFT JOIN sys_org o ON u.ORG_ID = o.ORG_ID
+        WHERE u.VALI_FLAG = '1'
+        <if test="user.userName != null and user.userName != ''">
+            AND u.USER_NAME LIKE CONCAT('%', #{user.userName}, '%')
+        </if>
+        <if test="user.realName != null and user.realName != ''">
+            AND u.REAL_NAME LIKE CONCAT('%', #{user.realName}, '%')
+        </if>
+        <if test="user.mobile != null and user.mobile != ''">
+            AND u.MOBILE LIKE CONCAT('%', #{user.mobile}, '%')
+        </if>
+        <if test="user.orgId != null">
+            AND u.ORG_ID = #{user.orgId}
+        </if>
+        <if test="user.stasFlag != null and user.stasFlag != ''">
+            AND u.STAS_FLAG = #{user.stasFlag}
+        </if>
+        ORDER BY u.CRTE_TIME DESC
+    </select>
+</mapper>

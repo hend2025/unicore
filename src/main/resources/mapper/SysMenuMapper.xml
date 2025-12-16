@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.unicore.mapper.SysMenuMapper">
+    
+    <resultMap id="MenuResultMap" type="com.unicore.entity.SysMenu">
+        <id property="menuId" column="MENU_ID"/>
+        <result property="menuName" column="MENU_NAME"/>
+        <result property="parentId" column="PARENT_ID"/>
+        <result property="sysId" column="SYS_ID"/>
+        <result property="orderNum" column="ORDER_NUM"/>
+        <result property="menuPath" column="MENU_PATH"/>
+        <result property="menuComp" column="MENU_COMP"/>
+        <result property="menuQuery" column="MENU_QUERY"/>
+        <result property="isFrame" column="IS_FRAME"/>
+        <result property="isCache" column="IS_CACHE"/>
+        <result property="menuType" column="MENU_TYPE"/>
+        <result property="menuIcon" column="MENU_ICON"/>
+        <result property="menuPerms" column="MENU_PERMS"/>
+        <result property="isShow" column="IS_SHOW"/>
+        <result property="stasFlag" column="STAS_FLAG"/>
+        <result property="valiFlag" column="VALI_FLAG"/>
+        <result property="crteTime" column="CRTE_TIME"/>
+        <result property="updtTime" column="UPDT_TIME"/>
+    </resultMap>
+
+    <select id="selectMenusByUserId" resultMap="MenuResultMap">
+        SELECT DISTINCT m.MENU_ID, m.MENU_NAME, m.PARENT_ID, m.SYS_ID, m.ORDER_NUM,
+                        m.MENU_PATH, m.MENU_COMP, m.MENU_QUERY, m.IS_FRAME, m.IS_CACHE,
+                        m.MENU_TYPE, m.MENU_ICON, m.MENU_PERMS, m.IS_SHOW,
+                        m.STAS_FLAG, m.VALI_FLAG, m.CRTE_TIME, m.UPDT_TIME
+        FROM sys_menu m
+        INNER JOIN sys_role_menu rm ON m.MENU_ID = rm.MENU_ID
+        INNER JOIN sys_user_role ur ON rm.ROLE_ID = ur.ROLE_ID
+        WHERE ur.USER_ID = #{userId}
+        AND m.VALI_FLAG = '1'
+        AND m.STAS_FLAG = '1'
+        AND m.MENU_TYPE IN ('1', '2')
+        AND m.IS_SHOW = '1'
+        ORDER BY m.PARENT_ID, m.ORDER_NUM
+    </select>
+
+    <select id="selectMenuIdsByRoleId" resultType="java.lang.Long">
+        SELECT MENU_ID FROM sys_role_menu WHERE ROLE_ID = #{roleId}
+    </select>
+</mapper>

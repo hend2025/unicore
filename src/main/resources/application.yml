@@ -1,0 +1,117 @@
+server:
+  port: 7080
+  servlet:
+    context-path: /unicore
+    session:
+      timeout: 1800
+      cookie:
+        path: /
+
+logging:
+  level:
+    root: info
+    com.unicore.mapper: debug
+    org.mybatis: debug
+#  path: /home/hospital/unicore
+
+spring:
+  application:
+    name: unicore
+    multipart:
+      allowFormat: doc,docx,xls,xlsx,ppt,pptx,pdf,jpg,gif,jpeg,png,txt,log,wmv,mp4,zip,rar,apk,bmp,avi
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/unicore?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    database: 0
+    timeout: 10000ms
+  cache:
+    type: redis
+  devtools:
+    restart:
+      enabled: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+  output:
+    ansi:
+      enabled: always #控制台彩色
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.unicore.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: valiFlag
+      logic-delete-value: "0"
+      logic-not-delete-value: "1"
+
+# MinIO配置
+minio:
+  endpoint: http://localhost:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+  bucketName: unicore
+
+security:
+  type: pms-sso
+  oauth2:
+    client:
+      permits: /sys/para/list,/hosd/org/download/template,/hosd/deptgrp/download/template,/hosd/user/download/template,/captcha,/login,/doc.html,/swagger-ui.html,/swagger-ui.html/**,/webjars/**,/*/api-docs,/v2/**,/**/swagger-resources,/**/swagger-resources/configuration/ui,/**/swagger-resources/configuration/security
+
+cacheLevel: "HPM:"
+cache:
+  #单机
+  alone:
+    deployType: 1
+    cacheName: defaultCache
+    clusterNodes: 127.0.0.1:6379
+    password: 123456
+  #集群(若是多IP，中间用逗号隔即可)
+  cluster:
+    deployType: 2
+    cacheName: defaultCache
+    clusterNodes: 127.0.0.1:6379
+    password: 123456
+    maxRedirects: 3
+
+session:
+  redis:
+    host: 127.0.0.1
+    password: 123456
+    port: 6379
+    database: 5
+    timeout: 6000
+    pool:
+      maxIdle: 50
+      maxTotal: 100
+      maxWaitMillis: -1
+      testOnBorrow: true
+      testOnReturn: true
+
+threadPool:
+  commPool:
+    desc: '公共线程池'
+    corePoolSize: 2
+    #设置最大线程数
+    maxPoolSize: 20
+    #设置队列容量
+    queueCapacity: 1
+    #设置线程活跃时间（秒）
+    keepAliveSeconds: 5
+    #设置默认线程名称
+    threadNamePrefix: aeye
+
