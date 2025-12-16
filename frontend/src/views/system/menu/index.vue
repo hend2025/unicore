@@ -5,8 +5,16 @@
       <div class="section-title"><i></i>信息查询</div>
       <div class="query-section">
         <el-form :model="queryParams" inline class="query-form" label-width="80px">
+          <el-form-item label="所属系统">
+            <el-select v-model="queryParams.sysId" placeholder="请选择系统" clearable>
+              <el-option v-for="item in systemList" :key="item.sysId" :label="item.sysName" :value="item.sysId" />
+            </el-select>
+          </el-form-item>
           <el-form-item label="菜单名称">
             <el-input v-model="queryParams.menuName" placeholder="请输入菜单名称" clearable />
+          </el-form-item>
+          <el-form-item label="路由名称">
+            <el-input v-model="queryParams.menuPath" placeholder="请输入路由名称" clearable />
           </el-form-item>
           <el-form-item label="状态">
             <el-select v-model="queryParams.stasFlag" placeholder="请选择状态" clearable>
@@ -16,7 +24,7 @@
           </el-form-item>
           <el-form-item>
             <el-button @click="handleReset">重置</el-button>
-            <el-button type="primary" @click="loadData">查询</el-button>
+            <el-button type="primary" @click="handleQuery">查询</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -27,12 +35,11 @@
       <div class="table-header">
         <div class="section-title"><i></i>菜单列表</div>
         <div>
-          <el-button @click="toggleExpand">{{ isExpand ? '折叠' : '展开' }}</el-button>
-          <el-button type="primary" @click="handleAdd(0)">新增菜单</el-button>
+          <el-button type="primary" @click="handleAdd()">新增菜单</el-button>
         </div>
       </div>
-      <el-table :data="filteredData" v-loading="loading" row-key="menuId" :key="tableKey" :default-expand-all="isExpand" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }">
-        <el-table-column prop="menuName" label="菜单名称" width="200" align="left" />
+      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }">
+        <el-table-column prop="menuName" label="菜单名称" min-width="150" />
         <el-table-column prop="menuIcon" label="图标" width="80">
           <template #default="{ row }">
             <el-icon v-if="row.menuIcon"><component :is="row.menuIcon" /></el-icon>
@@ -42,6 +49,11 @@
         <el-table-column prop="menuPerms" label="权限标识" min-width="120" />
         <el-table-column prop="menuPath" label="路由地址" min-width="120" />
         <el-table-column prop="menuComp" label="组件路径" min-width="150" />
+        <el-table-column label="所属系统" min-width="120">
+          <template #default="{ row }">
+            {{ getSystemName(row.sysId) }}
+          </template>
+        </el-table-column>
         <el-table-column prop="menuType" label="类型" width="80">
           <template #default="{ row }">
             <el-tag v-if="row.menuType === '1'">目录</el-tag>
@@ -62,10 +74,26 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+      <el-pagination
+        v-model:current-page="queryParams.pageNum"
+        v-model:page-size="queryParams.pageSize"
+        :page-sizes="[10, 20, 50, 100]"
+        :total="total"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="loadData"
+        @current-change="loadData"
+        style="margin-top: 10px; justify-content: flex-end;"
+      />
     </div>
 
     <!-- 对话框 -->
     <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" width="600px" @submit="handleSubmit">
+      <el-form-item label="所属系统" prop="sysId">
+        <el-select v-model="form.sysId" placeholder="请选择系统" style="width: 100%">
+          <el-option v-for="item in systemList" :key="item.sysId" :label="item.sysName" :value="item.sysId" />
+        </el-select>
+      </el-form-item>
       <el-form-item label="上级菜单" prop="parentId">
         <el-tree-select v-model="form.parentId" :data="menuOptions" :props="{ label: 'menuName', value: 'menuId', children: 'children' }" check-strictly placeholder="选择上级菜单" style="width: 100%" />
       </el-form-item>
@@ -108,62 +136,79 @@
 import { ref, reactive, onMounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import FormDialog from '@/components/FormDialog.vue'
-import { menuApi } from '@/api/system'
+import { menuApi, systemApi } from '@/api/system'
 
 const loading = ref(false)
 const submitLoading = ref(false)
 const tableData = ref([])
+const total = ref(0)
 const dialogVisible = ref(false)
 const dialogTitle = ref('')
-const isExpand = ref(true)
-const tableKey = ref(0)
+const systemList = ref([])
+const menuTreeData = ref([])
 
-const queryParams = reactive({ menuName: '', stasFlag: '' })
-const form = reactive({ menuId: null, parentId: 0, menuName: '', menuType: '1', menuIcon: '', menuPath: '', menuComp: '', menuPerms: '', orderNum: 0, stasFlag: '1', sysId: 1 })
-const rules = { menuName: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }] }
-
-const menuOptions = computed(() => [{ menuId: 0, menuName: '主类目', children: tableData.value }])
-
-// 递归过滤树形数据
-const filterTree = (data, menuName, stasFlag) => {
-  return data.filter(item => {
-    const nameMatch = !menuName || item.menuName.includes(menuName)
-    const statusMatch = !stasFlag || item.stasFlag === stasFlag
-    if (item.children && item.children.length) {
-      item.children = filterTree(item.children, menuName, stasFlag)
-      return nameMatch && statusMatch || item.children.length > 0
-    }
-    return nameMatch && statusMatch
-  }).map(item => ({ ...item, children: item.children ? [...item.children] : [] }))
+const queryParams = reactive({ menuName: '', menuPath: '', stasFlag: '', sysId: '', pageNum: 1, pageSize: 10 })
+const form = reactive({ menuId: null, parentId: 0, menuName: '', menuType: '1', menuIcon: '', menuPath: '', menuComp: '', menuPerms: '', orderNum: 0, stasFlag: '1', sysId: '' })
+const rules = { 
+  menuName: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }],
+  sysId: [{ required: true, message: '请选择所属系统', trigger: 'change' }]
 }
 
-const filteredData = computed(() => {
-  if (!queryParams.menuName && !queryParams.stasFlag) return tableData.value
-  return filterTree(JSON.parse(JSON.stringify(tableData.value)), queryParams.menuName, queryParams.stasFlag)
-})
+const menuOptions = computed(() => [{ menuId: 0, menuName: '主类目', children: menuTreeData.value }])
+
+// 获取系统名称
+const getSystemName = (sysId) => {
+  const system = systemList.value.find(item => item.sysId === sysId)
+  return system ? system.sysName : ''
+}
+
+// 加载系统列表
+const loadSystemList = async () => {
+  try {
+    const res = await systemApi.list()
+    systemList.value = res.data || []
+  } catch (e) {
+    console.error('加载系统列表失败', e)
+  }
+}
+
+// 加载菜单树（用于上级菜单选择）
+const loadMenuTree = async () => {
+  try {
+    const res = await menuApi.tree()
+    menuTreeData.value = res.data || []
+  } catch (e) {
+    console.error('加载菜单树失败', e)
+  }
+}
 
 const loadData = async () => {
   loading.value = true
   try {
-    const res = await menuApi.tree()
-    tableData.value = res.data
+    const res = await menuApi.page(queryParams)
+    tableData.value = res.data?.records || res.data?.list || []
+    total.value = res.data?.total || 0
   } finally {
     loading.value = false
   }
 }
 
+const handleQuery = () => {
+  queryParams.pageNum = 1
+  loadData()
+}
+
 const handleReset = () => {
   queryParams.menuName = ''
+  queryParams.menuPath = ''
   queryParams.stasFlag = ''
+  queryParams.sysId = ''
+  queryParams.pageNum = 1
+  loadData()
 }
 
-const toggleExpand = () => {
-  isExpand.value = !isExpand.value
-  tableKey.value++
-}
-
-const handleAdd = (parentId) => {
-  Object.assign(form, { menuId: null, parentId, menuName: '', menuType: '1', menuIcon: '', menuPath: '', menuComp: '', menuPerms: '', orderNum: 0, stasFlag: '1', sysId: 1 })
+const handleAdd = (parentId = 0) => {
+  Object.assign(form, { menuId: null, parentId, menuName: '', menuType: '1', menuIcon: '', menuPath: '', menuComp: '', menuPerms: '', orderNum: 0, stasFlag: '1', sysId: '' })
   dialogTitle.value = '新增菜单'
   dialogVisible.value = true
 }
@@ -185,6 +230,7 @@ const handleSubmit = async () => {
     ElMessage.success('操作成功')
     dialogVisible.value = false
     loadData()
+    loadMenuTree()
   } finally {
     submitLoading.value = false
   }
@@ -195,11 +241,17 @@ const handleDelete = (row) => {
     await menuApi.delete(row.menuId)
     ElMessage.success('删除成功')
     loadData()
+    loadMenuTree()
   })
 }
 
-onMounted(() => loadData())
+onMounted(() => {
+  loadSystemList()
+  loadMenuTree()
+  loadData()
+})
 </script>
+
 
 <style scoped>
 .page-container { display: flex; flex-direction: column; padding: 10px; background: #f5f5f5; height: 100%; box-sizing: border-box; overflow: hidden; }

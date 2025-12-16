@@ -54,6 +54,7 @@ export const roleApi = {
 
 // 菜单管理
 export const menuApi = {
+  page: (params) => request({ url: '/api/sys/menu/page', method: 'get', params }),
   tree: (sysId) => request({ url: '/api/sys/menu/tree', method: 'get', params: { sysId } }),
   list: () => request({ url: '/api/sys/menu/list', method: 'get' }),
   get: (id) => request({ url: `/api/sys/menu/${id}`, method: 'get' }),
