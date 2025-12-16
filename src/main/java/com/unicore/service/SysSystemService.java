@@ -8,4 +8,5 @@ import java.util.List;
 public interface SysSystemService extends IService<SysSystem> {
     Page<SysSystem> selectSystemPage(Page<SysSystem> page, SysSystem system);
     List<SysSystem> selectSystemTree();
+    List<SysSystem> selectSystemList();
 }

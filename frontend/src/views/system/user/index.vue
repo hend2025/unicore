@@ -138,7 +138,7 @@
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button type="warning" plain v-if="form.userId" @click="handleResetPwd">密码重置</el-button>
+        <el-button type="warning" plain v-if="form.userId && form.userName !== 'admin'" @click="handleResetPwd">密码重置</el-button>
         <el-button @click="dialogVisible = false">取消</el-button>
         <el-button type="primary" :loading="submitLoading" @click="handleSubmit">保存</el-button>
       </template>
@@ -179,10 +179,32 @@ const queryParams = reactive({
   stasFlag: ''
 })
 const form = reactive({ userId: null, userName: '', realName: '', password: '', mobile: '', email: '', roleIds: [], stasFlag: '1' })
+
+// 密码复杂度验证：至少8个字符，包含数字、字母、特殊符号中的至少3种
+const validatePassword = (rule, value, callback) => {
+  if (!value) {
+    callback(new Error('请输入密码'))
+    return
+  }
+  if (value.length < 8) {
+    callback(new Error('密码长度至少8个字符'))
+    return
+  }
+  let complexity = 0
+  if (/[0-9]/.test(value)) complexity++ // 数字
+  if (/[a-zA-Z]/.test(value)) complexity++ // 字母
+  if (/[^0-9a-zA-Z]/.test(value)) complexity++ // 特殊符号
+  if (complexity < 3) {
+    callback(new Error('密码必须包含数字、字母、特殊符号'))
+    return
+  }
+  callback()
+}
+
 const rules = {
   userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   realName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+  password: [{ required: true, validator: validatePassword, trigger: 'blur' }]
 }
 
 const showStart = computed(() => total.value ? (queryParams.pageNum - 1) * queryParams.pageSize + 1 : 0)

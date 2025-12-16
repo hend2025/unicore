@@ -69,25 +69,16 @@
     </el-dialog>
     
     <el-container class="main-container">
-      <el-aside v-if="isAsideVisible" :width="isCollapse ? '64px' : '200px'" class="aside">
-        <el-menu :default-active="activeMenu" :collapse="isCollapse" :unique-opened="true" @select="handleMenuSelect" background-color="#2c5a99" text-color="#ffffff" active-text-color="#fff">
-          <template v-for="menu in menus" :key="menu.menuId">
-            <el-sub-menu v-if="menu.children && menu.children.length" :index="String(menu.menuId)">
-              <template #title>
-                <el-icon><component :is="menu.menuIcon || 'Folder'" /></el-icon>
-                <span>{{ menu.menuName }}</span>
-              </template>
-              <el-menu-item v-for="child in menu.children" :key="child.menuId" :index="child.menuPath">
-                <el-icon><component :is="child.menuIcon || 'Document'" /></el-icon>
-                <span>{{ child.menuName }}</span>
-              </el-menu-item>
-            </el-sub-menu>
-            <el-menu-item v-else :index="menu.menuPath">
-              <el-icon><component :is="menu.menuIcon || 'Document'" /></el-icon>
-              <span>{{ menu.menuName }}</span>
-            </el-menu-item>
-          </template>
+      <el-aside v-if="isAsideVisible" :width="isCollapse ? '64px' : `${asideWidth}px`" class="aside">
+        <el-menu :key="menuKey" :default-active="activeMenu" :default-openeds="defaultOpeneds" :collapse="isCollapse" :unique-opened="true" @select="handleMenuSelect" background-color="#2c5a99" text-color="#ffffff" active-text-color="#fff">
+          <MenuItem v-for="menu in menus" :key="menu.menuId" :menu="menu" />
         </el-menu>
+        <!-- 拖拽调整宽度的手柄 -->
+        <div 
+          v-if="!isCollapse" 
+          class="resize-handle" 
+          @mousedown="startResize"
+        />
       </el-aside>
       <el-container class="content-container">
         <div class="app-main">
@@ -118,12 +109,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, defineAsyncComponent } from 'vue'
+import { ref, computed, onMounted, watch, defineAsyncComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user'
 import { systemApi } from '@/api/system'
 import { changePassword } from '@/api/auth'
+import MenuItem from '@/components/MenuItem.vue'
 
 const router = useRouter()
 
@@ -157,17 +149,79 @@ const isFullscreen = ref(false)
 const showMenuSearch = ref(false)
 const menuSearchKeyword = ref('')
 const searchResults = ref([])
+const menuKey = ref(0) // 用于强制刷新菜单组件
+
+// 侧边栏宽度调整
+const asideWidth = ref(200)
+const isResizing = ref(false)
+
+const startResize = (e) => {
+  isResizing.value = true
+  document.addEventListener('mousemove', handleResize)
+  document.addEventListener('mouseup', stopResize)
+  document.body.style.cursor = 'col-resize'
+  document.body.style.userSelect = 'none'
+}
+
+const handleResize = (e) => {
+  if (!isResizing.value) return
+  const newWidth = e.clientX
+  // 限制宽度范围：最小150px，最大400px
+  if (newWidth >= 150 && newWidth <= 400) {
+    asideWidth.value = newWidth
+  }
+}
+
+const stopResize = () => {
+  isResizing.value = false
+  document.removeEventListener('mousemove', handleResize)
+  document.removeEventListener('mouseup', stopResize)
+  document.body.style.cursor = ''
+  document.body.style.userSelect = ''
+}
+
+// 菜单少于5个时自动展开第一个菜单
+const defaultOpeneds = computed(() => {
+  if (menus.value.length > 0 && menus.value.length < 5) {
+    const firstMenu = menus.value[0]
+    if (firstMenu && firstMenu.children && firstMenu.children.length) {
+      return [String(firstMenu.menuId)]
+    }
+  }
+  return []
+})
 
 // 修改密码相关
 const showChangePwd = ref(false)
 const pwdLoading = ref(false)
 const pwdFormRef = ref(null)
 const pwdForm = ref({ oldPassword: '', newPassword: '', confirmPassword: '' })
+
+// 密码复杂度验证：至少8个字符，包含数字、字母、特殊符号
+const validateNewPassword = (rule, value, callback) => {
+  if (!value) {
+    callback(new Error('请输入新密码'))
+    return
+  }
+  if (value.length < 8) {
+    callback(new Error('密码长度至少8个字符'))
+    return
+  }
+  let complexity = 0
+  if (/[0-9]/.test(value)) complexity++
+  if (/[a-zA-Z]/.test(value)) complexity++
+  if (/[^0-9a-zA-Z]/.test(value)) complexity++
+  if (complexity < 3) {
+    callback(new Error('密码必须包含数字、字母、特殊符号'))
+    return
+  }
+  callback()
+}
+
 const pwdRules = {
   oldPassword: [{ required: true, message: '请输入原密码', trigger: 'blur' }],
   newPassword: [
-    { required: true, message: '请输入新密码', trigger: 'blur' },
-    { min: 6, message: '密码长度不能少于6位', trigger: 'blur' }
+    { required: true, validator: validateNewPassword, trigger: 'blur' }
   ],
   confirmPassword: [
     { required: true, message: '请再次输入新密码', trigger: 'blur' },
@@ -194,12 +248,26 @@ const visitedViews = ref([{ path: '/home', title: '首页' }])
 // iframe缓存
 const iframeCache = ref({})
 
+// 原始菜单数据（包含一级节点）
+const rawMenus = ref([])
+
 // 加载菜单
 const loadMenus = async (sysId) => {
   try {
     const res = await userStore.getMenuList(sysId)
     if (res && res.code === 0) {
-      menus.value = res.data
+      rawMenus.value = res.data
+      // 跳过一级节点（parent_id=0），直接展示二级节点
+      // 将所有一级节点的children合并作为左侧菜单树的根节点
+      const secondLevelMenus = []
+      res.data.forEach(rootMenu => {
+        if (rootMenu.children && rootMenu.children.length) {
+          secondLevelMenus.push(...rootMenu.children)
+        }
+      })
+      menus.value = secondLevelMenus
+      // 强制刷新菜单组件，使 default-openeds 生效
+      menuKey.value++
     }
   } catch (error) {
     console.log('加载菜单失败:', error.message)
@@ -244,18 +312,15 @@ const handleSystemSelect = (index) => {
   activeSystem.value = index
 }
 
-// 查找菜单项
-const findMenuItem = (menuPath) => {
-  for (const menu of menus.value) {
+// 递归查找菜单项（在原始菜单数据中查找，包含一级节点）
+const findMenuItem = (menuPath, menuList = rawMenus.value, parent = null) => {
+  for (const menu of menuList) {
     if (menu.menuPath === menuPath) {
-      return menu
+      return parent ? { ...menu, parentMenu: parent } : menu
     }
     if (menu.children && menu.children.length) {
-      for (const child of menu.children) {
-        if (child.menuPath === menuPath) {
-          return { ...child, parentMenu: menu }
-        }
-      }
+      const found = findMenuItem(menuPath, menu.children, menu)
+      if (found) return found
     }
   }
   return null
@@ -435,7 +500,7 @@ onMounted(() => {
   })
 })
 
-// 菜单搜索
+// 菜单搜索 - 递归搜索所有层级
 const handleMenuSearch = () => {
   if (!menuSearchKeyword.value.trim()) {
     searchResults.value = []
@@ -445,26 +510,24 @@ const handleMenuSearch = () => {
   const keyword = menuSearchKeyword.value.toLowerCase()
   const results = []
   
-  // 遍历菜单查找匹配项
-  menus.value.forEach(menu => {
-    if (menu.menuName.toLowerCase().includes(keyword)) {
-      results.push({
-        path: menu.menuPath,
-        title: menu.menuName
-      })
-    }
-    if (menu.children && menu.children.length) {
-      menu.children.forEach(child => {
-        if (child.menuName.toLowerCase().includes(keyword)) {
-          results.push({
-            path: child.menuPath,
-            title: menu.menuName + ' / ' + child.menuName
-          })
-        }
-      })
-    }
-  })
+  // 递归遍历菜单查找匹配项
+  const searchInMenus = (menuList, parentPath = '') => {
+    menuList.forEach(menu => {
+      const currentPath = parentPath ? `${parentPath} / ${menu.menuName}` : menu.menuName
+      if (menu.menuName.toLowerCase().includes(keyword)) {
+        results.push({
+          path: menu.menuPath,
+          title: currentPath
+        })
+      }
+      if (menu.children && menu.children.length) {
+        searchInMenus(menu.children, currentPath)
+      }
+    })
+  }
   
+  // 在原始菜单数据中搜索（包含所有层级）
+  searchInMenus(rawMenus.value)
   searchResults.value = results
 }
 
@@ -566,11 +629,21 @@ const handleSearchResultClick = (item) => {
       }
     }
     
+    // 去除下拉菜单触发器的默认 focus 边框
+    :deep(.el-dropdown) {
+      outline: none;
+      
+      &:focus-visible {
+        outline: none;
+      }
+    }
+    
     .user-info {
       display: flex;
       align-items: center;
       cursor: pointer;
       color: #fff;
+      outline: none;
       
       .username {
         margin-left: 8px;
@@ -591,11 +664,27 @@ const handleSearchResultClick = (item) => {
 
 .aside {
   background: #2c5a99;
-  transition: width 0.3s;
   overflow-x: hidden;
   overflow-y: auto;
+  position: relative;
   
-
+  // 自定义滚动条样式
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+  }
   
   .el-menu {
     border-right: none;
@@ -609,6 +698,23 @@ const handleSearchResultClick = (item) => {
     
     :deep(.el-menu-item.is-active) {
       background-color: #1976d2;
+    }
+  }
+  
+  // 拖拽调整宽度的手柄
+  .resize-handle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 100%;
+    cursor: col-resize;
+    background: transparent;
+    transition: background 0.2s;
+    z-index: 10;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
     }
   }
 }
@@ -677,12 +783,18 @@ const handleSearchResultClick = (item) => {
     height: 100%;
     background: #fff;
     overflow: auto;
+    
+    // iframe 页面不需要外层滚动条
+    &:has(.iframe-content) {
+      overflow: hidden;
+    }
   }
   
   .iframe-content {
     width: 100%;
     height: 100%;
     border: none;
+    display: block;
   }
 }
 

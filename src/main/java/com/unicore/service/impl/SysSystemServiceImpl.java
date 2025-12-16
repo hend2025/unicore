@@ -42,4 +42,13 @@ public class SysSystemServiceImpl extends ServiceImpl<SysSystemMapper, SysSystem
             .peek(s -> s.setChildren(buildTree(systems, s.getSysId())))
             .collect(Collectors.toList());
     }
+
+    @Override
+    public List<SysSystem> selectSystemList() {
+        LambdaQueryWrapper<SysSystem> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysSystem::getValiFlag, "1");
+        wrapper.eq(SysSystem::getStasFlag, "1");
+        wrapper.orderByAsc(SysSystem::getOrderNum);
+        return list(wrapper);
+    }
 }

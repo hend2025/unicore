@@ -1,8 +1,11 @@
 package com.unicore.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.unicore.common.WrapperResponse;
+import com.unicore.entity.SysConfig;
 import com.unicore.entity.SysUser;
+import com.unicore.mapper.SysConfigMapper;
 import com.unicore.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +16,9 @@ public class SysUserController {
 
     @Autowired
     private SysUserService userService;
+
+    @Autowired
+    private SysConfigMapper configMapper;
 
     @GetMapping("/page")
     public WrapperResponse<Page<SysUser>> page(
@@ -45,8 +51,15 @@ public class SysUserController {
 
     @PutMapping("/resetPwd")
     public WrapperResponse<Boolean> resetPassword(@RequestBody SysUser user) {
-        // 默认重置密码
+        // 从配置表获取默认密码
         String defaultPassword = "asdfg@1234";
+        LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysConfig::getConfigKey, "default_password");
+        SysConfig config = configMapper.selectOne(wrapper);
+        if (config != null && config.getConfigValue() != null && !config.getConfigValue().isEmpty()) {
+            defaultPassword = config.getConfigValue();
+        }
+        
         String password = (user.getPassword() != null && !user.getPassword().isEmpty()) 
             ? user.getPassword() : defaultPassword;
         return WrapperResponse.success(userService.resetPassword(user.getUserId(), password));

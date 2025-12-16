@@ -31,7 +31,7 @@ public class SysSystemController {
 
     @GetMapping("/list")
     public WrapperResponse<List<SysSystem>> list() {
-        return WrapperResponse.success(systemService.list());
+        return WrapperResponse.success(systemService.selectSystemList());
     }
 
     @GetMapping("/{id}")
