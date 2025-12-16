@@ -102,6 +102,7 @@ export const dictApi = {
 export const configApi = {
   page: (params) => request({ url: '/api/sys/config/page', method: 'get', params }),
   get: (id) => request({ url: `/api/sys/config/${id}`, method: 'get' }),
+  getByKey: (key) => request({ url: `/api/sys/config/key/${key}`, method: 'get' }),
   add: (data) => request({ url: '/api/sys/config', method: 'post', data }),
   update: (data) => request({ url: '/api/sys/config', method: 'put', data }),
   delete: (id) => request({ url: `/api/sys/config/${id}`, method: 'delete' })

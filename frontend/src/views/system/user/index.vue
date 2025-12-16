@@ -4,7 +4,7 @@
     <div class="query-card">
       <div class="section-title"><i></i>信息查询</div>
       <div class="query-section">
-        <el-form :model="queryParams" inline class="query-form" label-width="70px">
+        <el-form :model="queryParams" inline class="query-form" label-width="70px" @submit.prevent>
           <!-- 第一行 - 始终显示 -->
           <el-form-item label="用户名">
             <el-input v-model="queryParams.userName" placeholder="请输入用户名" clearable />

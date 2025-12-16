@@ -35,7 +35,6 @@ public class AuthController {
         result.put("userId", loginUser.getUactID());
         result.put("userName", loginUser.getUsername());
         result.put("realName", loginUser.getName());
-//        result.put("permissions", loginUser.getp);
         return WrapperResponse.success(result);
     }
 

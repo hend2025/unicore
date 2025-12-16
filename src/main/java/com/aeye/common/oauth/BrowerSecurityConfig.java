@@ -45,7 +45,7 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
         loginSuccessHandler.setAlwaysUseDefaultTargetUrl(true);
         http.antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/", "/login","/logout","/user/forceLogout**","/captcha",
+                .antMatchers("/", "/home","/login","/logout","/user/forceLogout**","/captcha","/api/auth/**",
                         "/index.html", "/assets/**", "/favicon.ico",
                         "/doc.html",
                         "/swagger-ui.html",
@@ -55,7 +55,8 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/v2/**",
                         "/**/swagger-resources",
                         "/**/swagger-resources/configuration/ui",
-                        "/**/swagger-resources/configuration/security"
+                        "/**/swagger-resources/configuration/security",
+                        "/api/sys/config/key/**"
                 )
                 .permitAll()
                 // 除上面外的所有请求全部需要鉴权认证

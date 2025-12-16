@@ -70,7 +70,7 @@
     
     <el-container class="main-container">
       <el-aside v-if="isAsideVisible" :width="isCollapse ? '64px' : `${asideWidth}px`" class="aside">
-        <el-menu :key="menuKey" :default-active="activeMenu" :default-openeds="defaultOpeneds" :collapse="isCollapse" :unique-opened="true" @select="handleMenuSelect" background-color="#2c5a99" text-color="#ffffff" active-text-color="#fff">
+        <el-menu :key="menuKey" :default-active="activeMenu" :default-openeds="defaultOpeneds" :collapse="isCollapse" :unique-opened="true" @select="handleMenuSelect" background-color="#1b6eb3" text-color="rgba(255,255,255,0.9)" active-text-color="#fff">
           <MenuItem v-for="menu in menus" :key="menu.menuId" :menu="menu" />
         </el-menu>
         <!-- 拖拽调整宽度的手柄 -->
@@ -152,7 +152,7 @@ const searchResults = ref([])
 const menuKey = ref(0) // 用于强制刷新菜单组件
 
 // 侧边栏宽度调整
-const asideWidth = ref(200)
+const asideWidth = ref(210)
 const isResizing = ref(false)
 
 const startResize = (e) => {
@@ -270,7 +270,7 @@ const loadMenus = async (sysId) => {
       menuKey.value++
     }
   } catch (error) {
-    console.log('加载菜单失败:', error.message)
+    // 错误已在request拦截器中处理
   }
 }
 
@@ -301,8 +301,7 @@ onMounted(async () => {
     activeMenu.value = '/home'
     activeTab.value = '/home'
   } catch (error) {
-    // 401错误会在request拦截器中处理跳转，这里只需捕获防止报错
-    console.log('初始化失败:', error.message)
+    // 错误已在request拦截器中处理
   }
 })
 
@@ -663,7 +662,7 @@ const handleSearchResultClick = (item) => {
 }
 
 .aside {
-  background: #2c5a99;
+  background: #1b6eb3;
   overflow-x: hidden;
   overflow-y: auto;
   position: relative;
@@ -689,15 +688,50 @@ const handleSearchResultClick = (item) => {
   .el-menu {
     border-right: none;
     
+    // 一级菜单
+    > :deep(.el-sub-menu) > .el-sub-menu__title,
+    > :deep(.el-menu-item) {
+      height: 46px;
+      line-height: 46px;
+      font-size: 14px;
+      padding: 0 8px 0 8px !important;
+    }
+    
     :deep(.el-sub-menu__title),
     :deep(.el-menu-item) {
+      .el-icon {
+        margin-right: 4px;
+      }
+      
       &:hover {
         background-color: rgba(255, 255, 255, 0.1);
       }
     }
     
+    :deep(.el-sub-menu__icon-arrow) {
+      right: 6px;
+    }
+    
     :deep(.el-menu-item.is-active) {
-      background-color: #1976d2;
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+    
+    // 二级菜单
+    :deep(.el-sub-menu .el-menu-item) {
+      height: 44px;
+      line-height: 44px;
+    }
+    
+    :deep(.el-sub-menu .el-sub-menu > .el-sub-menu__title) {
+      height: 44px;
+      line-height: 44px;
+    }
+    
+    // 三级菜单
+    :deep(.el-sub-menu .el-sub-menu .el-menu-item),
+    :deep(.el-sub-menu .el-sub-menu .el-sub-menu > .el-sub-menu__title) {
+      height: 42px;
+      line-height: 42px;
     }
   }
   
@@ -774,7 +808,7 @@ const handleSearchResultClick = (item) => {
     
     .el-tabs__content {
       flex: 1;
-      padding: 8px;
+      padding: 0;
       overflow: hidden;
     }
   }

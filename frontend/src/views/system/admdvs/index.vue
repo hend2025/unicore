@@ -4,7 +4,7 @@
     <div class="query-card">
       <div class="section-title"><i></i>信息查询</div>
       <div class="query-section">
-        <el-form :model="queryParams" inline class="query-form" label-width="100px">
+        <el-form :model="queryParams" inline class="query-form" label-width="100px" @submit.prevent>
           <el-form-item label="区划名称">
             <el-input v-model="queryParams.admdvsName" placeholder="请输入区划名称" clearable />
           </el-form-item>

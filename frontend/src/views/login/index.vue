@@ -2,7 +2,7 @@
   <div class="login-container">
     <div class="login-content">
       <div class="left-section">
-        <h1 class="system-title">医保基金综合监管平台</h1>
+        <h1 class="system-title">{{ systemTitle }}</h1>
         <div class="illustration">
           <img src="@/assets/images/bg-icon.png" alt="系统插画" />
         </div>
@@ -43,11 +43,13 @@ import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { ElMessage } from 'element-plus'
+import { configApi } from '@/api/system'
 
 const router = useRouter()
 const userStore = useUserStore()
 const formRef = ref()
 const loading = ref(false)
+const systemTitle = ref('统一门户管理系统')
 
 const form = reactive({
   username: '',
@@ -61,8 +63,22 @@ const rules = {
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
 }
 
+// 获取系统标题
+const fetchSystemTitle = async () => {
+  try {
+    const res = await configApi.getByKey('system_title')
+    if (res.data?.configValue) {
+      systemTitle.value = res.data.configValue
+      document.title = res.data.configValue
+    }
+  } catch (e) {
+    // 忽略错误，使用默认标题
+  }
+}
+
 // 从 localStorage 读取记住的账号密码
 onMounted(() => {
+  fetchSystemTitle()
   const remembered = localStorage.getItem('rememberedUser')
   if (remembered) {
     try {
@@ -102,7 +118,7 @@ const handleLogin = async () => {
     ElMessage.success('登录成功')
     router.push('/')
   } catch (error) {
-    console.error('登录失败:', error)
+    // 错误已在request拦截器中处理
   } finally {
     loading.value = false
   }

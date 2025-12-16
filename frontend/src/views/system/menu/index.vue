@@ -4,7 +4,7 @@
     <div class="query-card">
       <div class="section-title"><i></i>信息查询</div>
       <div class="query-section">
-        <el-form :model="queryParams" inline class="query-form" label-width="80px">
+        <el-form :model="queryParams" inline class="query-form" label-width="80px" @submit.prevent>
           <el-form-item label="所属系统">
             <el-select v-model="queryParams.sysId" placeholder="请选择系统" clearable>
               <el-option v-for="item in systemList" :key="item.sysId" :label="item.sysName" :value="item.sysId" />
@@ -154,7 +154,7 @@ const loadSystemList = async () => {
     const res = await systemApi.list()
     systemList.value = res.data || []
   } catch (e) {
-    console.error('加载系统列表失败', e)
+    // 错误已在request拦截器中处理
   }
 }
 
@@ -164,7 +164,7 @@ const loadMenuTree = async () => {
     const res = await menuApi.tree()
     menuTreeData.value = res.data || []
   } catch (e) {
-    console.error('加载菜单树失败', e)
+    // 错误已在request拦截器中处理
   }
 }
 

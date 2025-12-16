@@ -35,11 +35,17 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     const res = response.data
-    if (res.code !== 0) {
+    const code = Number(res.code)
+    if (code !== 0) {
       // 401 未登录或会话过期，直接跳转登录页，不提示
-      if (res.code === 401) {
+      if (code === 401) {
         redirectToLogin()
         return Promise.reject(new Error(res.message || '未登录'))
+      }
+      // -4 非白名单，无法获取用户信息，跳转登录页
+      if (code === -4) {
+        redirectToLogin()
+        return Promise.reject(new Error(res.message || '无法获取用户信息'))
       }
       ElMessage.error(res.message || '请求失败')
       return Promise.reject(new Error(res.message || '请求失败'))

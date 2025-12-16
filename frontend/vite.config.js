@@ -21,15 +21,15 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:7080/'+APP_BASE_PATH,
+        target: 'http://localhost:7081/'+APP_BASE_PATH,
         changeOrigin: true
       },
       '/login': {
-        target:  'http://localhost:7080/'+APP_BASE_PATH,
+        target:  'http://localhost:7081/'+APP_BASE_PATH,
         changeOrigin: true
       },
       '/logout': {
-        target:  'http://localhost:7080/'+APP_BASE_PATH,
+        target:  'http://localhost:7081/'+APP_BASE_PATH,
         changeOrigin: true
       }
     }

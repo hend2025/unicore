@@ -6,7 +6,33 @@
   <component name="ChangeListManager">
     <list default="true" id="c40dc8fd-5d22-4ae7-b727-b885b2ff3978" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/api/system.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/system.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/layout/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layout/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles/index.scss" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/utils/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/utils/request.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/log/apilog/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/log/apilog/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/log/loginlog/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/log/loginlog/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/log/operlog/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/log/operlog/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/login/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/login/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/admdvs/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/admdvs/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/area/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/area/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/config/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/config/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/dict/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/dict/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/menu/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/menu/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/notice/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/notice/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/org/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/org/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/para/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/para/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/post/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/post/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/role/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/role/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/user/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/user/index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aeye/common/oauth/BrowerSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/aeye/common/oauth/BrowerSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/config/RedisConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysUserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysUserServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -90,6 +116,7 @@
       <updated>1765810800528</updated>
       <workItem from="1765810803490" duration="3973000" />
       <workItem from="1765844755069" duration="7502000" />
+      <workItem from="1765890966719" duration="4986000" />
     </task>
     <servers />
   </component>

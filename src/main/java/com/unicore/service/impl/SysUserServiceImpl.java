@@ -59,8 +59,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         user.setUactID(Long.toString(sysUser.getUserId()));
         user.setUserAcct(sysUser.getUserName());
         user.setName(sysUser.getRealName());
-//        user.setSalt(sysUser.getSalt());
-//        user.setPwd(sysUser.getPassword());
+        user.setAdmDvs(sysUser.getAdmdvsCode());
         return user;
 
     }

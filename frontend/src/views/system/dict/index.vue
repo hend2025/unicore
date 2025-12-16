@@ -6,7 +6,7 @@
         <div class="query-card">
           <div class="section-title"><i></i>信息查询</div>
           <div class="query-section">
-            <el-form :model="dataQuery" inline class="query-form" label-width="80px">
+            <el-form :model="dataQuery" inline class="query-form" label-width="80px" @submit.prevent>
               <el-form-item label="字典类型">
                 <el-select v-model="dataQuery.dicTypeCode" placeholder="请选择字典类型" clearable>
                   <el-option v-for="item in dictTypeList" :key="item.dicTypeCode" :label="item.dicTypeName" :value="item.dicTypeCode" />
@@ -60,7 +60,7 @@
         <div class="query-card">
           <div class="section-title"><i></i>信息查询</div>
           <div class="query-section">
-            <el-form :model="typeQuery" inline class="query-form" label-width="80px">
+            <el-form :model="typeQuery" inline class="query-form" label-width="80px" @submit.prevent>
               <el-form-item label="类型名称">
                 <el-input v-model="typeQuery.dicTypeName" placeholder="请输入类型名称" clearable />
               </el-form-item>
