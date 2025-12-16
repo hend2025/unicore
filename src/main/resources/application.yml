@@ -19,33 +19,27 @@ spring:
     name: unicore
     multipart:
       allowFormat: doc,docx,xls,xlsx,ppt,pptx,pdf,jpg,gif,jpeg,png,txt,log,wmv,mp4,zip,rar,apk,bmp,avi
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/unicore?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
-    username: root
-    password: 123456
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    password: 123456
-    database: 0
-    timeout: 10000ms
-  cache:
-    type: redis
-  devtools:
-    restart:
-      enabled: true
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: Asia/Shanghai
-  output:
-    ansi:
-      enabled: always #控制台彩色
   servlet:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
       enabled: true
+  output:
+    ansi:
+      enabled: always #控制台彩色
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+  devtools:
+    restart:
+      enabled: true
+  cache:
+    type: redis
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/unicore?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: 123456
 
 mybatis-plus:
   mapper-locations: classpath:mapper/**/*.xml
@@ -59,18 +53,11 @@ mybatis-plus:
       logic-delete-value: "0"
       logic-not-delete-value: "1"
 
-# MinIO配置
-minio:
-  endpoint: http://127.0.0.1:9000
-  accessKey: minioadmin
-  secretKey: minioadmin
-  bucketName: unicore
-
 security:
   type: pms-sso
   oauth2:
     client:
-      permits: /sys/para/list,/hosd/org/download/template,/hosd/deptgrp/download/template,/hosd/user/download/template,/captcha,/login,/doc.html,/swagger-ui.html,/swagger-ui.html/**,/webjars/**,/*/api-docs,/v2/**,/**/swagger-resources,/**/swagger-resources/configuration/ui,/**/swagger-resources/configuration/security
+      permits: /,/index.html,/assets/**,/favicon.ico,/login,/logout,/captcha,/api/auth/**,/home,/system/**,/log/**,/doc.html,/swagger-ui.html,/swagger-ui.html/**,/webjars/**,/*/api-docs,/v2/**,/**/swagger-resources,/**/swagger-resources/configuration/ui,/**/swagger-resources/configuration/security
 
 cacheLevel: "HPM:"
 cache:
@@ -115,3 +102,8 @@ threadPool:
     #设置默认线程名称
     threadNamePrefix: aeye
 
+minio:
+  endpoint: http://127.0.0.1:9000
+  accessKey: minioadmin
+  secretKey: minioadmin
+  bucketName: unicore
