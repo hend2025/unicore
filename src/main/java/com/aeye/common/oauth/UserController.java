@@ -24,7 +24,7 @@ public class UserController {
     }
 
     // 退出登录，请清除redis里面的token
-    @GetMapping(value = "/forceLogout")
+    @GetMapping(value = "/user/forceLogout")
     public CodeMessage forceLogout(String accessToken) {
         try{
             consumerTokenServices.revokeToken(accessToken);

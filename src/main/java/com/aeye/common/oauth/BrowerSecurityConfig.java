@@ -39,22 +39,14 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SecurityAuthenticationProvider provider;
 
-    /**
-     * 如若需从数据库动态判断权限则实现 AccessDecisionManager
-     * @param http
-     * @throws Exception
-     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         LoginSuccessHandler loginSuccessHandler = new LoginSuccessHandler();
         loginSuccessHandler.setAlwaysUseDefaultTargetUrl(true);
         http.antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/api/auth/**", "/", "/index.html", "/assets/**", "/favicon.ico",
-                        "/login", "/home", "/system/**", "/log/**",
-                        "/captcha","/login","/user/forceLogout**",
-                        "/sys/para/list",
-                        "/sys/oss/**",
+                .antMatchers("/", "/login","/logout","/user/forceLogout**","/captcha",
+                        "/index.html", "/assets/**", "/favicon.ico",
                         "/doc.html",
                         "/swagger-ui.html",
                         "/swagger-ui.html/**",

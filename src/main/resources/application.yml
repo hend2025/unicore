@@ -57,7 +57,7 @@ security:
   type: pms-sso
   oauth2:
     client:
-      permits: /,/index.html,/assets/**,/favicon.ico,/login,/logout,/captcha,/api/auth/**,/home,/system/**,/log/**,/doc.html,/swagger-ui.html,/swagger-ui.html/**,/webjars/**,/*/api-docs,/v2/**,/**/swagger-resources,/**/swagger-resources/configuration/ui,/**/swagger-resources/configuration/security
+      permits: /,/index.html,/login,/logout,/user/forceLogout**,/captcha,/assets/**,/favicon.ico,/doc.html,/swagger-ui.html,/swagger-ui.html/**,/webjars/**,/*/api-docs,/v2/**,/**/swagger-resources,/**/swagger-resources/configuration/ui,/**/swagger-resources/configuration/security
 
 cacheLevel: "HPM:"
 cache:

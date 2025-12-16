@@ -52,7 +52,7 @@ public class SysUserController {
     @PutMapping("/resetPwd")
     public WrapperResponse<Boolean> resetPassword(@RequestBody SysUser user) {
         // 从配置表获取默认密码
-        String defaultPassword = "asdfg@1234";
+        String defaultPassword = "Abc@12345678";
         LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysConfig::getConfigKey, "default_password");
         SysConfig config = configMapper.selectOne(wrapper);
@@ -62,6 +62,14 @@ public class SysUserController {
         
         String password = (user.getPassword() != null && !user.getPassword().isEmpty()) 
             ? user.getPassword() : defaultPassword;
+        
+        // 验证密码复杂度
+        String decodedPassword = com.unicore.common.Base64Utils.decode(password);
+        String pwdError = com.unicore.common.PasswordValidator.validate(decodedPassword);
+        if (pwdError != null) {
+            return WrapperResponse.error(pwdError);
+        }
+        
         return WrapperResponse.success(userService.resetPassword(user.getUserId(), password));
     }
 }
