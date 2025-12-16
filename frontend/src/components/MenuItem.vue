@@ -9,7 +9,7 @@
     <MenuItem v-for="child in menu.children" :key="child.menuId" :menu="child" />
   </el-sub-menu>
   <!-- 没有子菜单时渲染为 menu-item -->
-  <el-menu-item v-else :index="menu.menuPath">
+  <el-menu-item v-else :index="menu.menuUrl">
     <el-icon><component :is="menu.menuIcon || 'Document'" /></el-icon>
     <span>{{ menu.menuName }}</span>
   </el-menu-item>

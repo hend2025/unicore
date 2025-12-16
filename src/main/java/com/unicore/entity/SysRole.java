@@ -25,5 +25,5 @@ public class SysRole extends BaseEntity {
     private String remarks;
 
     @TableField(exist = false)
-    private List<Long> menuIds;
+    private List<String> menuIds;
 }

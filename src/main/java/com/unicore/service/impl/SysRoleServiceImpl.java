@@ -41,7 +41,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public boolean addRole(SysRole role) {
         boolean result = save(role);
         if (result && role.getMenuIds() != null) {
-            for (Long menuId : role.getMenuIds()) {
+            for (String menuId : role.getMenuIds()) {
                 SysRoleMenu rm = new SysRoleMenu();
                 rm.setRoleId(role.getRoleId());
                 rm.setMenuId(menuId);
@@ -59,7 +59,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             LambdaQueryWrapper<SysRoleMenu> wrapper = new LambdaQueryWrapper<>();
             wrapper.eq(SysRoleMenu::getRoleId, role.getRoleId());
             roleMenuMapper.delete(wrapper);
-            for (Long menuId : role.getMenuIds()) {
+            for (String menuId : role.getMenuIds()) {
                 SysRoleMenu rm = new SysRoleMenu();
                 rm.setRoleId(role.getRoleId());
                 rm.setMenuId(menuId);
@@ -71,7 +71,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public boolean deleteRole(Integer roleId) {
-        // MyBatis-Plus会自动进行逻辑删除（因为SysRole继承了BaseEntity，有@TableLogic注解）
         return removeById(roleId);
     }
 

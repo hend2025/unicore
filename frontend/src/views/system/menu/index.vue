@@ -14,13 +14,7 @@
             <el-input v-model="queryParams.menuName" placeholder="请输入菜单名称" clearable />
           </el-form-item>
           <el-form-item label="路由名称">
-            <el-input v-model="queryParams.menuPath" placeholder="请输入路由名称" clearable />
-          </el-form-item>
-          <el-form-item label="状态">
-            <el-select v-model="queryParams.stasFlag" placeholder="请选择状态" clearable>
-              <el-option label="正常" value="1" />
-              <el-option label="停用" value="0" />
-            </el-select>
+            <el-input v-model="queryParams.menuUrl" placeholder="请输入路由名称" clearable />
           </el-form-item>
           <el-form-item>
             <el-button @click="handleReset">重置</el-button>
@@ -40,15 +34,7 @@
       </div>
       <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }">
         <el-table-column prop="menuName" label="菜单名称" min-width="150" />
-        <el-table-column prop="menuIcon" label="图标" width="80">
-          <template #default="{ row }">
-            <el-icon v-if="row.menuIcon"><component :is="row.menuIcon" /></el-icon>
-          </template>
-        </el-table-column>
-        <el-table-column prop="orderNum" label="排序" width="80" />
-        <el-table-column prop="menuPerms" label="权限标识" min-width="120" />
-        <el-table-column prop="menuPath" label="路由地址" min-width="120" />
-        <el-table-column prop="menuComp" label="组件路径" min-width="150" />
+        <el-table-column prop="menuUrl" label="路由地址" min-width="220" />
         <el-table-column label="所属系统" min-width="120">
           <template #default="{ row }">
             {{ getSystemName(row.sysId) }}
@@ -66,9 +52,9 @@
             <el-tag :type="row.stasFlag === '1' ? 'success' : 'danger'">{{ row.stasFlag === '1' ? '正常' : '停用' }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="180" align="center">
+        <el-table-column prop="orderNum" label="排序" width="80" />
+        <el-table-column label="操作" width="120" align="center">
           <template #default="{ row }">
-            <el-button type="primary" link @click="handleAdd(row.menuId)">新增</el-button>
             <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
             <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
           </template>
@@ -110,8 +96,8 @@
       <el-form-item label="菜单图标" prop="menuIcon" v-if="form.menuType !== '3'">
         <el-input v-model="form.menuIcon" placeholder="请输入图标名称" />
       </el-form-item>
-      <el-form-item label="路由地址" prop="menuPath" v-if="form.menuType !== '3'">
-        <el-input v-model="form.menuPath" placeholder="请输入路由地址" />
+      <el-form-item label="路由地址" prop="menuUrl" v-if="form.menuType !== '3'">
+        <el-input v-model="form.menuUrl" placeholder="请输入路由地址" />
       </el-form-item>
       <el-form-item label="组件路径" prop="menuComp" v-if="form.menuType === '2'">
         <el-input v-model="form.menuComp" placeholder="请输入组件路径" />
@@ -147,14 +133,14 @@ const dialogTitle = ref('')
 const systemList = ref([])
 const menuTreeData = ref([])
 
-const queryParams = reactive({ menuName: '', menuPath: '', stasFlag: '', sysId: '', pageNum: 1, pageSize: 10 })
-const form = reactive({ menuId: null, parentId: 0, menuName: '', menuType: '1', menuIcon: '', menuPath: '', menuComp: '', menuPerms: '', orderNum: 0, stasFlag: '1', sysId: '' })
+const queryParams = reactive({ menuName: '', menuUrl: '', sysId: '', pageNum: 1, pageSize: 10 })
+const form = reactive({ menuId: null, parentId: '0', menuName: '', menuType: '1', menuIcon: '', menuUrl: '', menuComp: '', menuPerms: '', orderNum: 0, stasFlag: '1', sysId: '' })
 const rules = { 
   menuName: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }],
   sysId: [{ required: true, message: '请选择所属系统', trigger: 'change' }]
 }
 
-const menuOptions = computed(() => [{ menuId: 0, menuName: '主类目', children: menuTreeData.value }])
+const menuOptions = computed(() => [{ menuId: '0', menuName: '主类目', children: menuTreeData.value }])
 
 // 获取系统名称
 const getSystemName = (sysId) => {
@@ -200,15 +186,14 @@ const handleQuery = () => {
 
 const handleReset = () => {
   queryParams.menuName = ''
-  queryParams.menuPath = ''
-  queryParams.stasFlag = ''
+  queryParams.menuUrl = ''
   queryParams.sysId = ''
   queryParams.pageNum = 1
   loadData()
 }
 
-const handleAdd = (parentId = 0) => {
-  Object.assign(form, { menuId: null, parentId, menuName: '', menuType: '1', menuIcon: '', menuPath: '', menuComp: '', menuPerms: '', orderNum: 0, stasFlag: '1', sysId: '' })
+const handleAdd = (parentId = '0') => {
+  Object.assign(form, { menuId: null, parentId, menuName: '', menuType: '1', menuIcon: '', menuUrl: '', menuComp: '', menuPerms: '', orderNum: 0, stasFlag: '1', sysId: '' })
   dialogTitle.value = '新增菜单'
   dialogVisible.value = true
 }

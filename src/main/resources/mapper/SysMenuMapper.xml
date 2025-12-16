@@ -8,7 +8,7 @@
         <result property="parentId" column="PARENT_ID"/>
         <result property="sysId" column="SYS_ID"/>
         <result property="orderNum" column="ORDER_NUM"/>
-        <result property="menuPath" column="MENU_PATH"/>
+        <result property="menuUrl" column="MENU_URL"/>
         <result property="menuComp" column="MENU_COMP"/>
         <result property="menuQuery" column="MENU_QUERY"/>
         <result property="isFrame" column="IS_FRAME"/>
@@ -25,7 +25,7 @@
 
     <select id="selectMenusByUserId" resultMap="MenuResultMap">
         SELECT DISTINCT m.MENU_ID, m.MENU_NAME, m.PARENT_ID, m.SYS_ID, m.ORDER_NUM,
-                        m.MENU_PATH, m.MENU_COMP, m.MENU_QUERY, m.IS_FRAME, m.IS_CACHE,
+                        m.MENU_URL, m.MENU_COMP, m.MENU_QUERY, m.IS_FRAME, m.IS_CACHE,
                         m.MENU_TYPE, m.MENU_ICON, m.MENU_PERMS, m.IS_SHOW,
                         m.STAS_FLAG, m.VALI_FLAG, m.CRTE_TIME, m.UPDT_TIME
         FROM sys_menu m
@@ -39,7 +39,21 @@
         ORDER BY m.PARENT_ID, m.ORDER_NUM
     </select>
 
-    <select id="selectMenuIdsByRoleId" resultType="java.lang.Long">
+    <select id="selectMenuIdsByRoleId" resultType="java.lang.String">
         SELECT MENU_ID FROM sys_role_menu WHERE ROLE_ID = #{roleId}
+    </select>
+
+    <select id="selectMaxMenuId" resultType="java.lang.String">
+        SELECT MAX(MENU_ID) FROM sys_menu 
+        WHERE SYS_ID = #{sysId} 
+        AND VALI_FLAG = '1'
+        <choose>
+            <when test="parentId == null or parentId == '' or parentId == '0'">
+                AND (PARENT_ID IS NULL OR PARENT_ID = '0' OR PARENT_ID = '')
+            </when>
+            <otherwise>
+                AND PARENT_ID = #{parentId}
+            </otherwise>
+        </choose>
     </select>
 </mapper>

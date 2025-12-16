@@ -1,5 +1,7 @@
 package com.unicore.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.unicore.common.WrapperResponse;
 import com.unicore.entity.SysMenu;
 import com.unicore.service.SysMenuService;
@@ -14,6 +16,15 @@ public class SysMenuController {
     @Autowired
     private SysMenuService menuService;
 
+    @GetMapping("/page")
+    public WrapperResponse<IPage<SysMenu>> page(
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            SysMenu menu) {
+        Page<SysMenu> page = new Page<>(pageNum, pageSize);
+        return WrapperResponse.success(menuService.selectMenuPage(page, menu));
+    }
+
     @GetMapping("/tree")
     public WrapperResponse<List<SysMenu>> tree(@RequestParam(required = false) Integer sysId) {
         return WrapperResponse.success(menuService.selectMenuTree(sysId));
@@ -25,13 +36,13 @@ public class SysMenuController {
     }
 
     @GetMapping("/{id}")
-    public WrapperResponse<SysMenu> getById(@PathVariable Long id) {
+    public WrapperResponse<SysMenu> getById(@PathVariable String id) {
         return WrapperResponse.success(menuService.getById(id));
     }
 
     @PostMapping
     public WrapperResponse<Boolean> add(@RequestBody SysMenu menu) {
-        return WrapperResponse.success(menuService.save(menu));
+        return WrapperResponse.success(menuService.saveMenu(menu));
     }
 
     @PutMapping
@@ -40,8 +51,7 @@ public class SysMenuController {
     }
 
     @DeleteMapping("/{id}")
-    public WrapperResponse<Boolean> delete(@PathVariable Long id) {
-        // MyBatis-Plus会自动进行逻辑删除
+    public WrapperResponse<Boolean> delete(@PathVariable String id) {
         return WrapperResponse.success(menuService.removeById(id));
     }
 }

@@ -1,7 +1,6 @@
 package com.unicore.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -13,5 +12,5 @@ public class SysRoleMenu {
     private Integer roleMenuId;
 
     private Integer roleId;
-    private Long menuId;
+    private String menuId;
 }

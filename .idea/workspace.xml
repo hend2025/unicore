@@ -6,8 +6,18 @@
   <component name="ChangeListManager">
     <list default="true" id="c40dc8fd-5d22-4ae7-b727-b885b2ff3978" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/api/system.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/system.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/MenuItem.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/MenuItem.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/layout/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layout/index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/views/system/menu/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/menu/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysRole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysRoleMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysRoleMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/mapper/SysMenuMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/mapper/SysMenuMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/service/SysMenuService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/service/SysMenuService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysMenuServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysMenuServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysRoleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysRoleServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/SysMenuMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/SysMenuMapper.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +99,7 @@
       <option name="presentableId" value="Default" />
       <updated>1765810800528</updated>
       <workItem from="1765810803490" duration="3973000" />
-      <workItem from="1765844755069" duration="5836000" />
+      <workItem from="1765844755069" duration="7502000" />
     </task>
     <servers />
   </component>

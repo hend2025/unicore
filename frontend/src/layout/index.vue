@@ -313,13 +313,13 @@ const handleSystemSelect = (index) => {
 }
 
 // 递归查找菜单项（在原始菜单数据中查找，包含一级节点）
-const findMenuItem = (menuPath, menuList = rawMenus.value, parent = null) => {
+const findMenuItem = (menuUrl, menuList = rawMenus.value, parent = null) => {
   for (const menu of menuList) {
-    if (menu.menuPath === menuPath) {
+    if (menu.menuUrl === menuUrl) {
       return parent ? { ...menu, parentMenu: parent } : menu
     }
     if (menu.children && menu.children.length) {
-      const found = findMenuItem(menuPath, menu.children, menu)
+      const found = findMenuItem(menuUrl, menu.children, menu)
       if (found) return found
     }
   }
@@ -362,7 +362,7 @@ const handleMenuSelect = (index) => {
     // 获取外部系统的基础URL
     const sysUrl = currentSystem?.sysUrl || ''
     // 构建完整的外部系统URL
-    let externalUrl = sysUrl + menuItem.menuPath
+    let externalUrl = sysUrl + menuItem.menuUrl
     // 如果不是完整URL，拼接当前域名
     if (!externalUrl.startsWith('http://') && !externalUrl.startsWith('https://')) {
       if (!externalUrl.startsWith('/')) {
@@ -516,7 +516,7 @@ const handleMenuSearch = () => {
       const currentPath = parentPath ? `${parentPath} / ${menu.menuName}` : menu.menuName
       if (menu.menuName.toLowerCase().includes(keyword)) {
         results.push({
-          path: menu.menuPath,
+          path: menu.menuUrl,
           title: currentPath
         })
       }
