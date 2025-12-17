@@ -22,12 +22,12 @@
         <div class="section-title"><i></i>应用列表</div>
         <el-button type="primary" @click="handleAdd">新增应用</el-button>
       </div>
-      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }">
+      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }" :show-overflow-tooltip="true">
         <el-table-column type="index" label="序号" width="60" align="center" />
-        <el-table-column prop="sysName" label="系统名称" min-width="150" />
-        <el-table-column prop="sysAbbr" label="系统简称" min-width="100" />
-        <el-table-column prop="sysUrl" label="系统URL" min-width="200" />
-        <el-table-column prop="orderNum" label="排序" width="80" />
+        <el-table-column prop="sysName" label="系统名称" min-width="150" show-overflow-tooltip />
+        <el-table-column prop="sysAbbr" label="系统简称" min-width="100" show-overflow-tooltip />
+        <el-table-column prop="sysUrl" label="系统URL" min-width="200" show-overflow-tooltip />
+        <el-table-column prop="orderNum" label="排序" width="80" show-overflow-tooltip />
         <el-table-column prop="stasFlag" label="状态" width="80">
           <template #default="{ row }">
             <el-tag :type="row.stasFlag === '1' ? 'success' : 'danger'">{{ row.stasFlag === '1' ? '正常' : '停用' }}</el-tag>

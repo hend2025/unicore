@@ -28,9 +28,9 @@
         <div class="section-title"><i></i>公告列表</div>
         <el-button type="primary" @click="handleAdd">新增公告</el-button>
       </div>
-      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }">
+      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }" :show-overflow-tooltip="true">
         <el-table-column type="index" label="序号" width="60" align="center" />
-        <el-table-column prop="noticeTitle" label="公告标题" min-width="200" />
+        <el-table-column prop="noticeTitle" label="公告标题" min-width="200" show-overflow-tooltip />
         <el-table-column prop="noticeType" label="公告类型" width="100">
           <template #default="{ row }">
             <el-tag v-if="row.noticeType === '1'">通知</el-tag>
@@ -42,7 +42,7 @@
             <el-tag :type="row.stasFlag === '1' ? 'success' : 'danger'">{{ row.stasFlag === '1' ? '正常' : '关闭' }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="crteTime" label="创建时间" width="180" />
+        <el-table-column prop="crteTime" label="创建时间" width="180" show-overflow-tooltip />
         <el-table-column label="操作" width="128" align="center">
           <template #default="{ row }">
             <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>

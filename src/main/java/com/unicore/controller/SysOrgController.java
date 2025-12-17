@@ -1,5 +1,6 @@
 package com.unicore.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.unicore.common.WrapperResponse;
 import com.unicore.entity.SysOrg;
 import com.unicore.service.SysOrgService;
@@ -13,6 +14,15 @@ public class SysOrgController {
 
     @Autowired
     private SysOrgService orgService;
+
+    @GetMapping("/page")
+    public WrapperResponse<Page<SysOrg>> page(
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            SysOrg org) {
+        Page<SysOrg> page = new Page<>(pageNum, pageSize);
+        return WrapperResponse.success(orgService.selectOrgPage(page, org));
+    }
 
     @GetMapping("/tree")
     public WrapperResponse<List<SysOrg>> tree() {

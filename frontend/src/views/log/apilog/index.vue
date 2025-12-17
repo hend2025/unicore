@@ -39,23 +39,23 @@
           <el-button type="warning" @click="handleClearDays">清空N天前</el-button>
         </div>
       </div>
-      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }">
+      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }" :show-overflow-tooltip="true">
         <el-table-column type="index" label="序号" width="60" align="center" />
         <el-table-column prop="repUrl" label="请求URL" min-width="200" show-overflow-tooltip />
-        <el-table-column prop="repMethod" label="请求方法" width="100">
+        <el-table-column prop="repMethod" label="请求方法" width="100" show-overflow-tooltip>
           <template #default="{ row }">
             <el-tag :type="getMethodType(row.repMethod)">{{ row.repMethod }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="repIp" label="IP地址" width="130" />
-        <el-table-column prop="userId" label="用户ID" width="80" />
+        <el-table-column prop="repIp" label="IP地址" width="130" show-overflow-tooltip />
+        <el-table-column prop="userId" label="用户ID" width="80" show-overflow-tooltip />
         <el-table-column prop="execStat" label="执行状态" width="100">
           <template #default="{ row }">
             <el-tag :type="row.execStat === '1' ? 'success' : 'danger'">{{ row.execStat === '1' ? '成功' : '失败' }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="execDura" label="执行时长(ms)" width="120" />
-        <el-table-column prop="crteTime" label="创建时间" width="180" />
+        <el-table-column prop="execDura" label="执行时长(ms)" width="120" show-overflow-tooltip />
+        <el-table-column prop="crteTime" label="创建时间" width="180" show-overflow-tooltip />
         <el-table-column label="操作" width="128" align="center">
           <template #default="{ row }">
             <el-button type="primary" link @click="handleView(row)">详情</el-button>

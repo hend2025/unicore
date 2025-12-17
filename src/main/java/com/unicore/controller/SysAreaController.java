@@ -61,8 +61,20 @@ public class SysAreaController {
     }
 
     private List<SysArea> buildTree(List<SysArea> list, String parentCode) {
+        // 收集所有节点的编码
+        java.util.Set<String> allCodes = list.stream()
+            .map(SysArea::getAreaCode)
+            .collect(Collectors.toSet());
+        
         return list.stream()
-            .filter(a -> parentCode == null ? a.getPrntAreaCode() == null : parentCode.equals(a.getPrntAreaCode()))
+            .filter(a -> {
+                String prnt = a.getPrntAreaCode();
+                if (parentCode == null) {
+                    // 根节点：父级编码为空或父级编码不在当前列表中
+                    return prnt == null || prnt.isEmpty() || !allCodes.contains(prnt);
+                }
+                return parentCode.equals(prnt);
+            })
             .peek(a -> a.setChildren(buildTree(list, a.getAreaCode())))
             .collect(Collectors.toList());
     }

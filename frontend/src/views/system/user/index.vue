@@ -5,61 +5,21 @@
       <div class="section-title"><i></i>信息查询</div>
       <div class="query-section">
         <el-form :model="queryParams" inline class="query-form" label-width="70px" @submit.prevent>
-          <!-- 第一行 - 始终显示 -->
           <el-form-item label="用户名">
             <el-input v-model="queryParams.userName" placeholder="请输入用户名" clearable />
           </el-form-item>
           <el-form-item label="姓名">
             <el-input v-model="queryParams.realName" placeholder="请输入姓名" clearable />
           </el-form-item>
-          <el-form-item label="手机号">
-            <el-input v-model="queryParams.mobile" placeholder="请输入手机号" clearable />
+          <el-form-item label="医保区划">
+            <el-tree-select v-model="queryParams.admdvsCode" :data="admdvsTree" :props="{ label: 'admdvsName', value: 'admdvsCode' }" check-strictly clearable placeholder="请选择医保区划" />
           </el-form-item>
-          <el-form-item label="邮箱">
-            <el-input v-model="queryParams.email" placeholder="请输入邮箱" clearable />
+          <el-form-item label="状态">
+            <el-select v-model="queryParams.stasFlag" placeholder="请选择" clearable>
+              <el-option label="正常" value="1" />
+              <el-option label="停用" value="0" />
+            </el-select>
           </el-form-item>
-          <!-- 展开时显示更多 -->
-          <template v-if="queryExpanded">
-            <el-form-item label="证件号码">
-              <el-input v-model="queryParams.certNo" placeholder="请输入证件号码" clearable />
-            </el-form-item>
-            <el-form-item label="证件类型">
-              <el-select v-model="queryParams.certType" placeholder="请选择" clearable>
-                <el-option label="身份证" value="01" />
-                <el-option label="护照" value="02" />
-                <el-option label="军官证" value="03" />
-                <el-option label="其他" value="99" />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="用户类型">
-              <el-select v-model="queryParams.userType" placeholder="请选择" clearable>
-                <el-option label="系统用户" value="00" />
-                <el-option label="普通用户" value="01" />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="性别">
-              <el-select v-model="queryParams.gend" placeholder="请选择" clearable>
-                <el-option label="男" value="1" />
-                <el-option label="女" value="2" />
-              </el-select>
-            </el-form-item>
-            <el-form-item label="区划代码">
-              <el-input v-model="queryParams.areaCode" placeholder="请输入区划代码" clearable />
-            </el-form-item>
-            <el-form-item label="医保区划">
-              <el-input v-model="queryParams.admdvsCode" placeholder="请输入医保区划" clearable />
-            </el-form-item>
-            <el-form-item label="地址">
-              <el-input v-model="queryParams.addr" placeholder="请输入地址" clearable />
-            </el-form-item>
-            <el-form-item label="状态">
-              <el-select v-model="queryParams.stasFlag" placeholder="请选择" clearable>
-                <el-option label="正常" value="1" />
-                <el-option label="停用" value="0" />
-              </el-select>
-            </el-form-item>
-          </template>
-          <!-- 按钮组 -->
           <el-form-item class="query-btns">
             <el-button link type="primary" @click="queryExpanded = !queryExpanded">
               {{ queryExpanded ? '收起' : '展开' }}<el-icon><component :is="queryExpanded ? 'ArrowUp' : 'ArrowDown'" /></el-icon>
@@ -77,13 +37,13 @@
         <div class="section-title"><i></i>用户列表</div>
         <el-button type="primary" @click="handleAdd">新增用户</el-button>
       </div>
-      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }">
+      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }" :show-overflow-tooltip="true">
         <el-table-column type="index" label="序号" width="60" align="center" />
-        <el-table-column prop="userName" label="用户名" min-width="100" />
-        <el-table-column prop="realName" label="姓名" min-width="80" />
-        <el-table-column prop="mobile" label="手机号" min-width="110" />
-        <el-table-column prop="orgName" label="所属机构" min-width="150" />
-        <el-table-column prop="crteTime" label="创建时间" width="180" />
+        <el-table-column prop="userName" label="用户名" min-width="100" show-overflow-tooltip />
+        <el-table-column prop="realName" label="姓名" min-width="80" show-overflow-tooltip />
+        <el-table-column prop="admdvsName" label="医保区划" min-width="120" show-overflow-tooltip />
+        <el-table-column prop="orgName" label="所属机构" min-width="150" show-overflow-tooltip />
+        <el-table-column prop="crteTime" label="创建时间" width="180" show-overflow-tooltip />
         <el-table-column label="操作" width="128" align="center">
           <template #default="{ row }">
             <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
@@ -119,11 +79,14 @@
         <el-form-item label="密码" prop="password" v-if="!form.userId">
           <el-input v-model="form.password" type="password" placeholder="请输入密码" show-password />
         </el-form-item>
-        <el-form-item label="手机号" prop="mobile">
-          <el-input v-model="form.mobile" placeholder="请输入手机号" />
+        <el-form-item label="医保区划" prop="admdvsCode">
+          <el-tree-select v-model="form.admdvsCode" :data="admdvsTree" :props="{ label: 'admdvsName', value: 'admdvsCode' }" check-strictly clearable placeholder="请选择医保区划" style="width: 100%" />
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="form.email" placeholder="请输入邮箱" />
+        <el-form-item label="所属机构" prop="orgId">
+          <el-tree-select v-model="form.orgId" :data="orgTree" :props="{ label: 'orgName', value: 'orgId', children: 'children' }" check-strictly clearable placeholder="请选择所属机构" style="width: 100%" />
+        </el-form-item>
+        <el-form-item label="地区" prop="areaCode">
+          <el-tree-select v-model="form.areaCode" :data="areaTree" :props="{ label: 'areaName', value: 'areaCode' }" check-strictly clearable placeholder="请选择地区" style="width: 100%" />
         </el-form-item>
         <el-form-item label="角色" prop="roleIds" v-if="form.userName !== 'admin'">
           <el-select v-model="form.roleIds" multiple placeholder="请选择角色" style="width: 100%">
@@ -150,7 +113,7 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ArrowUp, ArrowDown } from '@element-plus/icons-vue'
-import { userApi, roleApi } from '@/api/system'
+import { userApi, roleApi, admdvsApi, orgApi, areaApi } from '@/api/system'
 
 const loading = ref(false)
 const submitLoading = ref(false)
@@ -159,6 +122,9 @@ const total = ref(0)
 const dialogVisible = ref(false)
 const dialogTitle = ref('')
 const roleList = ref([])
+const admdvsTree = ref([])
+const orgTree = ref([])
+const areaTree = ref([])
 const queryExpanded = ref(false)
 const formRef = ref(null)
 
@@ -167,18 +133,20 @@ const queryParams = reactive({
   pageSize: 10,
   userName: '',
   realName: '',
-  mobile: '',
-  email: '',
-  certNo: '',
-  certType: '',
-  userType: '',
-  gend: '',
-  areaCode: '',
   admdvsCode: '',
-  addr: '',
   stasFlag: ''
 })
-const form = reactive({ userId: null, userName: '', realName: '', password: '', mobile: '', email: '', roleIds: [], stasFlag: '1' })
+const form = reactive({
+  userId: null,
+  userName: '',
+  realName: '',
+  password: '',
+  admdvsCode: '',
+  orgId: null,
+  areaCode: '',
+  roleIds: [],
+  stasFlag: '1'
+})
 
 // 密码复杂度验证：至少8个字符，包含数字、字母、特殊符号中的至少3种
 const validatePassword = (rule, value, callback) => {
@@ -204,7 +172,8 @@ const validatePassword = (rule, value, callback) => {
 const rules = {
   userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   realName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-  password: [{ required: true, validator: validatePassword, trigger: 'blur' }]
+  password: [{ required: true, validator: validatePassword, trigger: 'blur' }],
+  admdvsCode: [{ required: true, message: '请选择医保区划', trigger: 'change' }]
 }
 
 const showStart = computed(() => total.value ? (queryParams.pageNum - 1) * queryParams.pageSize + 1 : 0)
@@ -231,12 +200,61 @@ const handleReset = () => {
 }
 
 const loadRoles = async () => {
-  const res = await roleApi.list()
-  roleList.value = res.data
+  try {
+    const res = await roleApi.list()
+    if (res && res.data) {
+      roleList.value = res.data
+    }
+  } catch (e) {
+    console.error('加载角色列表失败', e)
+  }
+}
+
+const loadAdmdvsTree = async () => {
+  try {
+    const res = await admdvsApi.tree()
+    if (res && res.data) {
+      admdvsTree.value = res.data
+    }
+  } catch (e) {
+    console.error('加载医保区划失败', e)
+  }
+}
+
+const loadOrgTree = async () => {
+  try {
+    const res = await orgApi.tree()
+    if (res && res.data) {
+      orgTree.value = res.data
+    }
+  } catch (e) {
+    console.error('加载机构树失败', e)
+  }
+}
+
+const loadAreaTree = async () => {
+  try {
+    const res = await areaApi.tree()
+    if (res && res.data) {
+      areaTree.value = res.data
+    }
+  } catch (e) {
+    console.error('加载地区树失败', e)
+  }
 }
 
 const handleAdd = () => {
-  Object.assign(form, { userId: null, userName: '', realName: '', password: '', mobile: '', email: '', roleIds: [], stasFlag: '1' })
+  Object.assign(form, {
+    userId: null,
+    userName: '',
+    realName: '',
+    password: '',
+    admdvsCode: '',
+    orgId: null,
+    areaCode: '',
+    roleIds: [],
+    stasFlag: '1'
+  })
   dialogTitle.value = '新增用户'
   dialogVisible.value = true
 }
@@ -287,6 +305,9 @@ const handleDelete = (row) => {
 onMounted(() => {
   loadData()
   loadRoles()
+  loadAdmdvsTree()
+  loadOrgTree()
+  loadAreaTree()
 })
 </script>
 

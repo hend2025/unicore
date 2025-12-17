@@ -19,7 +19,7 @@
           </el-form-item>
           <el-form-item>
             <el-button @click="handleReset">重置</el-button>
-            <el-button type="primary" @click="loadData">查询</el-button>
+            <el-button type="primary" @click="handleQuery">查询</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -29,35 +29,47 @@
     <div class="table-card">
       <div class="table-header">
         <div class="section-title"><i></i>机构列表</div>
-        <div>
-          <el-button @click="toggleExpand">{{ isExpand ? '折叠' : '展开' }}</el-button>
-          <el-button type="primary" @click="handleAdd(0)">新增机构</el-button>
-        </div>
+        <el-button type="primary" @click="handleAdd(0)">新增机构</el-button>
       </div>
-      <el-table ref="tableRef" :data="filteredData" v-loading="loading" row-key="orgId" :key="tableKey" :default-expand-all="isExpand" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }">
-        <el-table-column prop="orgName" label="机构名称" width="200" align="left" />
-        <el-table-column prop="orgCode" label="机构编码" width="150" />
+      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }" :show-overflow-tooltip="true">
+        <el-table-column type="index" label="序号" width="60" align="center" />
+        <el-table-column prop="orgName" label="机构名称" min-width="200" show-overflow-tooltip />
+        <el-table-column prop="orgCode" label="机构编码" width="150" show-overflow-tooltip />
+        <el-table-column prop="prntOrgId" label="上级机构ID" width="120" show-overflow-tooltip />
         <el-table-column prop="orgType" label="机构类型" width="100">
           <template #default="{ row }">
             <el-tag v-if="row.orgType === '1'">单位</el-tag>
             <el-tag v-else type="success">部门</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="contName" label="联系人" width="100" />
-        <el-table-column prop="contPhone" label="联系电话" width="140" />
+        <el-table-column prop="contName" label="联系人" width="100" show-overflow-tooltip />
+        <el-table-column prop="contPhone" label="联系电话" width="140" show-overflow-tooltip />
         <el-table-column prop="stasFlag" label="状态" width="80">
           <template #default="{ row }">
             <el-tag :type="row.stasFlag === '1' ? 'success' : 'danger'">{{ row.stasFlag === '1' ? '正常' : '停用' }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="180" align="center">
+        <el-table-column label="操作" width="128" align="center">
           <template #default="{ row }">
-            <el-button type="primary" link @click="handleAdd(row.orgId)">新增</el-button>
             <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
             <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <div class="table-footer">
+        <span class="total-info">总共{{ total }}条 显示{{ showStart }}-{{ showEnd }}条</span>
+        <el-pagination
+          v-model:current-page="queryParams.pageNum"
+          v-model:page-size="queryParams.pageSize"
+          :page-sizes="[10, 20, 50, 100]"
+          :total="total"
+          background
+          small
+          layout="sizes, prev, pager, next, jumper"
+          @size-change="loadData"
+          @current-change="loadData"
+        />
+      </div>
     </div>
 
     <!-- 对话框 -->
@@ -108,60 +120,51 @@ import { orgApi } from '@/api/system'
 const loading = ref(false)
 const submitLoading = ref(false)
 const tableData = ref([])
-const tableRef = ref()
+const treeData = ref([])
+const total = ref(0)
 const dialogVisible = ref(false)
 const dialogTitle = ref('')
-const isExpand = ref(true)
-const tableKey = ref(0)
 
-const queryParams = reactive({ orgName: '', orgCode: '', stasFlag: '' })
+const queryParams = reactive({ pageNum: 1, pageSize: 10, orgName: '', orgCode: '', stasFlag: '' })
 const form = reactive({ orgId: null, prntOrgId: 0, orgName: '', orgCode: '', orgType: '1', contName: '', contPhone: '', orgAddr: '', orderNum: 0, stasFlag: '1' })
 const rules = {
   orgName: [{ required: true, message: '请输入机构名称', trigger: 'blur' }],
   orgCode: [{ required: true, message: '请输入机构编码', trigger: 'blur' }]
 }
 
-const orgOptions = computed(() => [{ orgId: 0, orgName: '顶级机构', children: tableData.value }])
+const orgOptions = computed(() => [{ orgId: 0, orgName: '顶级机构', children: treeData.value }])
 
-// 递归过滤树形数据
-const filterTree = (data) => {
-  const { orgName, orgCode, stasFlag } = queryParams
-  return data.filter(item => {
-    const nameMatch = !orgName || item.orgName.includes(orgName)
-    const codeMatch = !orgCode || item.orgCode.includes(orgCode)
-    const statusMatch = !stasFlag || item.stasFlag === stasFlag
-    if (item.children && item.children.length) {
-      item.children = filterTree(item.children)
-      return (nameMatch && codeMatch && statusMatch) || item.children.length > 0
-    }
-    return nameMatch && codeMatch && statusMatch
-  }).map(item => ({ ...item, children: item.children ? [...item.children] : [] }))
-}
-
-const filteredData = computed(() => {
-  if (!queryParams.orgName && !queryParams.orgCode && !queryParams.stasFlag) return tableData.value
-  return filterTree(JSON.parse(JSON.stringify(tableData.value)))
-})
+const showStart = computed(() => total.value ? (queryParams.pageNum - 1) * queryParams.pageSize + 1 : 0)
+const showEnd = computed(() => Math.min(queryParams.pageNum * queryParams.pageSize, total.value))
 
 const loadData = async () => {
   loading.value = true
   try {
-    const res = await orgApi.tree()
-    tableData.value = res.data
+    const res = await orgApi.page(queryParams)
+    tableData.value = res.data.records
+    total.value = res.data.total
   } finally {
     loading.value = false
   }
 }
 
+const loadTreeData = async () => {
+  const res = await orgApi.tree()
+  treeData.value = res.data
+}
+
+const handleQuery = () => {
+  queryParams.pageNum = 1
+  loadData()
+}
+
 const handleReset = () => {
+  queryParams.pageNum = 1
+  queryParams.pageSize = 10
   queryParams.orgName = ''
   queryParams.orgCode = ''
   queryParams.stasFlag = ''
-}
-
-const toggleExpand = () => {
-  isExpand.value = !isExpand.value
-  tableKey.value++
+  loadData()
 }
 
 const handleAdd = (prntOrgId) => {
@@ -187,6 +190,7 @@ const handleSubmit = async () => {
     ElMessage.success('操作成功')
     dialogVisible.value = false
     loadData()
+    loadTreeData()
   } finally {
     submitLoading.value = false
   }
@@ -197,10 +201,14 @@ const handleDelete = (row) => {
     await orgApi.delete(row.orgId)
     ElMessage.success('删除成功')
     loadData()
+    loadTreeData()
   })
 }
 
-onMounted(() => loadData())
+onMounted(() => {
+  loadData()
+  loadTreeData()
+})
 </script>
 
 <style scoped>
@@ -224,4 +232,9 @@ onMounted(() => loadData())
 :deep(.el-table td.el-table__cell) { padding: 8px 0; font-size: 14px; color: #000; border-right: 1px solid #e8e8e8; border-bottom: 1px solid #e8e8e8; }
 :deep(.el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell) { background-color: #f5faff; }
 :deep(.el-table--border) { border: 1px solid #e8e8e8; }
+.table-footer { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; margin-top: 6px; flex-shrink: 0; }
+.total-info { font-size: 14px; color: #000; }
+:deep(.el-pagination) { padding: 0; }
+:deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) { background-color: #409eff; }
+:deep(.el-pagination .el-select .el-input) { width: 100px; }
 </style>

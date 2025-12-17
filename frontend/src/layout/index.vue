@@ -354,14 +354,29 @@ const handleMenuSelect = (index) => {
   const menuItem = findMenuItem(index)
   const currentSystem = getCurrentSystem()
   
-  // 判断是否为外部系统链接（菜单路径以 /# 开头表示外部系统路由）
-  const isExternalLink = index.startsWith('/#/')
+  // 先检查是否为内部页面组件
+  const comp = componentMap[index]
   
-  if (isExternalLink) {
-    // 获取外部系统的基础URL
+  if (comp) {
+    // 内部页面
+    const title = menuTitleMap[index] || (menuItem?.menuName) || '页面'
+    
+    // 添加到访问记录
+    const existingView = visitedViews.value.find(v => v.path === index)
+    if (!existingView) {
+      visitedViews.value.push({
+        path: index,
+        title: title
+      })
+    }
+    
+    activeTab.value = index
+    activeMenu.value = index
+  } else {
+    // 外部系统链接（不在 componentMap 中的都当作外部链接处理）
     const sysUrl = currentSystem?.sysUrl || ''
     // 构建完整的外部系统URL
-    let externalUrl = sysUrl + menuItem.menuUrl
+    let externalUrl = sysUrl + (menuItem?.menuUrl || index)
     // 如果不是完整URL，拼接当前域名
     if (!externalUrl.startsWith('http://') && !externalUrl.startsWith('https://')) {
       if (!externalUrl.startsWith('/')) {
@@ -370,8 +385,8 @@ const handleMenuSelect = (index) => {
       externalUrl = window.location.origin + externalUrl
     }
     
-    const menuId = menuItem.menuId || Date.now()
-    const title = menuItem.menuName || '外部页面'
+    const menuId = menuItem?.menuId || Date.now()
+    const title = menuItem?.menuName || '外部页面'
     const iframePath = `iframe_${menuId}`
     
     // 缓存iframe信息
@@ -391,24 +406,6 @@ const handleMenuSelect = (index) => {
     
     activeTab.value = iframePath
     activeMenu.value = index
-  } else {
-    // 内部页面
-    const comp = componentMap[index]
-    if (comp) {
-      const title = menuTitleMap[index] || (menuItem?.menuName) || '页面'
-      
-      // 添加到访问记录
-      const existingView = visitedViews.value.find(v => v.path === index)
-      if (!existingView) {
-        visitedViews.value.push({
-          path: index,
-          title: title
-        })
-      }
-      
-      activeTab.value = index
-      activeMenu.value = index
-    }
   }
 }
 

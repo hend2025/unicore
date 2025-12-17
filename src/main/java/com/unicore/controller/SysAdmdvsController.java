@@ -61,8 +61,20 @@ public class SysAdmdvsController {
     }
 
     private List<SysAdmdvs> buildTree(List<SysAdmdvs> list, String parentCode) {
+        // 收集所有节点的编码
+        java.util.Set<String> allCodes = list.stream()
+            .map(SysAdmdvs::getAdmdvsCode)
+            .collect(Collectors.toSet());
+        
         return list.stream()
-            .filter(a -> parentCode == null ? a.getPrntAdmdvsCode() == null : parentCode.equals(a.getPrntAdmdvsCode()))
+            .filter(a -> {
+                String prnt = a.getPrntAdmdvsCode();
+                if (parentCode == null) {
+                    // 根节点：父级编码为空或父级编码不在当前列表中
+                    return prnt == null || prnt.isEmpty() || !allCodes.contains(prnt);
+                }
+                return parentCode.equals(prnt);
+            })
             .peek(a -> a.setChildren(buildTree(list, a.getAdmdvsCode())))
             .collect(Collectors.toList());
     }

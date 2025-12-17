@@ -25,10 +25,10 @@
         <div class="section-title"><i></i>参数列表</div>
         <el-button type="primary" @click="handleAdd">新增参数</el-button>
       </div>
-      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }">
+      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }" :show-overflow-tooltip="true">
         <el-table-column type="index" label="序号" width="60" align="center" />
-        <el-table-column prop="configName" label="参数名称" min-width="120" />
-        <el-table-column prop="configKey" label="参数键名" min-width="120" />
+        <el-table-column prop="configName" label="参数名称" min-width="120" show-overflow-tooltip />
+        <el-table-column prop="configKey" label="参数键名" min-width="120" show-overflow-tooltip />
         <el-table-column prop="configValue" label="参数键值" min-width="150" show-overflow-tooltip />
         <el-table-column prop="stasFlag" label="状态" width="80">
           <template #default="{ row }">

@@ -32,10 +32,10 @@
           <el-button type="primary" @click="handleAdd()">新增菜单</el-button>
         </div>
       </div>
-      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }">
-        <el-table-column prop="menuName" label="菜单名称" min-width="150" />
-        <el-table-column prop="menuUrl" label="路由地址" min-width="220" />
-        <el-table-column label="所属系统" min-width="120">
+      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }" :show-overflow-tooltip="true">
+        <el-table-column prop="menuName" label="菜单名称" min-width="150" show-overflow-tooltip />
+        <el-table-column prop="menuUrl" label="路由地址" min-width="220" show-overflow-tooltip />
+        <el-table-column label="所属系统" min-width="120" show-overflow-tooltip>
           <template #default="{ row }">
             {{ getSystemName(row.sysId) }}
           </template>
@@ -52,7 +52,7 @@
             <el-tag :type="row.stasFlag === '1' ? 'success' : 'danger'">{{ row.stasFlag === '1' ? '正常' : '停用' }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="orderNum" label="排序" width="80" />
+        <el-table-column prop="orderNum" label="排序" width="80" show-overflow-tooltip />
         <el-table-column label="操作" width="120" align="center">
           <template #default="{ row }">
             <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>

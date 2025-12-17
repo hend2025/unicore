@@ -25,19 +25,19 @@
           <el-button type="danger" @click="handleClear">清空全部</el-button>
         </div>
       </div>
-      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }">
+      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }" :show-overflow-tooltip="true">
         <el-table-column type="index" label="序号" width="60" align="center" />
-        <el-table-column prop="userName" label="用户账号" width="120" />
-        <el-table-column prop="loginIp" label="登录IP" width="140" />
-        <el-table-column prop="loginLoc" label="登录地点" min-width="150" />
-        <el-table-column prop="browser" label="浏览器" width="120" />
-        <el-table-column prop="os" label="操作系统" width="120" />
+        <el-table-column prop="userName" label="用户账号" width="120" show-overflow-tooltip />
+        <el-table-column prop="loginIp" label="登录IP" width="140" show-overflow-tooltip />
+        <el-table-column prop="loginLoc" label="登录地点" min-width="150" show-overflow-tooltip />
+        <el-table-column prop="browser" label="浏览器" width="120" show-overflow-tooltip />
+        <el-table-column prop="os" label="操作系统" width="120" show-overflow-tooltip />
         <el-table-column prop="loginStat" label="登录状态" width="100">
           <template #default="{ row }">
             <el-tag :type="row.loginStat === '1' ? 'success' : 'danger'">{{ row.loginStat === '1' ? '成功' : '失败' }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="loginTime" label="登录时间" width="180" />
+        <el-table-column prop="loginTime" label="登录时间" width="180" show-overflow-tooltip />
         <el-table-column label="操作" width="80" align="center">
           <template #default="{ row }">
             <el-button type="danger" link @click="handleDelete(row)">删除</el-button>

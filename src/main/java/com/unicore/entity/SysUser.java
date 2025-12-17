@@ -54,4 +54,7 @@ public class SysUser extends BaseEntity {
 
     @TableField(exist = false)
     private String orgName;
+
+    @TableField(exist = false)
+    private String admdvsName;
 }

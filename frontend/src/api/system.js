@@ -65,6 +65,7 @@ export const menuApi = {
 
 // 机构管理
 export const orgApi = {
+  page: (params) => request({ url: '/api/sys/org/page', method: 'get', params }),
   tree: () => request({ url: '/api/sys/org/tree', method: 'get' }),
   list: (params) => request({ url: '/api/sys/org/list', method: 'get', params }),
   get: (id) => request({ url: `/api/sys/org/${id}`, method: 'get' }),

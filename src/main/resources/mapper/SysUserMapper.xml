@@ -15,9 +15,10 @@
     </select>
 
     <select id="selectUserList" resultType="com.unicore.entity.SysUser">
-        SELECT u.*, o.ORG_NAME as orgName
+        SELECT u.*, o.ORG_NAME as orgName, a.ADMDVS_NAME as admdvsName
         FROM sys_user u
         LEFT JOIN sys_org o ON u.ORG_ID = o.ORG_ID
+        LEFT JOIN sys_admdvs a ON u.ADMDVS_CODE = a.ADMDVS_CODE
         WHERE u.VALI_FLAG = '1'
         <if test="user.userName != null and user.userName != ''">
             AND u.USER_NAME LIKE CONCAT('%', #{user.userName}, '%')
@@ -25,8 +26,8 @@
         <if test="user.realName != null and user.realName != ''">
             AND u.REAL_NAME LIKE CONCAT('%', #{user.realName}, '%')
         </if>
-        <if test="user.mobile != null and user.mobile != ''">
-            AND u.MOBILE LIKE CONCAT('%', #{user.mobile}, '%')
+        <if test="user.admdvsCode != null and user.admdvsCode != ''">
+            AND u.ADMDVS_CODE = #{user.admdvsCode}
         </if>
         <if test="user.orgId != null">
             AND u.ORG_ID = #{user.orgId}

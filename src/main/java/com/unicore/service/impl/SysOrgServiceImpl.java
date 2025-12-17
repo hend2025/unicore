@@ -1,6 +1,7 @@
 package com.unicore.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.unicore.entity.SysOrg;
 import com.unicore.mapper.SysOrgMapper;
@@ -11,6 +12,23 @@ import java.util.stream.Collectors;
 
 @Service
 public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> implements SysOrgService {
+
+    @Override
+    public Page<SysOrg> selectOrgPage(Page<SysOrg> page, SysOrg org) {
+        LambdaQueryWrapper<SysOrg> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysOrg::getValiFlag, "1");
+        if (org.getOrgName() != null && !org.getOrgName().isEmpty()) {
+            wrapper.like(SysOrg::getOrgName, org.getOrgName());
+        }
+        if (org.getOrgCode() != null && !org.getOrgCode().isEmpty()) {
+            wrapper.like(SysOrg::getOrgCode, org.getOrgCode());
+        }
+        if (org.getStasFlag() != null && !org.getStasFlag().isEmpty()) {
+            wrapper.eq(SysOrg::getStasFlag, org.getStasFlag());
+        }
+        wrapper.orderByAsc(SysOrg::getOrderNum);
+        return page(page, wrapper);
+    }
 
     @Override
     public List<SysOrg> selectOrgTree() {

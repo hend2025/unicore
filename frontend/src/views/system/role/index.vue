@@ -25,16 +25,16 @@
         <div class="section-title"><i></i>角色列表</div>
         <el-button type="primary" @click="handleAdd">新增角色</el-button>
       </div>
-      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }">
+      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }" :show-overflow-tooltip="true">
         <el-table-column type="index" label="序号" width="60" align="center" />
-        <el-table-column prop="roleName" label="角色名称" min-width="120" />
-        <el-table-column prop="roleKey" label="权限字符" min-width="120" />
+        <el-table-column prop="roleName" label="角色名称" min-width="120" show-overflow-tooltip />
+        <el-table-column prop="roleKey" label="权限字符" min-width="120" show-overflow-tooltip />
         <el-table-column prop="stasFlag" label="状态" width="80">
           <template #default="{ row }">
             <el-tag :type="row.stasFlag === '1' ? 'success' : 'danger'">{{ row.stasFlag === '1' ? '正常' : '停用' }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="crteTime" label="创建时间" width="180" />
+        <el-table-column prop="crteTime" label="创建时间" width="180" show-overflow-tooltip />
         <el-table-column label="操作" width="128" align="center">
           <template #default="{ row }">
             <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
