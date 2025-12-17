@@ -51,7 +51,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (StringUtils.hasText(menu.getStasFlag())) {
             wrapper.eq(SysMenu::getStasFlag, menu.getStasFlag());
         }
-        wrapper.orderByAsc(SysMenu::getSysId, SysMenu::getOrderNum);
+        wrapper.orderByAsc(SysMenu::getSysId, SysMenu::getMenuId);
         return page(page, wrapper);
     }
 

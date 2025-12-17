@@ -113,8 +113,7 @@ import { ref, computed, onMounted, watch, defineAsyncComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/user'
-import { systemApi } from '@/api/system'
-import { changePassword } from '@/api/auth'
+import { changePassword, getSystems } from '@/api/auth'
 import MenuItem from '@/components/MenuItem.vue'
 
 const router = useRouter()
@@ -284,12 +283,17 @@ onMounted(async () => {
   try {
     await userStore.getUserInfo()
     
-    // 获取子系统列表
-    const sysRes = await systemApi.list()
+    // 获取用户有权限的子系统列表
+    const sysRes = await getSystems()
     if (sysRes.code === 0 && sysRes.data.length > 0) {
       systems.value = sysRes.data
       // 如果没有保存的系统，默认选择第一个
       if (!activeSystem.value) {
+        activeSystem.value = String(sysRes.data[0].sysId)
+      }
+      // 如果保存的系统不在用户有权限的系统列表中，重置为第一个
+      const savedSystemExists = sysRes.data.some(s => String(s.sysId) === activeSystem.value)
+      if (!savedSystemExists) {
         activeSystem.value = String(sysRes.data[0].sysId)
       }
     }

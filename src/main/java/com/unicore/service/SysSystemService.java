@@ -9,4 +9,11 @@ public interface SysSystemService extends IService<SysSystem> {
     Page<SysSystem> selectSystemPage(Page<SysSystem> page, SysSystem system);
     List<SysSystem> selectSystemTree();
     List<SysSystem> selectSystemList();
+    
+    /**
+     * 获取用户有权限的系统列表
+     * @param userId 用户ID
+     * @return 系统列表
+     */
+    List<SysSystem> selectSystemListByUserId(Integer userId);
 }

@@ -33,6 +33,7 @@
         </div>
       </div>
       <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }" :show-overflow-tooltip="true">
+        <el-table-column prop="menuId" label="菜单ID" width="180" show-overflow-tooltip />
         <el-table-column prop="menuName" label="菜单名称" min-width="150" show-overflow-tooltip />
         <el-table-column prop="menuUrl" label="路由地址" min-width="220" show-overflow-tooltip />
         <el-table-column label="所属系统" min-width="120" show-overflow-tooltip>
@@ -75,6 +76,9 @@
 
     <!-- 对话框 -->
     <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" width="600px" @submit="handleSubmit">
+      <el-form-item label="菜单ID" prop="menuId" v-if="form.menuId">
+        <el-input v-model="form.menuId" disabled />
+      </el-form-item>
       <el-form-item label="所属系统" prop="sysId">
         <el-select v-model="form.sysId" placeholder="请选择系统" style="width: 100%">
           <el-option v-for="item in systemList" :key="item.sysId" :label="item.sysName" :value="item.sysId" />

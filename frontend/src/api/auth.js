@@ -69,3 +69,10 @@ export function changePassword(data) {
     data
   })
 }
+
+export function getSystems() {
+  return request({
+    url: '/api/auth/systems',
+    method: 'get'
+  })
+}

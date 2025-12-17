@@ -3,7 +3,9 @@ package com.unicore.controller;
 import cn.hsa.hsaf.auth.security.entity.PortalUserDetails;
 import com.unicore.common.WrapperResponse;
 import com.unicore.entity.SysMenu;
+import com.unicore.entity.SysSystem;
 import com.unicore.service.SysMenuService;
+import com.unicore.service.SysSystemService;
 import com.unicore.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,9 @@ public class AuthController {
 
     @Autowired
     private SysUserService userService;
+    
+    @Autowired
+    private SysSystemService systemService;
 
     @GetMapping("/info")
     public WrapperResponse<Map<String, Object>> getInfo() {
@@ -48,6 +53,18 @@ public class AuthController {
         PortalUserDetails loginUser = (PortalUserDetails) principal;
         List<SysMenu> menus = menuService.selectMenuTreeByUserId(Integer.parseInt(loginUser.getUactID()), sysId);
         return WrapperResponse.success(menus);
+    }
+    
+    @GetMapping("/systems")
+    public WrapperResponse<List<SysSystem>> getSystems() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+        if (principal == null || !(principal instanceof PortalUserDetails)) {
+            return WrapperResponse.error(401, "未登录或会话已过期，请重新登录");
+        }
+        PortalUserDetails loginUser = (PortalUserDetails) principal;
+        List<SysSystem> systems = systemService.selectSystemListByUserId(Integer.parseInt(loginUser.getUactID()));
+        return WrapperResponse.success(systems);
     }
 
     @PutMapping("/password")

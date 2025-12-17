@@ -3,15 +3,28 @@ package com.unicore.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.unicore.entity.SysMenu;
 import com.unicore.entity.SysSystem;
+import com.unicore.entity.SysUser;
+import com.unicore.mapper.SysMenuMapper;
 import com.unicore.mapper.SysSystemMapper;
+import com.unicore.mapper.SysUserMapper;
 import com.unicore.service.SysSystemService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class SysSystemServiceImpl extends ServiceImpl<SysSystemMapper, SysSystem> implements SysSystemService {
+
+    @Autowired
+    private SysMenuMapper menuMapper;
+    
+    @Autowired
+    private SysUserMapper userMapper;
 
     @Override
     public Page<SysSystem> selectSystemPage(Page<SysSystem> page, SysSystem system) {
@@ -48,6 +61,40 @@ public class SysSystemServiceImpl extends ServiceImpl<SysSystemMapper, SysSystem
         LambdaQueryWrapper<SysSystem> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysSystem::getValiFlag, "1");
         wrapper.eq(SysSystem::getStasFlag, "1");
+        wrapper.orderByAsc(SysSystem::getOrderNum);
+        return list(wrapper);
+    }
+    
+    @Override
+    public List<SysSystem> selectSystemListByUserId(Integer userId) {
+        // 判断是否为admin用户
+        SysUser user = userMapper.selectById(userId);
+        if (user != null && "admin".equals(user.getUserName())) {
+            // admin用户返回所有系统
+            return selectSystemList();
+        }
+        
+        // 获取用户有权限的菜单
+        List<SysMenu> menus = menuMapper.selectMenusByUserId(userId);
+        if (menus == null || menus.isEmpty()) {
+            return new ArrayList<>();
+        }
+        
+        // 提取不重复的系统ID
+        Set<Integer> sysIds = menus.stream()
+            .filter(m -> m.getSysId() != null)
+            .map(SysMenu::getSysId)
+            .collect(Collectors.toSet());
+        
+        if (sysIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+        
+        // 查询对应的系统信息
+        LambdaQueryWrapper<SysSystem> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysSystem::getValiFlag, "1");
+        wrapper.eq(SysSystem::getStasFlag, "1");
+        wrapper.in(SysSystem::getSysId, sysIds);
         wrapper.orderByAsc(SysSystem::getOrderNum);
         return list(wrapper);
     }
