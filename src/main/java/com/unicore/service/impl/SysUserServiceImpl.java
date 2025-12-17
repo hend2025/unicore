@@ -2,13 +2,16 @@ package com.unicore.service.impl;
 
 import cn.hsa.hsaf.auth.security.entity.PortalUserDetails;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.unicore.common.Base64Utils;
 import com.unicore.common.PasswordValidator;
+import com.unicore.entity.SysOrg;
 import com.unicore.entity.SysUser;
 import com.unicore.entity.SysUserRole;
+import com.unicore.mapper.SysOrgMapper;
 import com.unicore.mapper.SysUserMapper;
 import com.unicore.mapper.SysUserRoleMapper;
 import com.unicore.security.SecurityUtils;
@@ -20,19 +23,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService, UserDetailsService {
 
     @Autowired
-    private SysUserRoleMapper userRoleMapper;
+     SysUserRoleMapper userRoleMapper;
 
     @Autowired
-    private SysUserMapper userMapper;
+     SysUserMapper userMapper;
+
+    @Autowired
+     SysOrgMapper orgMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -44,22 +49,22 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new UsernameNotFoundException("用户不存在");
         }
 
-        Set<String> permissions = new HashSet<>();
-        // admin用户拥有所有权限
-        if ("admin".equals(username)) {
-            permissions.add("*:*:*");
-        } else {
-            List<String> perms = userMapper.selectPermsByUserId(sysUser.getUserId());
-            if (perms != null) {
-                permissions.addAll(perms);
-            }
-        }
-
         PortalUserDetails user = new PortalUserDetails();
         user.setUactID(Long.toString(sysUser.getUserId()));
         user.setUserAcct(sysUser.getUserName());
         user.setName(sysUser.getRealName());
         user.setAdmDvs(sysUser.getAdmdvsCode());
+        user.setOpterNo(sysUser.getSalt());
+        user.setPoolAreaCodg(sysUser.getPassword());
+
+        if(!StringUtils.isEmpty(sysUser.getOrgId())){
+            SysOrg orgEntity = orgMapper.selectById(sysUser.getOrgId());
+            user.setOrgUntID(ObjectUtil.isNull(orgEntity) ? null : String.valueOf(orgEntity.getOrgId()));
+            user.setOrgCodg(Optional.ofNullable(orgEntity).map(SysOrg::getOrgCode).orElse(null));
+            user.setOrgName(Optional.ofNullable(orgEntity).map(SysOrg::getOrgName).orElse(null));
+            user.setAdmDvs(Optional.ofNullable(orgEntity).map(SysOrg::getAdmdvsCode).orElse(sysUser.getAdmdvsCode()));
+        }
+
         return user;
 
     }
