@@ -82,26 +82,37 @@
       </el-aside>
       <el-container class="content-container">
         <div class="app-main">
-          <el-tabs v-model="activeTab" type="card" @tab-remove="closeTab" @tab-change="handleTabChange">
-            <el-tab-pane 
-              v-for="view in visitedViews" 
-              :key="view.path" 
-              :label="view.title" 
-              :name="view.path" 
-              :closable="view.path !== '/home'"
-              lazy
-            >
-              <!-- 外部系统iframe -->
-              <iframe 
-                v-if="view.isIframe" 
-                :src="iframeCache[view.path]?.url" 
-                class="iframe-content" 
-                frameborder="0"
-              />
-              <!-- 内部页面组件 -->
-              <component v-else :is="componentMap[view.path]" />
-            </el-tab-pane>
-          </el-tabs>
+          <div class="tabs-wrapper">
+            <el-tabs v-model="activeTab" type="card" @tab-remove="closeTab" @tab-change="handleTabChange">
+              <el-tab-pane 
+                v-for="view in visitedViews" 
+                :key="view.path" 
+                :label="view.title" 
+                :name="view.path" 
+                :closable="view.path !== '/home'"
+                lazy
+              >
+                <!-- 外部系统iframe -->
+                <iframe 
+                  v-if="view.isIframe" 
+                  :src="iframeCache[view.path]?.url" 
+                  class="iframe-content" 
+                  frameborder="0"
+                />
+                <!-- 内部页面组件 -->
+                <component v-else :is="componentMap[view.path]" />
+              </el-tab-pane>
+            </el-tabs>
+            <el-dropdown class="tabs-close-btn" @command="handleTabsCommand">
+              <el-icon><Close /></el-icon>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="closeOther">关闭其他</el-dropdown-item>
+                  <el-dropdown-item command="closeAll">关闭全部</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </div>
         </div>
       </el-container>
     </el-container>
@@ -438,6 +449,37 @@ const closeTab = (targetPath) => {
   }
 }
 
+// 关闭其他标签（保留首页和当前标签）
+const closeOtherTabs = () => {
+  visitedViews.value = visitedViews.value.filter(view => 
+    view.path === '/home' || view.path === activeTab.value
+  )
+  // 清理iframe缓存
+  Object.keys(iframeCache.value).forEach(key => {
+    if (key !== activeTab.value) {
+      delete iframeCache.value[key]
+    }
+  })
+}
+
+// 关闭全部标签（只保留首页）
+const closeAllTabs = () => {
+  visitedViews.value = visitedViews.value.filter(view => view.path === '/home')
+  activeTab.value = '/home'
+  activeMenu.value = '/home'
+  // 清理所有iframe缓存
+  iframeCache.value = {}
+}
+
+// 处理tabs下拉菜单命令
+const handleTabsCommand = (command) => {
+  if (command === 'closeOther') {
+    closeOtherTabs()
+  } else if (command === 'closeAll') {
+    closeAllTabs()
+  }
+}
+
 const handleCommand = async (command) => {
   if (command === 'logout') {
     try {
@@ -701,7 +743,7 @@ const handleSearchResultClick = (item) => {
     :deep(.el-sub-menu__title),
     :deep(.el-menu-item) {
       .el-icon {
-        margin-right: 4px;
+        margin-right: 2px;
       }
       
       &:hover {
@@ -717,15 +759,17 @@ const handleSearchResultClick = (item) => {
       background-color: rgba(255, 255, 255, 0.15);
     }
     
-    // 二级菜单
+    // 二级菜单（子菜单）- 减少左边距
     :deep(.el-sub-menu .el-menu-item) {
       height: 44px;
       line-height: 44px;
+      padding-left: 20px !important;
     }
     
     :deep(.el-sub-menu .el-sub-menu > .el-sub-menu__title) {
       height: 44px;
       line-height: 44px;
+      padding-left: 20px !important;
     }
     
     // 三级菜单
@@ -733,6 +777,31 @@ const handleSearchResultClick = (item) => {
     :deep(.el-sub-menu .el-sub-menu .el-sub-menu > .el-sub-menu__title) {
       height: 42px;
       line-height: 42px;
+      padding-left: 32px !important;
+    }
+
+    // 四级菜单
+    :deep(.el-sub-menu .el-sub-menu .el-sub-menu .el-menu-item),
+    :deep(.el-sub-menu .el-sub-menu .el-sub-menu .el-sub-menu > .el-sub-menu__title) {
+      padding-left: 44px !important;
+    }
+
+    // 五级菜单
+    :deep(.el-sub-menu .el-sub-menu .el-sub-menu .el-sub-menu .el-menu-item),
+    :deep(.el-sub-menu .el-sub-menu .el-sub-menu .el-sub-menu .el-sub-menu > .el-sub-menu__title) {
+      padding-left: 56px !important;
+    }
+
+    // 六级菜单
+    :deep(.el-sub-menu .el-sub-menu .el-sub-menu .el-sub-menu .el-sub-menu .el-menu-item),
+    :deep(.el-sub-menu .el-sub-menu .el-sub-menu .el-sub-menu .el-sub-menu .el-sub-menu > .el-sub-menu__title) {
+      padding-left: 68px !important;
+    }
+
+    // 七级菜单
+    :deep(.el-sub-menu .el-sub-menu .el-sub-menu .el-sub-menu .el-sub-menu .el-sub-menu .el-menu-item),
+    :deep(.el-sub-menu .el-sub-menu .el-sub-menu .el-sub-menu .el-sub-menu .el-sub-menu .el-sub-menu > .el-sub-menu__title) {
+      padding-left: 80px !important;
     }
   }
   
@@ -764,6 +833,34 @@ const handleSearchResultClick = (item) => {
 .app-main {
   height: 100%;
   
+  .tabs-wrapper {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    
+    .tabs-close-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 40px;
+      width: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f5f5;
+      border-bottom: 1px solid #e8e8e8;
+      cursor: pointer;
+      color: #606266;
+      z-index: 10;
+      
+      &:hover {
+        color: #1976d2;
+        background: #e8e8e8;
+      }
+    }
+  }
+  
   :deep(.el-tabs) {
     height: 100%;
     display: flex;
@@ -773,7 +870,7 @@ const handleSearchResultClick = (item) => {
       margin: 0;
       background: #f5f5f5;
       border-bottom: 1px solid #e8e8e8;
-      padding: 0 8px;
+      padding: 0 48px 0 8px;
       
       .el-tabs__nav-wrap::after {
         display: none;
@@ -793,6 +890,24 @@ const handleSearchResultClick = (item) => {
         background: transparent;
         color: #606266;
         transition: all 0.2s;
+        position: relative;
+        
+        // tab之间的分割线
+        &::after {
+          content: '';
+          position: absolute;
+          right: -2px;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 1px;
+          height: 14px;
+          background: #d9d9d9;
+        }
+        
+        // 最后一个tab不显示分割线
+        &:last-child::after {
+          display: none;
+        }
         
         &:hover {
           background: rgba(25, 118, 210, 0.05);
