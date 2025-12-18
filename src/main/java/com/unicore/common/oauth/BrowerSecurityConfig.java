@@ -81,8 +81,8 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 设置跨域问题
         http.cors().configurationSource(corsConfigurationSource()).and()
-                .csrf().csrfTokenRepository(this.cookieCsrfTokenRepository())
-                .ignoringAntMatchers("/login", "/logout");
+                // 禁用 CSRF（前后端分离项目通常不需要 CSRF）
+                .csrf().disable();
         //单用户登录，新登录会踢掉旧session
         http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
     }
@@ -94,11 +94,10 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
-        configuration.setAllowCredentials(true);
+        configuration.addAllowedOrigin("*");
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
+        configuration.setAllowCredentials(false);
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**",configuration);
         return source;

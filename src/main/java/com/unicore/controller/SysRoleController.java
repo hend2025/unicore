@@ -47,12 +47,12 @@ public class SysRoleController {
         return WrapperResponse.success(roleService.addRole(role));
     }
 
-    @PutMapping
+    @PostMapping("/update")
     public WrapperResponse<Boolean> update(@RequestBody SysRole role) {
         return WrapperResponse.success(roleService.updateRole(role));
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/delete/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable Integer id) {
         return WrapperResponse.success(roleService.deleteRole(id));
     }

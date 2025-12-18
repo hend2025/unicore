@@ -42,13 +42,13 @@ public class SysApiLogController {
         return WrapperResponse.success(apiLogMapper.selectById(id));
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/delete/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable Long id) {
         // API日志表没有vali_flag字段，进行物理删除
         return WrapperResponse.success(apiLogMapper.deleteById(id) > 0);
     }
 
-    @DeleteMapping("/batch")
+    @PostMapping("/batch/delete")
     public WrapperResponse<Boolean> deleteBatch(@RequestBody Long[] ids) {
         int count = 0;
         for (Long id : ids) {
@@ -57,7 +57,7 @@ public class SysApiLogController {
         return WrapperResponse.success(count > 0);
     }
 
-    @DeleteMapping("/clear")
+    @GetMapping("/clear")
     public WrapperResponse<Boolean> clear(@RequestParam(required = false) Integer days) {
         LambdaQueryWrapper<SysApiLog> wrapper = new LambdaQueryWrapper<>();
         if (days != null && days > 0) {

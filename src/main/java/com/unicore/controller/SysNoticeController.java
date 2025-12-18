@@ -43,12 +43,12 @@ public class SysNoticeController {
         return WrapperResponse.success(noticeMapper.insert(notice) > 0);
     }
 
-    @PutMapping
+    @PostMapping("/update")
     public WrapperResponse<Boolean> update(@RequestBody SysNotice notice) {
         return WrapperResponse.success(noticeMapper.updateById(notice) > 0);
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/delete/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable Integer id) {
         return WrapperResponse.success(noticeMapper.deleteById(id) > 0);
     }

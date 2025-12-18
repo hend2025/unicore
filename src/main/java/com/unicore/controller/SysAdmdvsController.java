@@ -49,12 +49,12 @@ public class SysAdmdvsController {
         return WrapperResponse.success(admdvsMapper.insert(admdvs) > 0);
     }
 
-    @PutMapping
+    @PostMapping("/update")
     public WrapperResponse<Boolean> update(@RequestBody SysAdmdvs admdvs) {
         return WrapperResponse.success(admdvsMapper.updateById(admdvs) > 0);
     }
 
-    @DeleteMapping("/{code}")
+    @GetMapping("/delete/{code}")
     public WrapperResponse<Boolean> delete(@PathVariable String code) {
         // MyBatis-Plus会自动进行逻辑删除
         return WrapperResponse.success(admdvsMapper.deleteById(code) > 0);

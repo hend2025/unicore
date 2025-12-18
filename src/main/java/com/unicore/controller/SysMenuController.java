@@ -45,12 +45,12 @@ public class SysMenuController {
         return WrapperResponse.success(menuService.saveMenu(menu));
     }
 
-    @PutMapping
+    @PostMapping("/update")
     public WrapperResponse<Boolean> update(@RequestBody SysMenu menu) {
         return WrapperResponse.success(menuService.updateById(menu));
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/delete/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable String id) {
         return WrapperResponse.success(menuService.removeById(id));
     }

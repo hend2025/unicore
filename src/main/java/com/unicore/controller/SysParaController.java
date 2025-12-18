@@ -43,12 +43,12 @@ public class SysParaController {
         return WrapperResponse.success(paraMapper.insert(para) > 0);
     }
 
-    @PutMapping
+    @PostMapping("/update")
     public WrapperResponse<Boolean> update(@RequestBody SysPara para) {
         return WrapperResponse.success(paraMapper.updateById(para) > 0);
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/delete/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable Integer id) {
         // MyBatis-Plus会自动进行逻辑删除
         return WrapperResponse.success(paraMapper.deleteById(id) > 0);

@@ -65,7 +65,7 @@ export function getMenus(sysId) {
 export function changePassword(data) {
   return request({
     url: '/api/auth/password',
-    method: 'put',
+    method: 'post',
     data
   })
 }

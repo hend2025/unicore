@@ -44,12 +44,12 @@ public class SysOrgController {
         return WrapperResponse.success(orgService.save(org));
     }
 
-    @PutMapping
+    @PostMapping("/update")
     public WrapperResponse<Boolean> update(@RequestBody SysOrg org) {
         return WrapperResponse.success(orgService.updateById(org));
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/delete/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable Integer id) {
         // MyBatis-Plus会自动进行逻辑删除
         return WrapperResponse.success(orgService.removeById(id));

@@ -41,17 +41,17 @@ public class SysUserController {
         return WrapperResponse.success(userService.addUser(user));
     }
 
-    @PutMapping
+    @PostMapping("/update")
     public WrapperResponse<Boolean> update(@RequestBody SysUser user) {
         return WrapperResponse.success(userService.updateUser(user));
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/delete/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable Integer id) {
         return WrapperResponse.success(userService.deleteUser(id));
     }
 
-    @PutMapping("/resetPwd")
+    @PostMapping("/resetPwd")
     public WrapperResponse<Boolean> resetPassword(@RequestBody SysUser user) {
         // 从配置表获取默认密码
         String defaultPassword = "Abc@12345678";

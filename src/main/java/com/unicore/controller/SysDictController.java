@@ -48,12 +48,12 @@ public class SysDictController {
         return WrapperResponse.success(dictTypeMapper.insert(dictType) > 0);
     }
 
-    @PutMapping("/type")
+    @PostMapping("/type/update")
     public WrapperResponse<Boolean> updateType(@RequestBody SysDictType dictType) {
         return WrapperResponse.success(dictTypeMapper.updateById(dictType) > 0);
     }
 
-    @DeleteMapping("/type/{code}")
+    @GetMapping("/type/delete/{code}")
     public WrapperResponse<Boolean> deleteType(@PathVariable String code) {
         // MyBatis-Plus会自动进行逻辑删除
         return WrapperResponse.success(dictTypeMapper.deleteById(code) > 0);
@@ -101,12 +101,12 @@ public class SysDictController {
         return WrapperResponse.success(dictMapper.insert(dict) > 0);
     }
 
-    @PutMapping("/data")
+    @PostMapping("/data/update")
     public WrapperResponse<Boolean> updateData(@RequestBody SysDict dict) {
         return WrapperResponse.success(dictMapper.updateById(dict) > 0);
     }
 
-    @DeleteMapping("/data/{id}")
+    @GetMapping("/data/delete/{id}")
     public WrapperResponse<Boolean> deleteData(@PathVariable String id) {
         // MyBatis-Plus会自动进行逻辑删除
         return WrapperResponse.success(dictMapper.deleteById(id) > 0);

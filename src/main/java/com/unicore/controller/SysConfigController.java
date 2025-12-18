@@ -51,12 +51,12 @@ public class SysConfigController {
         return WrapperResponse.success(configMapper.insert(config) > 0);
     }
 
-    @PutMapping
+    @PostMapping("/update")
     public WrapperResponse<Boolean> update(@RequestBody SysConfig config) {
         return WrapperResponse.success(configMapper.updateById(config) > 0);
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/delete/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable Integer id) {
         // MyBatis-Plus会自动进行逻辑删除
         return WrapperResponse.success(configMapper.deleteById(id) > 0);

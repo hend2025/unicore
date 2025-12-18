@@ -67,7 +67,7 @@ public class AuthController {
         return WrapperResponse.success(systems);
     }
 
-    @PutMapping("/password")
+    @PostMapping("/password")
     public WrapperResponse<Void> changePassword(@RequestBody Map<String, String> params) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();

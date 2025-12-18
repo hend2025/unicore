@@ -48,17 +48,17 @@ public class SysLogController {
         return WrapperResponse.success(logininforMapper.selectPage(page, wrapper));
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/delete/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable Long id) {
         return WrapperResponse.success(logMapper.deleteById(id) > 0);
     }
 
-    @DeleteMapping("/login/{id}")
+    @GetMapping("/login/delete/{id}")
     public WrapperResponse<Boolean> deleteLogin(@PathVariable Long id) {
         return WrapperResponse.success(logininforMapper.deleteById(id) > 0);
     }
 
-    @DeleteMapping("/clear")
+    @GetMapping("/clear")
     public WrapperResponse<Boolean> clearOper(@RequestParam(required = false) Integer days) {
         LambdaQueryWrapper<SysLog> wrapper = new LambdaQueryWrapper<>();
         if (days != null && days > 0) {
@@ -67,7 +67,7 @@ public class SysLogController {
         return WrapperResponse.success(logMapper.delete(wrapper) >= 0);
     }
 
-    @DeleteMapping("/login/clear")
+    @GetMapping("/login/clear")
     public WrapperResponse<Boolean> clearLogin(@RequestParam(required = false) Integer days) {
         LambdaQueryWrapper<SysLogininfor> wrapper = new LambdaQueryWrapper<>();
         if (days != null && days > 0) {

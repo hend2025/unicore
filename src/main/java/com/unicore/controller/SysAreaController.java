@@ -49,12 +49,12 @@ public class SysAreaController {
         return WrapperResponse.success(areaMapper.insert(area) > 0);
     }
 
-    @PutMapping
+    @PostMapping("/update")
     public WrapperResponse<Boolean> update(@RequestBody SysArea area) {
         return WrapperResponse.success(areaMapper.updateById(area) > 0);
     }
 
-    @DeleteMapping("/{code}")
+    @GetMapping("/delete/{code}")
     public WrapperResponse<Boolean> delete(@PathVariable String code) {
         // MyBatis-Plus会自动进行逻辑删除
         return WrapperResponse.success(areaMapper.deleteById(code) > 0);
