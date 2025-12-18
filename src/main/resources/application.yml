@@ -14,7 +14,7 @@ logging:
     com.unicore.mapper: info
     org.mybatis: info
   file:
-    name: /home/unicore/logs/unicore.log
+    name: /home/unicore/logs/uniportal.log
   logback:
     rollingpolicy:
       max-history: 30
