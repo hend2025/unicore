@@ -3,16 +3,22 @@ server:
   servlet:
     context-path: /uniportal
     session:
-      timeout: 1800
+      timeout: 30m
       cookie:
         path: /
+        http-only: true
 
 logging:
   level:
     root: info
     com.unicore.mapper: info
     org.mybatis: info
-  path: /home/unicore/logs
+  file:
+    name: /home/unicore/logs/unicore.log
+  logback:
+    rollingpolicy:
+      max-history: 30
+      max-file-size: 20MB
 
 spring:
   application:
@@ -21,15 +27,16 @@ spring:
       allowFormat: doc,docx,xls,xlsx,ppt,pptx,pdf,jpg,gif,jpeg,png,txt,log,wmv,mp4,zip,rar,apk,bmp,avi
   servlet:
     multipart:
+      enabled: true
       max-file-size: 100MB
       max-request-size: 100MB
-      enabled: true
   output:
     ansi:
-      enabled: always #控制台彩色
+      enabled: always
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Asia/Shanghai
+    default-property-inclusion: non_null
   devtools:
     restart:
       enabled: true
@@ -41,6 +48,11 @@ spring:
     url: jdbc:mysql://192.168.10.147:3306/pms_scen_new?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
     password: 123456
+    hikari:
+      maximum-pool-size: 200
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 300000
 
 mybatis-plus:
   mapper-locations: classpath:mapper/**/*.xml
@@ -51,24 +63,22 @@ mybatis-plus:
   global-config:
     db-config:
       logic-delete-field: valiFlag
-      logic-delete-value: "0"
-      logic-not-delete-value: "1"
+      logic-delete-value: 0
+      logic-not-delete-value: 1
 
 security:
-  type: pms-sso
+  type: unicore-sso
   oauth2:
     client:
       permits: /,/index.html,/home,/home/**,/login,/logout,/user/forceLogout**,/captcha,/assets/**,/favicon.ico,/doc.html,/swagger-ui.html,/swagger-ui.html/**,/webjars/**,/*/api-docs,/v2/**,/**/swagger-resources,/**/swagger-resources/configuration/ui,/**/swagger-resources/configuration/security,/api/sys/config/key/**
 
 cacheLevel: "HPM:"
 cache:
-  #单机
   alone:
     deployType: 1
     cacheName: defaultCache
     clusterNodes: 127.0.0.1:6379
     password: 123456
-  #集群(若是多IP，中间用逗号隔即可)
   cluster:
     deployType: 2
     cacheName: defaultCache
@@ -93,15 +103,11 @@ session:
 threadPool:
   commPool:
     desc: '公共线程池'
-    corePoolSize: 2
-    #设置最大线程数
-    maxPoolSize: 20
-    #设置队列容量
-    queueCapacity: 1
-    #设置线程活跃时间（秒）
-    keepAliveSeconds: 5
-    #设置默认线程名称
-    threadNamePrefix: aeye
+    corePoolSize: 8
+    maxPoolSize: 64
+    queueCapacity: 500
+    keepAliveSeconds: 60
+    threadNamePrefix: unicore-task-
 
 minio:
   endpoint: http://127.0.0.1:9000

@@ -2,7 +2,9 @@ package com.unicore.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.unicore.common.WrapperResponse;
+import cn.hsa.hsaf.core.framework.web.WrapperResponse;
+import com.unicore.common.utils.Base64Utils;
+import com.unicore.common.utils.PasswordValidator;
 import com.unicore.entity.SysConfig;
 import com.unicore.entity.SysUser;
 import com.unicore.mapper.SysConfigMapper;
@@ -64,10 +66,10 @@ public class SysUserController {
             ? user.getPassword() : defaultPassword;
         
         // 验证密码复杂度
-        String decodedPassword = com.unicore.common.Base64Utils.decode(password);
-        String pwdError = com.unicore.common.PasswordValidator.validate(decodedPassword);
+        String decodedPassword = Base64Utils.decode(password);
+        String pwdError = PasswordValidator.validate(decodedPassword);
         if (pwdError != null) {
-            return WrapperResponse.error(pwdError);
+            return WrapperResponse.fail(pwdError, null);
         }
         
         return WrapperResponse.success(userService.resetPassword(user.getUserId(), password));

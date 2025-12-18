@@ -1,4 +1,4 @@
-package com.aeye.common.oauth;
+package com.unicore.common.oauth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,37 +26,23 @@ import javax.sql.DataSource;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    /**
-     * 注入权限验证控制器 来支持 password grant type  表示支持password认证模式
-     */
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    /**
-     * 注入userDetailsService，开启refresh_token需要用到
-     */
     @Resource
     private UserDetailsService userDetailsService;
 
-    /**
-     * 数据源
-     */
     @Autowired
     private DataSource dataSource;
 
-    /**
-     * 登陆成功后的token需要存在redis里面，因为redis里面有过期机制
-     */
     @Autowired
     private RedisConnectionFactory connectionFactory;
 
     @Autowired
     private MyOAuth2WebResponseExceptionTranslator webResponseExceptionTranslator;
 
-
     @Bean
     public TokenStore tokenStore() {
-        // token 相关信息保存在 redis 中
         return new RedisTokenStore( connectionFactory );
     }
 
@@ -86,8 +72,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-//        clients.jdbc(dataSource);
-        //这个地方指的是从jdbc查出数据来存储
         clients.withClientDetails(clientDetails());
     }
 
@@ -101,7 +85,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         //开启密码授权类型
         endpoints.authenticationManager(authenticationManager);
         //配置token存储方式
-//        endpoints.tokenStore(tokenStore());
         endpoints.tokenServices(defaultTokenServices());
         //自定义登录或者鉴权失败时的返回信息
         endpoints.exceptionTranslator(webResponseExceptionTranslator);

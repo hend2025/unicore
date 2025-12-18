@@ -1,7 +1,7 @@
 package com.unicore.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.unicore.common.WrapperResponse;
+import cn.hsa.hsaf.core.framework.web.WrapperResponse;
 import com.unicore.entity.SysOrg;
 import com.unicore.service.SysOrgService;
 import org.springframework.beans.factory.annotation.Autowired;

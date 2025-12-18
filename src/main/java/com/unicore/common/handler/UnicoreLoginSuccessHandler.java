@@ -1,4 +1,4 @@
-package com.aeye.common.handler;
+package com.unicore.common.handler;
 
 import cn.hsa.hsaf.core.framework.web.WrapperResponse;
 import com.alibaba.fastjson.JSON;
@@ -11,9 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+public class UnicoreLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    public LoginSuccessHandler() {}
+    public UnicoreLoginSuccessHandler() {}
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {

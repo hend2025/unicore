@@ -1,4 +1,4 @@
-package com.aeye.common.handler;
+package com.unicore.common.handler;
 
 import cn.hsa.hsaf.core.framework.web.WrapperResponse;
 import com.alibaba.fastjson.JSON;
@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AeyeAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+public class UnicoreAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    public AeyeAuthenticationFailureHandler(String defaultFailureUrl) {
+    public UnicoreAuthenticationFailureHandler(String defaultFailureUrl) {
         super(defaultFailureUrl);
     }
 

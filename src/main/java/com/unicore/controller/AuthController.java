@@ -1,7 +1,7 @@
 package com.unicore.controller;
 
 import cn.hsa.hsaf.auth.security.entity.PortalUserDetails;
-import com.unicore.common.WrapperResponse;
+import cn.hsa.hsaf.core.framework.web.WrapperResponse;
 import com.unicore.entity.SysMenu;
 import com.unicore.entity.SysSystem;
 import com.unicore.service.SysMenuService;
@@ -33,7 +33,7 @@ public class AuthController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
         if (principal == null || !(principal instanceof PortalUserDetails)) {
-            return WrapperResponse.error(401, "未登录或会话已过期，请重新登录");
+            return WrapperResponse.error(401, "未登录或会话已过期，请重新登录", null);
         }
         PortalUserDetails loginUser = (PortalUserDetails) principal;
         Map<String, Object> result = new HashMap<>();
@@ -48,7 +48,7 @@ public class AuthController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
         if (principal == null || !(principal instanceof PortalUserDetails)) {
-            return WrapperResponse.error(401, "未登录或会话已过期，请重新登录");
+            return WrapperResponse.error(401, "未登录或会话已过期，请重新登录", null);
         }
         PortalUserDetails loginUser = (PortalUserDetails) principal;
         List<SysMenu> menus = menuService.selectMenuTreeByUserId(Integer.parseInt(loginUser.getUactID()), sysId);
@@ -60,7 +60,7 @@ public class AuthController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
         if (principal == null || !(principal instanceof PortalUserDetails)) {
-            return WrapperResponse.error(401, "未登录或会话已过期，请重新登录");
+            return WrapperResponse.error(401, "未登录或会话已过期，请重新登录", null);
         }
         PortalUserDetails loginUser = (PortalUserDetails) principal;
         List<SysSystem> systems = systemService.selectSystemListByUserId(Integer.parseInt(loginUser.getUactID()));
@@ -72,19 +72,19 @@ public class AuthController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object principal = authentication.getPrincipal();
         if (principal == null || !(principal instanceof PortalUserDetails)) {
-            return WrapperResponse.error(401, "未登录或会话已过期，请重新登录");
+            return WrapperResponse.error(401, "未登录或会话已过期，请重新登录", null);
         }
         PortalUserDetails loginUser = (PortalUserDetails) principal;
         String oldPassword = params.get("oldPassword");
         String newPassword = params.get("newPassword");
         if (oldPassword == null || newPassword == null) {
-            return WrapperResponse.error(400, "参数不完整");
+            return WrapperResponse.error(400, "参数不完整", null);
         }
         try {
             userService.changePassword(Integer.parseInt(loginUser.getUactID()), oldPassword, newPassword);
-            return WrapperResponse.success();
+            return WrapperResponse.success(null);
         } catch (RuntimeException e) {
-            return WrapperResponse.error(400, e.getMessage());
+            return WrapperResponse.error(400, e.getMessage(), null);
         }
     }
 

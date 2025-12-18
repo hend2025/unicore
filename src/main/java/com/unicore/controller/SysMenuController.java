@@ -2,7 +2,7 @@ package com.unicore.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.unicore.common.WrapperResponse;
+import cn.hsa.hsaf.core.framework.web.WrapperResponse;
 import com.unicore.entity.SysMenu;
 import com.unicore.service.SysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;

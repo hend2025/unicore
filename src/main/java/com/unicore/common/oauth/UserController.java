@@ -1,4 +1,4 @@
-package com.aeye.common.oauth;
+package com.unicore.common.oauth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

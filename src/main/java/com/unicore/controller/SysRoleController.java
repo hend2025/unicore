@@ -1,7 +1,7 @@
 package com.unicore.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.unicore.common.WrapperResponse;
+import cn.hsa.hsaf.core.framework.web.WrapperResponse;
 import com.unicore.entity.SysRole;
 import com.unicore.service.SysMenuService;
 import com.unicore.service.SysRoleService;

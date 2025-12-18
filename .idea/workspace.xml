@@ -7,6 +7,56 @@
     <list default="true" id="c40dc8fd-5d22-4ae7-b727-b885b2ff3978" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/layout/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layout/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aeye/common/handler/AeyeAuthenticationFailureHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/handler/UnicoreAuthenticationFailureHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aeye/common/handler/AeyeLogoutSuccessHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/handler/UnicoreLogoutSuccessHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aeye/common/handler/LoginSuccessHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/handler/UnicoreLoginSuccessHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aeye/common/oauth/AuthorizationServerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/oauth/AuthorizationServerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aeye/common/oauth/BrowerSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/oauth/BrowerSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aeye/common/oauth/CodeMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/oauth/CodeMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aeye/common/oauth/MyAuthenticationEntryPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/oauth/MyAuthenticationEntryPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aeye/common/oauth/MyOAuth2WebResponseExceptionTranslator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/oauth/MyOAuth2WebResponseExceptionTranslator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aeye/common/oauth/ResourceServerConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/oauth/ResourceServerConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aeye/common/oauth/RestAuthAccessDeniedHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/oauth/RestAuthAccessDeniedHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aeye/common/oauth/SecurityAuthenticationProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/oauth/SecurityAuthenticationProvider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/aeye/common/oauth/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/oauth/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/UnicoreApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/UnicoreApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/common/Base64Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/utils/Base64Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/common/BaseEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/entity/BaseEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/common/GlobalExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/common/PasswordValidator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/utils/PasswordValidator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/common/WrapperResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/FileController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/FileController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysAdmdvsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysAdmdvsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysApiLogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysApiLogController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysAreaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysAreaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysConfigController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysConfigController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysDictController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysDictController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysLogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysLogController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysMenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysNoticeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysNoticeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysOrgController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysOrgController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysParaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysParaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysPostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysPostController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysRoleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysRoleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysSystemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysSystemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysUserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysAdmdvs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysAdmdvs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysArea.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysArea.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysDict.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysDict.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysDictType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysDictType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysOrg.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysOrg.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysPara.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysPara.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysPost.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysPost.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysRole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/entity/SysUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/security/SecurityUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/utils/SecurityUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysUserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysUserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/springframework/core/log/LogMessage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,35 +84,35 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Maven.unicore [clean].executor": "Run",
-    "Maven.unicore [package].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Notification.DisplayName-DoNotAsk-DatabaseConfigFileWatcher.found": "New/updated database configurations found",
-    "Notification.DoNotAsk-DatabaseConfigFileWatcher.found": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.UnicoreApplication.executor": "Debug",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "C:\\Program Files\\IntelliJ IDEA 2025.2.4\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Maven.unicore [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.unicore [package].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Notification.DisplayName-DoNotAsk-DatabaseConfigFileWatcher.found&quot;: &quot;New/updated database configurations found&quot;,
+    &quot;Notification.DoNotAsk-DatabaseConfigFileWatcher.found&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.UnicoreApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\IntelliJ IDEA 2025.2.4\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -96,7 +146,9 @@
       <workItem from="1765844755069" duration="7502000" />
       <workItem from="1765890966719" duration="6209000" />
       <workItem from="1765935426545" duration="5462000" />
-      <workItem from="1765960988629" duration="3582000" />
+      <workItem from="1765960988629" duration="4492000" />
+      <workItem from="1765976291508" duration="653000" />
+      <workItem from="1766015921453" duration="9178000" />
     </task>
     <servers />
   </component>

@@ -6,15 +6,15 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.unicore.common.Base64Utils;
-import com.unicore.common.PasswordValidator;
+import com.unicore.common.utils.Base64Utils;
+import com.unicore.common.utils.PasswordValidator;
 import com.unicore.entity.SysOrg;
 import com.unicore.entity.SysUser;
 import com.unicore.entity.SysUserRole;
 import com.unicore.mapper.SysOrgMapper;
 import com.unicore.mapper.SysUserMapper;
 import com.unicore.mapper.SysUserRoleMapper;
-import com.unicore.security.SecurityUtils;
+import com.unicore.common.utils.SecurityUtils;
 import com.unicore.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,7 +43,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysUser::getUserName, username);
-        wrapper.eq(SysUser::getValiFlag, "1");
+        wrapper.eq(SysUser::getStasFlag, "1");
         SysUser sysUser = userMapper.selectOne(wrapper);
         if (sysUser == null) {
             throw new UsernameNotFoundException("用户不存在");

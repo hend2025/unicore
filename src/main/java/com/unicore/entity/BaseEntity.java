@@ -1,4 +1,4 @@
-package com.unicore.common;
+package com.unicore.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;

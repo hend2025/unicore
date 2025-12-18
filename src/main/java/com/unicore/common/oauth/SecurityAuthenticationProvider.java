@@ -1,8 +1,8 @@
-package com.aeye.common.oauth;
+package com.unicore.common.oauth;
 
 import java.util.Collection;
 
-import com.unicore.common.Base64Utils;
+import com.unicore.common.utils.Base64Utils;
 import com.unicore.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;

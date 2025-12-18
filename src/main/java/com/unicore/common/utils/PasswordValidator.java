@@ -1,4 +1,4 @@
-package com.unicore.common;
+package com.unicore.common.utils;
 
 /**
  * 密码复杂度验证工具类

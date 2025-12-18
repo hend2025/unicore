@@ -1,4 +1,4 @@
-package com.aeye.common.oauth;
+package com.unicore.common.oauth;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.security.core.AuthenticationException;
@@ -12,16 +12,11 @@ import java.io.IOException;
 @Service
 public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    /**
-     * Performs the redirect (or forward) to the login form URL.
-     */
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-        // redirect to login page. Use https if forceHttps true
-
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(JSONObject.toJSONString(CodeMessage.NoLogin));// 返回 JSON 信息
+        response.getWriter().write(JSONObject.toJSONString(CodeMessage.NoLogin));
         response.flushBuffer();
     }
 

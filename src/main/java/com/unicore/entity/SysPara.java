@@ -1,10 +1,8 @@
 package com.unicore.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.unicore.common.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

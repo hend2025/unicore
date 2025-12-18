@@ -1,7 +1,7 @@
 package com.unicore.controller;
 
 import cn.hutool.core.util.IdUtil;
-import com.unicore.common.WrapperResponse;
+import cn.hsa.hsaf.core.framework.web.WrapperResponse;
 import com.unicore.config.MinioConfig;
 import com.unicore.entity.SysOss;
 import com.unicore.mapper.SysOssMapper;
@@ -47,45 +47,45 @@ public class FileController {
         try {
             // 安全校验：检查文件是否为空
             if (file == null || file.isEmpty()) {
-                return WrapperResponse.error("文件不能为空");
+                return WrapperResponse.fail("文件不能为空", null);
             }
 
             // 安全校验：检查文件大小
             if (file.getSize() > MAX_FILE_SIZE) {
-                return WrapperResponse.error("文件大小不能超过150MB");
+                return WrapperResponse.fail("文件大小不能超过150MB", null);
             }
 
             String originalFilename = file.getOriginalFilename();
             if (originalFilename == null || originalFilename.isEmpty()) {
-                return WrapperResponse.error("文件名不能为空");
+                return WrapperResponse.fail("文件名不能为空", null);
             }
 
             // 安全校验：防止路径遍历攻击
             if (originalFilename.contains("..") || originalFilename.contains("/") || originalFilename.contains("\\")) {
-                return WrapperResponse.error("非法文件名");
+                return WrapperResponse.fail("非法文件名", null);
             }
 
             // 获取文件扩展名并转小写
             int lastDotIndex = originalFilename.lastIndexOf(".");
             if (lastDotIndex < 0) {
-                return WrapperResponse.error("文件必须有扩展名");
+                return WrapperResponse.fail("文件必须有扩展名", null);
             }
             String suffix = originalFilename.substring(lastDotIndex).toLowerCase();
 
             // 安全校验：检查是否为危险文件类型
             if (DANGEROUS_EXTENSIONS.contains(suffix)) {
-                return WrapperResponse.error("不允许上传此类型文件");
+                return WrapperResponse.fail("不允许上传此类型文件", null);
             }
 
             // 安全校验：检查文件类型白名单
             if (!ALLOWED_EXTENSIONS.contains(suffix)) {
-                return WrapperResponse.error("不支持的文件类型，允许的类型：" + String.join(", ", ALLOWED_EXTENSIONS));
+                return WrapperResponse.fail("不支持的文件类型，允许的类型：" + String.join(", ", ALLOWED_EXTENSIONS), null);
             }
 
             // 安全校验：验证Content-Type与扩展名是否匹配
             String contentType = file.getContentType();
             if (!isValidContentType(suffix, contentType)) {
-                return WrapperResponse.error("文件类型与内容不匹配");
+                return WrapperResponse.fail("文件类型与内容不匹配", null);
             }
 
             // 生成安全的文件名（UUID + 扩展名）
@@ -115,7 +115,7 @@ public class FileController {
             return WrapperResponse.success(result);
         } catch (Exception e) {
             // 不暴露详细错误信息
-            return WrapperResponse.error("文件上传失败，请稍后重试");
+            return WrapperResponse.fail("文件上传失败，请稍后重试", null);
         }
     }
 

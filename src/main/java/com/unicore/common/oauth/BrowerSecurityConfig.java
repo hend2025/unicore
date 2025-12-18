@@ -1,7 +1,6 @@
-package com.aeye.common.oauth;
+package com.unicore.common.oauth;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,11 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
-import com.aeye.common.handler.AeyeAuthenticationFailureHandler;
-import com.aeye.common.handler.AeyeLogoutSuccessHandler;
-import com.aeye.common.handler.LoginSuccessHandler;
+import com.unicore.common.handler.UnicoreAuthenticationFailureHandler;
+import com.unicore.common.handler.UnicoreLogoutSuccessHandler;
+import com.unicore.common.handler.UnicoreLoginSuccessHandler;
 
-import cn.hsa.hsaf.auth.security.filter.ApiAuthorizationFilter;
 import cn.hsa.hsaf.auth.security.filter.RefererFilter;
 import cn.hsa.hsaf.auth.security.filter.UserContextFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
@@ -33,7 +31,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@ConditionalOnProperty(name = {"security.type"}, havingValue = "pms-sso", matchIfMissing = true)
+@ConditionalOnProperty(name = {"security.type"}, havingValue = "unicore-sso", matchIfMissing = true)
 public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -41,7 +39,7 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        LoginSuccessHandler loginSuccessHandler = new LoginSuccessHandler();
+        UnicoreLoginSuccessHandler loginSuccessHandler = new UnicoreLoginSuccessHandler();
         loginSuccessHandler.setAlwaysUseDefaultTargetUrl(true);
         http.antMatcher("/**")
                 .authorizeRequests()
@@ -66,14 +64,14 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .failureUrl("/login?error=true")
                 .successHandler(loginSuccessHandler)
-                .failureHandler(new AeyeAuthenticationFailureHandler("/login?error=true"))
+                .failureHandler(new UnicoreAuthenticationFailureHandler("/login?error=true"))
                 .permitAll()
                 .and()
                 .headers().frameOptions().disable()
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
-                .logoutSuccessHandler(new AeyeLogoutSuccessHandler())
+                .logoutSuccessHandler(new UnicoreLogoutSuccessHandler())
                 .and()
                 .addFilterAfter(new UserContextFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(new RefererFilter(), UserContextFilter.class)
@@ -108,13 +106,13 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private CsrfTokenRepository cookieCsrfTokenRepository() {
         CookieCsrfTokenRepository cookieCsrfTokenRepository = new CookieCsrfTokenRepository();
-//        MyCookieCsrfTokenRepository cookieCsrfTokenRepository = new MyCookieCsrfTokenRepository();
         cookieCsrfTokenRepository.setCookiePath("/");
         cookieCsrfTokenRepository.setCookieHttpOnly(false);
-//        cookieCsrfTokenRepository.setCookieName("XSRF-TOKEN");
-//        cookieCsrfTokenRepository.setHeaderName("XSRF-TOKEN");
+        cookieCsrfTokenRepository.setCookieName("XSRF-TOKEN");
+        cookieCsrfTokenRepository.setHeaderName("XSRF-TOKEN");
         return cookieCsrfTokenRepository;
     }
+
     /**
      * 自定义验证逻辑
      * @param auth

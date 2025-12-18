@@ -2,7 +2,7 @@ package com.unicore.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.unicore.common.WrapperResponse;
+import cn.hsa.hsaf.core.framework.web.WrapperResponse;
 import com.unicore.entity.SysArea;
 import com.unicore.mapper.SysAreaMapper;
 import org.springframework.beans.factory.annotation.Autowired;

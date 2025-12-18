@@ -1,4 +1,4 @@
-package com.aeye.common.oauth;
+package com.unicore.common.oauth;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;

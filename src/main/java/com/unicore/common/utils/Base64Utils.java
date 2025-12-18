@@ -1,4 +1,4 @@
-package com.unicore.common;
+package com.unicore.common.utils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;

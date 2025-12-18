@@ -1,4 +1,4 @@
-package com.aeye.common.oauth;
+package com.unicore.common.oauth;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.security.access.AccessDeniedException;

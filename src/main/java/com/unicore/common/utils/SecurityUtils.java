@@ -1,4 +1,4 @@
-package com.unicore.security;
+package com.unicore.common.utils;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

@@ -2,7 +2,7 @@ package com.unicore.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.unicore.common.WrapperResponse;
+import cn.hsa.hsaf.core.framework.web.WrapperResponse;
 import com.unicore.entity.SysDict;
 import com.unicore.entity.SysDictType;
 import com.unicore.mapper.SysDictMapper;
@@ -43,7 +43,7 @@ public class SysDictController {
     public WrapperResponse<?> addType(@RequestBody SysDictType dictType) {
         // 检查字典类型编码是否已存在
         if (dictTypeMapper.selectById(dictType.getDicTypeCode()) != null) {
-            return WrapperResponse.error("字典类型编码已存在");
+            return WrapperResponse.fail("字典类型编码已存在", null);
         }
         return WrapperResponse.success(dictTypeMapper.insert(dictType) > 0);
     }
@@ -96,7 +96,7 @@ public class SysDictController {
         wrapper.eq(SysDict::getDicTypeCode, dict.getDicTypeCode());
         wrapper.eq(SysDict::getDicValue, dict.getDicValue());
         if (dictMapper.selectCount(wrapper) > 0) {
-            return WrapperResponse.error("该字典类型下已存在相同的字典值");
+            return WrapperResponse.fail("该字典类型下已存在相同的字典值", null);
         }
         return WrapperResponse.success(dictMapper.insert(dict) > 0);
     }
