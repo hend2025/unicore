@@ -95,9 +95,6 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import PageCard from '@/components/PageCard.vue'
-import SearchForm from '@/components/SearchForm.vue'
-import DataTable from '@/components/DataTable.vue'
 import { userApi, roleApi, admdvsApi, orgApi, areaApi } from '@/api/system'
 import { passwordValidator } from '@/utils/validators'
 

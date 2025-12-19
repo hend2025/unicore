@@ -99,10 +99,6 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import PageCard from '@/components/PageCard.vue'
-import SearchForm from '@/components/SearchForm.vue'
-import DataTable from '@/components/DataTable.vue'
-import FormDialog from '@/components/FormDialog.vue'
 import { orgApi } from '@/api/system'
 
 const loading = ref(false)

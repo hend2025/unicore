@@ -12,7 +12,7 @@
     <!-- 岗位列表 -->
     <PageCard title="岗位列表" flex>
       <template #extra>
-        <el-button type="primary" @click="handleAdd">新增岗位</el-button>
+        <el-button type="primary" @click="handleAdd(form)">新增岗位</el-button>
       </template>
       <DataTable
         :data="tableData"
@@ -35,7 +35,7 @@
         <el-table-column prop="crteTime" label="创建时间" width="180" show-overflow-tooltip />
         <el-table-column label="操作" width="128" align="center">
           <template #default="{ row }">
-            <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
+            <el-button type="primary" link @click="handleEdit(row, form)">编辑</el-button>
             <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -43,7 +43,7 @@
     </PageCard>
 
     <!-- 对话框 -->
-    <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" @submit="handleSubmit">
+    <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" @submit="handleSubmit(form)">
       <el-form-item label="岗位编码" prop="postCode">
         <el-input v-model="form.postCode" placeholder="请输入岗位编码" />
       </el-form-item>
@@ -67,79 +67,28 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import PageCard from '@/components/PageCard.vue'
-import SearchForm from '@/components/SearchForm.vue'
-import DataTable from '@/components/DataTable.vue'
-import FormDialog from '@/components/FormDialog.vue'
+import { reactive } from 'vue'
 import { postApi } from '@/api/system'
+import { useCrud } from '@/hooks/useCrud'
 
-const loading = ref(false)
-const submitLoading = ref(false)
-const tableData = ref([])
-const total = ref(0)
-const dialogVisible = ref(false)
-const dialogTitle = ref('')
-
-const queryParams = reactive({ pageNum: 1, pageSize: 10, postName: '' })
+// 表单数据（需要在页面定义，因为模板需要绑定）
 const form = reactive({ postId: null, postCode: '', postName: '', orderNum: 0, remarks: '', stasFlag: '1' })
+
+// 表单校验规则
 const rules = {
   postCode: [{ required: true, message: '请输入岗位编码', trigger: 'blur' }],
   postName: [{ required: true, message: '请输入岗位名称', trigger: 'blur' }]
 }
 
-const loadData = async () => {
-  loading.value = true
-  try {
-    const res = await postApi.page(queryParams)
-    tableData.value = res.data.records
-    total.value = res.data.total
-  } finally {
-    loading.value = false
-  }
-}
+// 使用 CRUD Hook
+const {
+  loading, submitLoading, tableData, total, dialogVisible, dialogTitle, queryParams,
+  loadData, handleReset, handleAdd, handleEdit, handleSubmit, handleDelete
+} = useCrud(postApi, {
+  defaultQuery: { postName: '' },
+  defaultForm: { postCode: '', postName: '', orderNum: 0, remarks: '', stasFlag: '1' },
+  rowKey: 'postId',
+  title: '岗位'
+})
 
-const handleReset = () => {
-  loadData()
-}
-
-const handleAdd = () => {
-  Object.assign(form, { postId: null, postCode: '', postName: '', orderNum: 0, remarks: '', stasFlag: '1' })
-  dialogTitle.value = '新增岗位'
-  dialogVisible.value = true
-}
-
-const handleEdit = async (row) => {
-  const res = await postApi.get(row.postId)
-  Object.assign(form, res.data)
-  dialogTitle.value = '编辑岗位'
-  dialogVisible.value = true
-}
-
-const handleSubmit = async () => {
-  submitLoading.value = true
-  try {
-    if (form.postId) {
-      await postApi.update(form)
-    } else {
-      await postApi.add(form)
-    }
-    ElMessage.success('操作成功')
-    dialogVisible.value = false
-    loadData()
-  } finally {
-    submitLoading.value = false
-  }
-}
-
-const handleDelete = (row) => {
-  ElMessageBox.confirm('确认删除该岗位?', '提示', { type: 'warning' }).then(async () => {
-    await postApi.delete(row.postId)
-    ElMessage.success('删除成功')
-    loadData()
-  })
-}
-
-onMounted(() => loadData())
 </script>

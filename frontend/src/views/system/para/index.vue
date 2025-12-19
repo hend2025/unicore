@@ -15,7 +15,7 @@
     <!-- 参数列表 -->
     <PageCard title="参数列表" flex>
       <template #extra>
-        <el-button type="primary" @click="handleAdd">新增参数</el-button>
+        <el-button type="primary" @click="handleAdd(form)">新增参数</el-button>
       </template>
       <DataTable
         :data="tableData"
@@ -38,7 +38,7 @@
         </el-table-column>
         <el-table-column label="操作" width="128" align="center">
           <template #default="{ row }">
-            <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
+            <el-button type="primary" link @click="handleEdit(row, form)">编辑</el-button>
             <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -46,7 +46,7 @@
     </PageCard>
 
     <!-- 对话框 -->
-    <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" @submit="handleSubmit">
+    <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" @submit="handleSubmit(form)">
       <el-form-item label="参数编码" prop="paraCode">
         <el-input v-model="form.paraCode" placeholder="请输入参数编码" />
       </el-form-item>
@@ -73,82 +73,25 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import PageCard from '@/components/PageCard.vue'
-import SearchForm from '@/components/SearchForm.vue'
-import DataTable from '@/components/DataTable.vue'
-import FormDialog from '@/components/FormDialog.vue'
+import { reactive } from 'vue'
 import { paraApi } from '@/api/system'
+import { useCrud } from '@/hooks/useCrud'
 
-const loading = ref(false)
-const submitLoading = ref(false)
-const tableData = ref([])
-const total = ref(0)
-const dialogVisible = ref(false)
-const dialogTitle = ref('')
-
-const queryParams = reactive({ pageNum: 1, pageSize: 10, paraName: '', paraCode: '' })
 const form = reactive({ paraId: null, paraCode: '', paraName: '', paraValue: '', paraType: '', paraDesc: '', stasFlag: '1' })
+
 const rules = {
   paraCode: [{ required: true, message: '请输入参数编码', trigger: 'blur' }],
   paraName: [{ required: true, message: '请输入参数名称', trigger: 'blur' }],
   paraValue: [{ required: true, message: '请输入参数值', trigger: 'blur' }]
 }
 
-const loadData = async () => {
-  loading.value = true
-  try {
-    const res = await paraApi.page(queryParams)
-    tableData.value = res.data.records
-    total.value = res.data.total
-  } finally {
-    loading.value = false
-  }
-}
-
-const handleReset = () => {
-  loadData()
-}
-
-const handleAdd = () => {
-  Object.assign(form, { paraId: null, paraCode: '', paraName: '', paraValue: '', paraType: '', paraDesc: '', stasFlag: '1' })
-  dialogTitle.value = '新增参数'
-  dialogVisible.value = true
-}
-
-const handleEdit = async (row) => {
-  const res = await paraApi.get(row.paraId)
-  Object.assign(form, res.data)
-  dialogTitle.value = '编辑参数'
-  dialogVisible.value = true
-}
-
-const handleSubmit = async () => {
-  submitLoading.value = true
-  try {
-    if (form.paraId) {
-      await paraApi.update(form)
-    } else {
-      await paraApi.add(form)
-    }
-    ElMessage.success('操作成功')
-    dialogVisible.value = false
-    loadData()
-  } finally {
-    submitLoading.value = false
-  }
-}
-
-const handleDelete = (row) => {
-  ElMessageBox.confirm('确认删除该参数?', '提示', { type: 'warning' }).then(async () => {
-    await paraApi.delete(row.paraId)
-    ElMessage.success('删除成功')
-    loadData()
-  })
-}
-
-onMounted(() => loadData())
+const {
+  loading, submitLoading, tableData, total, dialogVisible, dialogTitle, queryParams,
+  loadData, handleReset, handleAdd, handleEdit, handleSubmit, handleDelete
+} = useCrud(paraApi, {
+  defaultQuery: { paraName: '', paraCode: '' },
+  defaultForm: { paraCode: '', paraName: '', paraValue: '', paraType: '', paraDesc: '', stasFlag: '1' },
+  rowKey: 'paraId',
+  title: '参数'
+})
 </script>
-
-

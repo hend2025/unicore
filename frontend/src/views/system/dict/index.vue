@@ -145,7 +145,6 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import FormDialog from '@/components/FormDialog.vue'
 import { dictApi } from '@/api/system'
 
 const activeTab = ref('data')

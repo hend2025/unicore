@@ -15,7 +15,7 @@
     <!-- 参数列表 -->
     <PageCard title="参数列表" flex>
       <template #extra>
-        <el-button type="primary" @click="handleAdd">新增参数</el-button>
+        <el-button type="primary" @click="handleAdd(form)">新增参数</el-button>
       </template>
       <DataTable
         :data="tableData"
@@ -36,7 +36,7 @@
         </el-table-column>
         <el-table-column label="操作" width="128" align="center">
           <template #default="{ row }">
-            <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
+            <el-button type="primary" link @click="handleEdit(row, form)">编辑</el-button>
             <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -44,7 +44,7 @@
     </PageCard>
 
     <!-- 对话框 -->
-    <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" @submit="handleSubmit">
+    <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" @submit="handleSubmit(form)">
       <el-form-item label="参数名称" prop="configName">
         <el-input v-model="form.configName" placeholder="请输入参数名称" />
       </el-form-item>
@@ -68,80 +68,25 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import PageCard from '@/components/PageCard.vue'
-import SearchForm from '@/components/SearchForm.vue'
-import DataTable from '@/components/DataTable.vue'
-import FormDialog from '@/components/FormDialog.vue'
+import { reactive } from 'vue'
 import { configApi } from '@/api/system'
+import { useCrud } from '@/hooks/useCrud'
 
-const loading = ref(false)
-const submitLoading = ref(false)
-const tableData = ref([])
-const total = ref(0)
-const dialogVisible = ref(false)
-const dialogTitle = ref('')
-
-const queryParams = reactive({ pageNum: 1, pageSize: 10, configName: '', configKey: '' })
 const form = reactive({ configId: null, configName: '', configKey: '', configValue: '', remarks: '', stasFlag: '1' })
+
 const rules = {
   configName: [{ required: true, message: '请输入参数名称', trigger: 'blur' }],
   configKey: [{ required: true, message: '请输入参数键名', trigger: 'blur' }],
   configValue: [{ required: true, message: '请输入参数键值', trigger: 'blur' }]
 }
 
-const loadData = async () => {
-  loading.value = true
-  try {
-    const res = await configApi.page(queryParams)
-    tableData.value = res.data.records
-    total.value = res.data.total
-  } finally {
-    loading.value = false
-  }
-}
-
-const handleReset = () => {
-  loadData()
-}
-
-const handleAdd = () => {
-  Object.assign(form, { configId: null, configName: '', configKey: '', configValue: '', remarks: '', stasFlag: '1' })
-  dialogTitle.value = '新增参数'
-  dialogVisible.value = true
-}
-
-const handleEdit = async (row) => {
-  const res = await configApi.get(row.configId)
-  Object.assign(form, res.data)
-  dialogTitle.value = '编辑参数'
-  dialogVisible.value = true
-}
-
-const handleSubmit = async () => {
-  submitLoading.value = true
-  try {
-    if (form.configId) {
-      await configApi.update(form)
-    } else {
-      await configApi.add(form)
-    }
-    ElMessage.success('操作成功')
-    dialogVisible.value = false
-    loadData()
-  } finally {
-    submitLoading.value = false
-  }
-}
-
-const handleDelete = (row) => {
-  ElMessageBox.confirm('确认删除该参数?', '提示', { type: 'warning' }).then(async () => {
-    await configApi.delete(row.configId)
-    ElMessage.success('删除成功')
-    loadData()
-  })
-}
-
-onMounted(() => loadData())
+const {
+  loading, submitLoading, tableData, total, dialogVisible, dialogTitle, queryParams,
+  loadData, handleReset, handleAdd, handleEdit, handleSubmit, handleDelete
+} = useCrud(configApi, {
+  defaultQuery: { configName: '', configKey: '' },
+  defaultForm: { configName: '', configKey: '', configValue: '', remarks: '', stasFlag: '1' },
+  rowKey: 'configId',
+  title: '参数'
+})
 </script>

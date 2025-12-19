@@ -5,12 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c40dc8fd-5d22-4ae7-b727-b885b2ff3978" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/api/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/auth.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/layout/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layout/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/styles/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles/index.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/user/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/user/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/config/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/config/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/notice/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/notice/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/para/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/para/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/post/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/post/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/system/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/system/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -12,7 +12,7 @@
     <!-- 应用列表 -->
     <PageCard title="应用列表" flex>
       <template #extra>
-        <el-button type="primary" @click="handleAdd">新增应用</el-button>
+        <el-button type="primary" @click="handleAdd(form)">新增应用</el-button>
       </template>
       <DataTable
         :data="tableData"
@@ -34,7 +34,7 @@
         </el-table-column>
         <el-table-column label="操作" width="128" align="center">
           <template #default="{ row }">
-            <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
+            <el-button type="primary" link @click="handleEdit(row, form)">编辑</el-button>
             <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -42,7 +42,7 @@
     </PageCard>
 
     <!-- 对话框 -->
-    <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" @submit="handleSubmit">
+    <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" @submit="handleSubmit(form)">
       <el-form-item label="系统名称" prop="sysName">
         <el-input v-model="form.sysName" placeholder="请输入系统名称" />
       </el-form-item>
@@ -69,79 +69,24 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import PageCard from '@/components/PageCard.vue'
-import SearchForm from '@/components/SearchForm.vue'
-import DataTable from '@/components/DataTable.vue'
-import FormDialog from '@/components/FormDialog.vue'
+import { reactive } from 'vue'
 import { systemApi } from '@/api/system'
+import { useCrud } from '@/hooks/useCrud'
 
-const loading = ref(false)
-const submitLoading = ref(false)
-const tableData = ref([])
-const total = ref(0)
-const dialogVisible = ref(false)
-const dialogTitle = ref('')
-
-const queryParams = reactive({ pageNum: 1, pageSize: 10, sysName: '' })
 const form = reactive({ sysId: null, sysName: '', sysAbbr: '', sysUrl: '', homeUrl: '', orderNum: 0, stasFlag: '1', prntId: 0 })
+
 const rules = {
   sysName: [{ required: true, message: '请输入系统名称', trigger: 'blur' }],
   sysAbbr: [{ required: true, message: '请输入系统简称', trigger: 'blur' }]
 }
 
-const loadData = async () => {
-  loading.value = true
-  try {
-    const res = await systemApi.page(queryParams)
-    tableData.value = res.data.records
-    total.value = res.data.total
-  } finally {
-    loading.value = false
-  }
-}
-
-const handleReset = () => {
-  loadData()
-}
-
-const handleAdd = () => {
-  Object.assign(form, { sysId: null, sysName: '', sysAbbr: '', sysUrl: '', homeUrl: '', orderNum: 0, stasFlag: '1', prntId: 0 })
-  dialogTitle.value = '新增应用'
-  dialogVisible.value = true
-}
-
-const handleEdit = async (row) => {
-  const res = await systemApi.get(row.sysId)
-  Object.assign(form, res.data)
-  dialogTitle.value = '编辑应用'
-  dialogVisible.value = true
-}
-
-const handleSubmit = async () => {
-  submitLoading.value = true
-  try {
-    if (form.sysId) {
-      await systemApi.update(form)
-    } else {
-      await systemApi.add(form)
-    }
-    ElMessage.success('操作成功')
-    dialogVisible.value = false
-    loadData()
-  } finally {
-    submitLoading.value = false
-  }
-}
-
-const handleDelete = (row) => {
-  ElMessageBox.confirm('确认删除该应用?', '提示', { type: 'warning' }).then(async () => {
-    await systemApi.delete(row.sysId)
-    ElMessage.success('删除成功')
-    loadData()
-  })
-}
-
-onMounted(() => loadData())
+const {
+  loading, submitLoading, tableData, total, dialogVisible, dialogTitle, queryParams,
+  loadData, handleReset, handleAdd, handleEdit, handleSubmit, handleDelete
+} = useCrud(systemApi, {
+  defaultQuery: { sysName: '' },
+  defaultForm: { sysName: '', sysAbbr: '', sysUrl: '', homeUrl: '', orderNum: 0, stasFlag: '1', prntId: 0 },
+  rowKey: 'sysId',
+  title: '应用'
+})
 </script>

@@ -9,11 +9,24 @@ import router from './router'
 import './styles/index.scss'
 import { configApi } from '@/api/system'
 
+// 全局组件
+import PageCard from '@/components/PageCard.vue'
+import SearchForm from '@/components/SearchForm.vue'
+import DataTable from '@/components/DataTable.vue'
+import FormDialog from '@/components/FormDialog.vue'
+
 const app = createApp(App)
 
+// 注册 Element Plus 图标
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
+
+// 注册全局业务组件
+app.component('PageCard', PageCard)
+app.component('SearchForm', SearchForm)
+app.component('DataTable', DataTable)
+app.component('FormDialog', FormDialog)
 
 app.use(createPinia())
 app.use(router)
