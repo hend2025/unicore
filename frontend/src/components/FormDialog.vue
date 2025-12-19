@@ -1,23 +1,27 @@
 <template>
   <el-dialog v-model="visible" :width="width" :close-on-click-modal="false" @close="handleClose" class="custom-dialog">
     <template #header>
-      <div class="dialog-title">
-        <i class="title-bar"></i>
-        <span>{{ title }}</span>
-      </div>
+      <slot name="header">
+        <div class="dialog-title">
+          <i class="title-bar"></i>
+          <span>{{ title }}</span>
+        </div>
+      </slot>
     </template>
     <el-form ref="formRef" :model="modelValue" :rules="rules" :label-width="labelWidth" label-position="right">
       <slot></slot>
     </el-form>
     <template #footer>
-      <el-button @click="handleClose">取消</el-button>
-      <el-button type="primary" :loading="loading" @click="handleSubmit">保存</el-button>
+      <slot name="footer" :loading="loading" :close="handleClose" :submit="handleSubmit">
+        <el-button @click="handleClose">{{ cancelText }}</el-button>
+        <el-button type="primary" :loading="loading" @click="handleSubmit">{{ submitText }}</el-button>
+      </slot>
     </template>
   </el-dialog>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, useSlots } from 'vue'
 
 const props = defineProps({
   modelValue: { type: Object, default: () => ({}) },
@@ -26,10 +30,14 @@ const props = defineProps({
   width: { type: String, default: '500px' },
   labelWidth: { type: String, default: '100px' },
   rules: { type: Object, default: () => ({}) },
-  loading: { type: Boolean, default: false }
+  loading: { type: Boolean, default: false },
+  resetOnClose: { type: Boolean, default: true },
+  cancelText: { type: String, default: '取消' },
+  submitText: { type: String, default: '保存' }
 })
 
 const emit = defineEmits(['update:show', 'submit', 'close'])
+const slots = useSlots()
 
 const formRef = ref()
 
@@ -39,7 +47,9 @@ const visible = computed({
 })
 
 const handleClose = () => {
-  formRef.value?.resetFields()
+  if (props.resetOnClose) {
+    formRef.value?.resetFields()
+  }
   emit('update:show', false)
   emit('close')
 }
@@ -49,7 +59,16 @@ const handleSubmit = async () => {
   emit('submit')
 }
 
-defineExpose({ formRef })
+// 手动验证表单
+const validate = () => formRef.value?.validate()
+
+// 手动重置表单
+const resetFields = () => formRef.value?.resetFields()
+
+// 清除验证
+const clearValidate = (props) => formRef.value?.clearValidate(props)
+
+defineExpose({ formRef, validate, resetFields, clearValidate })
 </script>
 
 <style scoped>
@@ -95,6 +114,8 @@ defineExpose({ formRef })
 :deep(.el-form-item__label) {
   color: #000;
   font-size: 14px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 :deep(.el-input__wrapper),

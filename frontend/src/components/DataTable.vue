@@ -65,19 +65,85 @@ const handleSortChange = ({ prop, order }) => {
 }
 </script>
 
-<style scoped>
-.data-table-wrapper { display: flex; flex-direction: column; height: 100%; min-height: 0; overflow: hidden; }
-.table-toolbar { margin-bottom: 8px; flex-shrink: 0; }
-.table-footer { display: flex; align-items: center; justify-content: space-between; padding: 8px 0 0; flex-shrink: 0; }
-.total-info { font-size: 14px; color: #000; }
-:deep(.el-table) { flex: 1; min-height: 0; --el-table-border-color: #e8e8e8; }
-:deep(.el-table__body-wrapper) { overflow-y: auto; }
-:deep(.el-scrollbar__view) { height: auto !important; }
-:deep(.el-table th.el-table__cell) { background-color: #f5f5f5; color: #003; font-weight: 700; font-size: 14px; padding: 8px 0; text-align: center; border-right: 1px solid #e8e8e8; border-bottom: 1px solid #e8e8e8; }
-:deep(.el-table td.el-table__cell) { padding: 8px 0; font-size: 14px; color: #000; border-right: 1px solid #e8e8e8; border-bottom: 1px solid #e8e8e8; }
-:deep(.el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell) { background-color: #f5faff; }
-:deep(.el-table--border) { border: 1px solid #e8e8e8; }
-:deep(.el-pagination) { padding: 0; }
-:deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) { background-color: #409eff; }
-:deep(.el-pagination .el-select .el-input) { width: 100px; }
+<style scoped lang="scss">
+@use "@/styles/variables.scss" as *;
+
+.data-table-wrapper { 
+  display: flex; 
+  flex-direction: column; 
+  height: 100%; 
+  min-height: 0; 
+  overflow: hidden; 
+}
+
+.table-toolbar { 
+  margin-bottom: 8px; 
+  flex-shrink: 0; 
+}
+
+.table-footer { 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  padding: 8px 0 0; 
+  flex-shrink: 0; 
+}
+
+.total-info { 
+  font-size: 14px; 
+  color: $text-primary; 
+}
+
+:deep(.el-table) { 
+  flex: 1; 
+  min-height: 0; 
+  --el-table-border-color: #{$border-color}; 
+}
+
+:deep(.el-table__body-wrapper) { 
+  overflow-y: auto; 
+}
+
+:deep(.el-scrollbar__view) { 
+  height: auto !important; 
+}
+
+:deep(.el-table th.el-table__cell) { 
+  background-color: $bg-color; 
+  color: $text-primary; 
+  font-weight: 700; 
+  font-size: 14px; 
+  padding: 8px 0; 
+  text-align: center; 
+  border-right: 1px solid $border-color; 
+  border-bottom: 1px solid $border-color; 
+}
+
+:deep(.el-table td.el-table__cell) { 
+  padding: 8px 0; 
+  font-size: 14px; 
+  color: $text-primary; 
+  border-right: 1px solid $border-color; 
+  border-bottom: 1px solid $border-color; 
+}
+
+:deep(.el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell) { 
+  background-color: rgba($primary-color, 0.05); 
+}
+
+:deep(.el-table--border) { 
+  border: 1px solid $border-color; 
+}
+
+:deep(.el-pagination) { 
+  padding: 0; 
+}
+
+:deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) { 
+  background-color: $primary-color; 
+}
+
+:deep(.el-pagination .el-select .el-input) { 
+  width: 100px; 
+}
 </style>

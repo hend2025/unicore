@@ -38,7 +38,7 @@
             <el-table-column prop="orderNum" label="排序" width="80" show-overflow-tooltip />
             <el-table-column prop="stasFlag" label="状态" width="80">
               <template #default="{ row }">
-                <el-tag :type="row.stasFlag === '1' ? 'success' : 'danger'">{{ row.stasFlag === '1' ? '正常' : '停用' }}</el-tag>
+                <StatusTag :status="row.stasFlag" />
               </template>
             </el-table-column>
             <el-table-column label="操作" width="128" align="center">
@@ -82,7 +82,7 @@
             <el-table-column prop="dicTypeName" label="字典名称" min-width="120" show-overflow-tooltip />
             <el-table-column prop="stasFlag" label="状态" width="80">
               <template #default="{ row }">
-                <el-tag :type="row.stasFlag === '1' ? 'success' : 'danger'">{{ row.stasFlag === '1' ? '正常' : '停用' }}</el-tag>
+                <StatusTag :status="row.stasFlag" />
               </template>
             </el-table-column>
             <el-table-column label="操作" width="128" align="center">

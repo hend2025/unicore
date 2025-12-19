@@ -80,12 +80,14 @@ const handleSearch = () => {
 }
 
 const handleReset = () => {
-  // 直接修改原对象的属性，而不是替换整个对象
+  // 通过 emit 通知父组件更新数据，遵循单向数据流原则
+  const resetData = {}
   Object.keys(props.modelValue).forEach(key => {
-    if (key === 'pageNum') props.modelValue[key] = 1
-    else if (key === 'pageSize') { /* 保持不变 */ }
-    else props.modelValue[key] = ''
+    if (key === 'pageNum') resetData[key] = 1
+    else if (key === 'pageSize') resetData[key] = props.modelValue[key]
+    else resetData[key] = ''
   })
+  emit('update:modelValue', { ...props.modelValue, ...resetData })
   emit('reset')
 }
 </script>

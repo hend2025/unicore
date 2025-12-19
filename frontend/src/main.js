@@ -14,6 +14,10 @@ import PageCard from '@/components/PageCard.vue'
 import SearchForm from '@/components/SearchForm.vue'
 import DataTable from '@/components/DataTable.vue'
 import FormDialog from '@/components/FormDialog.vue'
+import StatusTag from '@/components/StatusTag.vue'
+
+// 指令
+import { setupDirectives } from '@/directives'
 
 const app = createApp(App)
 
@@ -27,6 +31,10 @@ app.component('PageCard', PageCard)
 app.component('SearchForm', SearchForm)
 app.component('DataTable', DataTable)
 app.component('FormDialog', FormDialog)
+app.component('StatusTag', StatusTag)
+
+// 注册自定义指令
+setupDirectives(app)
 
 app.use(createPinia())
 app.use(router)

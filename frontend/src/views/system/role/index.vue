@@ -30,7 +30,7 @@
         <el-table-column prop="roleKey" label="权限字符" min-width="120" show-overflow-tooltip />
         <el-table-column prop="stasFlag" label="状态" width="80">
           <template #default="{ row }">
-            <el-tag :type="row.stasFlag === '1' ? 'success' : 'danger'">{{ row.stasFlag === '1' ? '正常' : '停用' }}</el-tag>
+            <StatusTag :status="row.stasFlag" />
           </template>
         </el-table-column>
         <el-table-column prop="crteTime" label="创建时间" width="180" show-overflow-tooltip />

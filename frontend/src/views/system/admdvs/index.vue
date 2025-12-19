@@ -39,7 +39,7 @@
         <el-table-column prop="latlnt" label="经纬度" min-width="200" show-overflow-tooltip />
         <el-table-column prop="stasFlag" label="状态" width="80">
           <template #default="{ row }">
-            <el-tag :type="row.stasFlag === '1' ? 'success' : 'danger'">{{ row.stasFlag === '1' ? '正常' : '停用' }}</el-tag>
+            <StatusTag :status="row.stasFlag" />
           </template>
         </el-table-column>
         <el-table-column label="操作" width="128" align="center">
@@ -52,7 +52,7 @@
     </PageCard>
 
     <!-- 对话框 -->
-    <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" @submit="handleSubmit">
+    <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" label-width="120px" @submit="handleSubmit">
       <el-form-item label="医保区划编码" prop="admdvsCode">
         <el-input v-model="form.admdvsCode" placeholder="请输入医保区划编码(6位)" maxlength="6" :disabled="!!form.admdvsCode && dialogTitle === '编辑医保区划'" />
       </el-form-item>

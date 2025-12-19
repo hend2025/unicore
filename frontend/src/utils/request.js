@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import router from '@/router'
+import { STORAGE_KEYS, ROUTES } from '@/constants'
 
 const service = axios.create({
   baseURL: import.meta.env.DEV ? '' : __API_BASE_URL__,
@@ -12,16 +13,16 @@ let isRedirecting = false
 const redirectToLogin = () => {
   if (isRedirecting) return
   isRedirecting = true
-  localStorage.removeItem('access_token')
+  localStorage.removeItem(STORAGE_KEYS.TOKEN)
   sessionStorage.clear()
-  router.push('/login').finally(() => {
+  router.push(ROUTES.LOGIN).finally(() => {
     isRedirecting = false
   })
 }
 
 service.interceptors.request.use(
   config => {
-    const token = localStorage.getItem('access_token')
+    const token = localStorage.getItem(STORAGE_KEYS.TOKEN)
     if (token) {
       config.headers['Authorization'] = token
     }

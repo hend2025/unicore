@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { AuthAPI, logout, getInfo, getMenus } from '@/api/auth'
+import { STORAGE_KEYS } from '@/constants'
 
-const TOKEN_KEY = 'access_token'
+const { TOKEN: TOKEN_KEY } = STORAGE_KEYS
 
 function setToken(token) {
   localStorage.setItem(TOKEN_KEY, token)
