@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.unicore.entity.SysMenu;
 import com.unicore.mapper.SysMenuMapper;
+import com.unicore.mapper.SysRoleMenuMapper;
+import com.unicore.entity.SysRoleMenu;
 import com.unicore.service.SysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Autowired
     private SysUserMapper userMapper;
+
+    @Autowired
+    private SysRoleMenuMapper roleMenuMapper;
 
     /**
      * 判断是否为admin用户
@@ -226,7 +231,14 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     @Override
     public List<String> selectMenuIdsByRoleId(Integer roleId) {
-        return baseMapper.selectMenuIdsByRoleId(roleId);
+        LambdaQueryWrapper<SysRoleMenu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysRoleMenu::getRoleId, roleId);
+        List<SysRoleMenu> list = roleMenuMapper.selectList(wrapper);
+        List<String> menuIds = new ArrayList<>();
+        for (SysRoleMenu rm : list) {
+            menuIds.add(rm.getMenuId());
+        }
+        return menuIds;
     }
 
     private List<SysMenu> buildTree(List<SysMenu> menus, String parentId) {
@@ -250,5 +262,17 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             }
         }
         return result;
+    }
+
+    @Override
+    public boolean deleteMenu(String menuId) {
+        // 校验菜单是否被角色使用
+        LambdaQueryWrapper<SysRoleMenu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysRoleMenu::getMenuId, menuId);
+        Long count = roleMenuMapper.selectCount(wrapper);
+        if (count > 0) {
+            throw new RuntimeException("该菜单已分配给角色，无法删除");
+        }
+        return removeById(menuId);
     }
 }

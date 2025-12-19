@@ -4,7 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.hsa.hsaf.core.framework.web.WrapperResponse;
 import com.unicore.entity.SysAdmdvs;
+import com.unicore.entity.SysOrg;
+import com.unicore.entity.SysUser;
 import com.unicore.mapper.SysAdmdvsMapper;
+import com.unicore.mapper.SysOrgMapper;
+import com.unicore.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -16,6 +20,12 @@ public class SysAdmdvsController {
 
     @Autowired
     private SysAdmdvsMapper admdvsMapper;
+
+    @Autowired
+    private SysOrgMapper orgMapper;
+
+    @Autowired
+    private SysUserMapper userMapper;
 
     @GetMapping("/page")
     public WrapperResponse<Page<SysAdmdvs>> page(
@@ -56,7 +66,20 @@ public class SysAdmdvsController {
 
     @GetMapping("/delete/{code}")
     public WrapperResponse<Boolean> delete(@PathVariable String code) {
-        // MyBatis-Plus会自动进行逻辑删除
+        // 校验医保区划是否被机构引用
+        LambdaQueryWrapper<SysOrg> orgWrapper = new LambdaQueryWrapper<>();
+        orgWrapper.eq(SysOrg::getAdmdvsCode, code);
+        orgWrapper.eq(SysOrg::getValiFlag, "1");
+        if (orgMapper.selectCount(orgWrapper) > 0) {
+            throw new RuntimeException("该医保区划已被机构使用，无法删除");
+        }
+        // 校验医保区划是否被用户引用
+        LambdaQueryWrapper<SysUser> userWrapper = new LambdaQueryWrapper<>();
+        userWrapper.eq(SysUser::getAdmdvsCode, code);
+        userWrapper.eq(SysUser::getValiFlag, "1");
+        if (userMapper.selectCount(userWrapper) > 0) {
+            throw new RuntimeException("该医保区划已被用户使用，无法删除");
+        }
         return WrapperResponse.success(admdvsMapper.deleteById(code) > 0);
     }
 

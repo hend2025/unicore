@@ -1,38 +1,35 @@
 <template>
   <div class="page-container">
     <!-- 信息查询 -->
-    <div class="query-card">
-      <div class="section-title"><i></i>信息查询</div>
-      <div class="query-section">
-        <el-form :model="queryParams" inline class="query-form" label-width="80px" @submit.prevent>
-          <el-form-item label="所属系统">
-            <el-select v-model="queryParams.sysId" placeholder="请选择系统" clearable>
-              <el-option v-for="item in systemList" :key="item.sysId" :label="item.sysName" :value="item.sysId" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="菜单名称">
-            <el-input v-model="queryParams.menuName" placeholder="请输入菜单名称" clearable />
-          </el-form-item>
-          <el-form-item label="路由名称">
-            <el-input v-model="queryParams.menuUrl" placeholder="请输入路由名称" clearable />
-          </el-form-item>
-          <el-form-item>
-            <el-button @click="handleReset">重置</el-button>
-            <el-button type="primary" @click="handleQuery">查询</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-    </div>
+    <PageCard title="信息查询">
+      <SearchForm v-model="queryParams" @search="handleQuery" @reset="handleReset">
+        <el-form-item label="所属系统">
+          <el-select v-model="queryParams.sysId" placeholder="请选择系统" clearable>
+            <el-option v-for="item in systemList" :key="item.sysId" :label="item.sysName" :value="item.sysId" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="菜单名称">
+          <el-input v-model="queryParams.menuName" placeholder="请输入菜单名称" clearable />
+        </el-form-item>
+        <el-form-item label="路由名称">
+          <el-input v-model="queryParams.menuUrl" placeholder="请输入路由名称" clearable />
+        </el-form-item>
+      </SearchForm>
+    </PageCard>
 
     <!-- 菜单列表 -->
-    <div class="table-card">
-      <div class="table-header">
-        <div class="section-title"><i></i>菜单列表</div>
-        <div>
-          <el-button type="primary" @click="handleAdd()">新增菜单</el-button>
-        </div>
-      </div>
-      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }" :show-overflow-tooltip="true">
+    <PageCard title="菜单列表" flex>
+      <template #extra>
+        <el-button type="primary" @click="handleAdd()">新增菜单</el-button>
+      </template>
+      <DataTable
+        :data="tableData"
+        :loading="loading"
+        :total="total"
+        v-model:pageNum="queryParams.pageNum"
+        v-model:pageSize="queryParams.pageSize"
+        @page-change="loadData"
+      >
         <el-table-column prop="menuId" label="菜单ID" width="180" show-overflow-tooltip />
         <el-table-column prop="menuName" label="菜单名称" min-width="150" show-overflow-tooltip />
         <el-table-column prop="menuUrl" label="路由地址" min-width="220" show-overflow-tooltip />
@@ -60,19 +57,8 @@
             <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
-      </el-table>
-      <!-- 分页 -->
-      <el-pagination
-        v-model:current-page="queryParams.pageNum"
-        v-model:page-size="queryParams.pageSize"
-        :page-sizes="[10, 20, 50, 100]"
-        :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="loadData"
-        @current-change="loadData"
-        style="margin-top: 10px; justify-content: flex-end;"
-      />
-    </div>
+      </DataTable>
+    </PageCard>
 
     <!-- 对话框 -->
     <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" width="600px" @submit="handleSubmit">
@@ -125,6 +111,9 @@
 <script setup>
 import { ref, reactive, onMounted, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import PageCard from '@/components/PageCard.vue'
+import SearchForm from '@/components/SearchForm.vue'
+import DataTable from '@/components/DataTable.vue'
 import FormDialog from '@/components/FormDialog.vue'
 import { menuApi, systemApi } from '@/api/system'
 
@@ -146,30 +135,23 @@ const rules = {
 
 const menuOptions = computed(() => [{ menuId: '0', menuName: '主类目', children: menuTreeData.value }])
 
-// 获取系统名称
 const getSystemName = (sysId) => {
   const system = systemList.value.find(item => item.sysId === sysId)
   return system ? system.sysName : ''
 }
 
-// 加载系统列表
 const loadSystemList = async () => {
   try {
     const res = await systemApi.list()
     systemList.value = res.data || []
-  } catch (e) {
-    // 错误已在request拦截器中处理
-  }
+  } catch (e) {}
 }
 
-// 加载菜单树（用于上级菜单选择）
 const loadMenuTree = async () => {
   try {
     const res = await menuApi.tree()
     menuTreeData.value = res.data || []
-  } catch (e) {
-    // 错误已在request拦截器中处理
-  }
+  } catch (e) {}
 }
 
 const loadData = async () => {
@@ -189,10 +171,6 @@ const handleQuery = () => {
 }
 
 const handleReset = () => {
-  queryParams.menuName = ''
-  queryParams.menuUrl = ''
-  queryParams.sysId = ''
-  queryParams.pageNum = 1
   loadData()
 }
 
@@ -240,27 +218,3 @@ onMounted(() => {
   loadData()
 })
 </script>
-
-
-<style scoped>
-.page-container { display: flex; flex-direction: column; padding: 10px; background: #f5f5f5; height: 100%; box-sizing: border-box; overflow: hidden; }
-.section-title { display: flex; align-items: center; font-size: 16x; color: #333; font-weight: 700; margin-bottom: 8px; }
-.section-title i { width: 4px; height: 18px; background: #0b7ef0ff; margin-right: 8px; border-radius: 2px; }
-.query-card { background: #fff; padding: 10px 12px; margin-bottom: 8px; border: 1px solid #eee; border-radius: 4px; }
-.query-card .section-title { margin-bottom: 8px; }
-.query-section { padding-bottom: 0; }
-.query-form { display: flex; flex-wrap: wrap; align-items: center; }
-.query-form :deep(.el-form-item) { margin-bottom: 8px; margin-right: 20px; flex: 0 0 calc(25% - 20px); }
-.query-form :deep(.el-form-item__label) { padding-right: 8px; color: #000; font-size: 14px; flex-shrink: 0; }
-.query-form :deep(.el-form-item__content) { flex: 1; }
-.query-form :deep(.el-input), .query-form :deep(.el-select) { width: 100%; }
-.table-card { flex: 1; background: #fff; padding: 10px 12px; border: 1px solid #eee; border-radius: 4px; display: flex; flex-direction: column; overflow: hidden; min-height: 0; }
-.table-header { display: flex; align-items: center; justify-content: space-between; }
-.table-header .section-title { margin-bottom: 0; }
-:deep(.el-table) { margin-top: 8px; flex: 1; --el-table-border-color: #e8e8e8; }
-:deep(.el-table__body-wrapper) { overflow: auto; }
-:deep(.el-table th.el-table__cell) { background-color: #f5f5f5; color: #003; font-weight: 700; font-size: 14px; padding: 8px 0; text-align: center; border-right: 1px solid #e8e8e8; border-bottom: 1px solid #e8e8e8; }
-:deep(.el-table td.el-table__cell) { padding: 8px 0; font-size: 14px; color: #000; border-right: 1px solid #e8e8e8; border-bottom: 1px solid #e8e8e8; }
-:deep(.el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell) { background-color: #f5faff; }
-:deep(.el-table--border) { border: 1px solid #e8e8e8; }
-</style>

@@ -1,71 +1,54 @@
 <template>
   <div class="page-container">
     <!-- 信息查询 -->
-    <div class="query-card">
-      <div class="section-title"><i></i>信息查询</div>
-      <div class="query-section">
-        <el-form :model="queryParams" inline class="query-form" label-width="70px" @submit.prevent>
-          <el-form-item label="用户名">
-            <el-input v-model="queryParams.userName" placeholder="请输入用户名" clearable />
-          </el-form-item>
-          <el-form-item label="姓名">
-            <el-input v-model="queryParams.realName" placeholder="请输入姓名" clearable />
-          </el-form-item>
-          <el-form-item label="医保区划">
-            <el-tree-select v-model="queryParams.admdvsCode" :data="admdvsTree" :props="{ label: 'admdvsName', value: 'admdvsCode' }" check-strictly clearable placeholder="请选择医保区划" />
-          </el-form-item>
-          <el-form-item label="状态">
-            <el-select v-model="queryParams.stasFlag" placeholder="请选择" clearable>
-              <el-option label="正常" value="1" />
-              <el-option label="停用" value="0" />
-            </el-select>
-          </el-form-item>
-          <el-form-item class="query-btns">
-            <el-button link type="primary" @click="queryExpanded = !queryExpanded">
-              {{ queryExpanded ? '收起' : '展开' }}<el-icon><component :is="queryExpanded ? 'ArrowUp' : 'ArrowDown'" /></el-icon>
-            </el-button>
-            <el-button @click="handleReset">重置</el-button>
-            <el-button type="primary" @click="loadData">查询</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-    </div>
+    <PageCard title="信息查询">
+      <SearchForm v-model="queryParams" @search="loadData" @reset="handleReset">
+        <el-form-item label="用户名">
+          <el-input v-model="queryParams.userName" placeholder="请输入用户名" clearable />
+        </el-form-item>
+        <el-form-item label="用户姓名">
+          <el-input v-model="queryParams.realName" placeholder="请输入姓名" clearable />
+        </el-form-item>
+        <el-form-item label="医保区划">
+          <el-tree-select v-model="queryParams.admdvsCode" :data="admdvsTree" :props="{ label: 'admdvsName', value: 'admdvsCode' }" check-strictly clearable placeholder="请选择医保区划" />
+        </el-form-item>
+        <el-form-item label="用户状态">
+          <el-select v-model="queryParams.stasFlag" placeholder="请选择" clearable>
+            <el-option label="正常" value="1" />
+            <el-option label="停用" value="0" />
+          </el-select>
+        </el-form-item>
+      </SearchForm>
+    </PageCard>
 
     <!-- 用户列表 -->
-    <div class="table-card">
-      <div class="table-header">
-        <div class="section-title"><i></i>用户列表</div>
+    <PageCard title="用户列表" flex>
+      <template #extra>
         <el-button type="primary" @click="handleAdd">新增用户</el-button>
-      </div>
-      <el-table :data="tableData" v-loading="loading" border style="width: 100%; flex: 1" height="100%" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }" :show-overflow-tooltip="true">
-        <el-table-column type="index" label="序号" width="60" align="center" />
-        <el-table-column prop="userName" label="用户名" min-width="100" show-overflow-tooltip />
-        <el-table-column prop="realName" label="姓名" min-width="80" show-overflow-tooltip />
+      </template>
+      <DataTable
+        :data="tableData"
+        :loading="loading"
+        :total="total"
+        v-model:pageNum="queryParams.pageNum"
+        v-model:pageSize="queryParams.pageSize"
+        @page-change="loadData"
+        @sort-change="handleSortChange"
+      >
+        <el-table-column type="index" label="序号" width="60" align="center" fixed="left" />
+        <el-table-column prop="userName" label="用户名" min-width="120" show-overflow-tooltip sortable/>
+        <el-table-column prop="realName" label="姓名" min-width="120" show-overflow-tooltip sortable />
         <el-table-column prop="admdvsName" label="医保区划" min-width="120" show-overflow-tooltip />
-        <el-table-column prop="orgName" label="所属机构" min-width="150" show-overflow-tooltip />
-        <el-table-column prop="crteTime" label="创建时间" width="180" show-overflow-tooltip />
-        <el-table-column label="操作" width="128" align="center">
+        <el-table-column prop="orgName" label="所属机构" min-width="120" show-overflow-tooltip />
+        <el-table-column prop="crteTime" label="创建时间" width="180" show-overflow-tooltip sortable />
+        <el-table-column label="操作" width="128" align="center" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
             <el-button type="danger" link @click="handleDelete(row)" :disabled="row.userName === 'admin'">删除</el-button>
           </template>
         </el-table-column>
-      </el-table>
-      <div class="table-footer">
-        <span class="total-info">总共{{ total }}条 显示{{ showStart }}-{{ showEnd }}条</span>
-        <el-pagination
-          v-model:current-page="queryParams.pageNum"
-          v-model:page-size="queryParams.pageSize"
-          :page-sizes="[10, 20, 50, 100]"
-          :total="total"
-          background
-          small
-          layout="sizes, prev, pager, next, jumper"
-          @size-change="loadData"
-          @current-change="loadData"
-        />
-      </div>
-    </div>
+      </DataTable>
+    </PageCard>
 
     <!-- 对话框 -->
     <el-dialog v-model="dialogVisible" :title="dialogTitle" width="500px" :close-on-click-modal="false">
@@ -110,9 +93,11 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { ArrowUp, ArrowDown } from '@element-plus/icons-vue'
+import PageCard from '@/components/PageCard.vue'
+import SearchForm from '@/components/SearchForm.vue'
+import DataTable from '@/components/DataTable.vue'
 import { userApi, roleApi, admdvsApi, orgApi, areaApi } from '@/api/system'
 
 const loading = ref(false)
@@ -125,47 +110,19 @@ const roleList = ref([])
 const admdvsTree = ref([])
 const orgTree = ref([])
 const areaTree = ref([])
-const queryExpanded = ref(false)
 const formRef = ref(null)
 
-const queryParams = reactive({
-  pageNum: 1,
-  pageSize: 10,
-  userName: '',
-  realName: '',
-  admdvsCode: '',
-  stasFlag: ''
-})
-const form = reactive({
-  userId: null,
-  userName: '',
-  realName: '',
-  password: '',
-  admdvsCode: '',
-  orgId: null,
-  areaCode: '',
-  roleIds: [],
-  stasFlag: '1'
-})
+const queryParams = reactive({ pageNum: 1, pageSize: 10, userName: '', realName: '', admdvsCode: '', stasFlag: '' })
+const form = reactive({ userId: null, userName: '', realName: '', password: '', admdvsCode: '', orgId: null, areaCode: '', roleIds: [], stasFlag: '1' })
 
-// 密码复杂度验证：至少8个字符，包含数字、字母、特殊符号中的至少3种
 const validatePassword = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('请输入密码'))
-    return
-  }
-  if (value.length < 8) {
-    callback(new Error('密码长度至少8个字符'))
-    return
-  }
+  if (!value) { callback(new Error('请输入密码')); return }
+  if (value.length < 8) { callback(new Error('密码长度至少8个字符')); return }
   let complexity = 0
-  if (/[0-9]/.test(value)) complexity++ // 数字
-  if (/[a-zA-Z]/.test(value)) complexity++ // 字母
-  if (/[^0-9a-zA-Z]/.test(value)) complexity++ // 特殊符号
-  if (complexity < 3) {
-    callback(new Error('密码必须包含数字、字母、特殊符号'))
-    return
-  }
+  if (/[0-9]/.test(value)) complexity++
+  if (/[a-zA-Z]/.test(value)) complexity++
+  if (/[^0-9a-zA-Z]/.test(value)) complexity++
+  if (complexity < 3) { callback(new Error('密码必须包含数字、字母、特殊符号')); return }
   callback()
 }
 
@@ -175,9 +132,6 @@ const rules = {
   password: [{ required: true, validator: validatePassword, trigger: 'blur' }],
   admdvsCode: [{ required: true, message: '请选择医保区划', trigger: 'change' }]
 }
-
-const showStart = computed(() => total.value ? (queryParams.pageNum - 1) * queryParams.pageSize + 1 : 0)
-const showEnd = computed(() => Math.min(queryParams.pageNum * queryParams.pageSize, total.value))
 
 const loadData = async () => {
   loading.value = true
@@ -191,70 +145,31 @@ const loadData = async () => {
 }
 
 const handleReset = () => {
-  Object.keys(queryParams).forEach(key => {
-    if (key === 'pageNum') queryParams[key] = 1
-    else if (key === 'pageSize') queryParams[key] = 10
-    else queryParams[key] = ''
-  })
+  loadData()
+}
+
+const handleSortChange = ({ prop, order }) => {
+  // order: ascending 升序, descending 降序, null 取消排序
+  queryParams.orderBy = prop
+  queryParams.orderType = order === 'ascending' ? 'asc' : order === 'descending' ? 'desc' : ''
   loadData()
 }
 
 const loadRoles = async () => {
-  try {
-    const res = await roleApi.list()
-    if (res && res.data) {
-      roleList.value = res.data
-    }
-  } catch (e) {
-    console.error('加载角色列表失败', e)
-  }
+  try { const res = await roleApi.list(); if (res?.data) roleList.value = res.data } catch (e) {}
 }
-
 const loadAdmdvsTree = async () => {
-  try {
-    const res = await admdvsApi.tree()
-    if (res && res.data) {
-      admdvsTree.value = res.data
-    }
-  } catch (e) {
-    console.error('加载医保区划失败', e)
-  }
+  try { const res = await admdvsApi.tree(); if (res?.data) admdvsTree.value = res.data } catch (e) {}
 }
-
 const loadOrgTree = async () => {
-  try {
-    const res = await orgApi.tree()
-    if (res && res.data) {
-      orgTree.value = res.data
-    }
-  } catch (e) {
-    console.error('加载机构树失败', e)
-  }
+  try { const res = await orgApi.tree(); if (res?.data) orgTree.value = res.data } catch (e) {}
 }
-
 const loadAreaTree = async () => {
-  try {
-    const res = await areaApi.tree()
-    if (res && res.data) {
-      areaTree.value = res.data
-    }
-  } catch (e) {
-    console.error('加载地区树失败', e)
-  }
+  try { const res = await areaApi.tree(); if (res?.data) areaTree.value = res.data } catch (e) {}
 }
 
 const handleAdd = () => {
-  Object.assign(form, {
-    userId: null,
-    userName: '',
-    realName: '',
-    password: '',
-    admdvsCode: '',
-    orgId: null,
-    areaCode: '',
-    roleIds: [],
-    stasFlag: '1'
-  })
+  Object.assign(form, { userId: null, userName: '', realName: '', password: '', admdvsCode: '', orgId: null, areaCode: '', roleIds: [], stasFlag: '1' })
   dialogTitle.value = '新增用户'
   dialogVisible.value = true
 }
@@ -291,10 +206,7 @@ const handleResetPwd = () => {
 }
 
 const handleDelete = (row) => {
-  if (row.userName === 'admin') {
-    ElMessage.warning('admin用户不能删除')
-    return
-  }
+  if (row.userName === 'admin') { ElMessage.warning('admin用户不能删除'); return }
   ElMessageBox.confirm('确认删除该用户?', '提示', { type: 'warning' }).then(async () => {
     await userApi.delete(row.userId)
     ElMessage.success('删除成功')
@@ -310,181 +222,3 @@ onMounted(() => {
   loadAreaTree()
 })
 </script>
-
-<style scoped>
-.page-container {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  background: #f5f5f5;
-  height: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  font-size: 16x;
-  color: #333;
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.section-title i {
-  width: 4px;
-  height: 18px;
-  background: #0b7ef0ff;
-  margin-right: 8px;
-  border-radius: 2px;
-}
-
-/* 查询卡片 */
-.query-card {
-  background: #fff;
-  padding: 10px 12px;
-  margin-bottom: 8px;
-  border: 1px solid #eee;
-  border-radius: 4px;
-}
-
-.query-card .section-title {
-  margin-bottom: 8px;
-}
-
-/* 查询区域 */
-.query-section {
-  padding-bottom: 0;
-}
-
-.query-form {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.query-form :deep(.el-form-item) {
-  margin-bottom: 8px;
-  margin-right: 20px;
-  flex: 0 0 calc(25% - 20px);
-}
-
-.query-form :deep(.el-form-item__label) {
-  padding-right: 8px;
-  color: #000;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-.query-form :deep(.el-form-item__content) {
-  flex: 1;
-}
-
-.query-form :deep(.el-input),
-.query-form :deep(.el-select) {
-  width: 100%;
-}
-
-.query-btns {
-  flex: 1 1 100% !important;
-  display: flex;
-  justify-content: flex-end;
-  margin-right: 0 !important;
-  padding-right: 0;
-}
-
-.query-btns :deep(.el-form-item__content) {
-  justify-content: flex-end;
-}
-
-.query-btns :deep(.el-icon) {
-  margin-left: 2px;
-}
-
-/* 表格卡片 */
-.table-card {
-  flex: 1;
-  background: #fff;
-  padding: 10px 12px;
-  border: 1px solid #eee;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  min-height: 0;
-}
-
-.table-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.table-header .section-title {
-  margin-bottom: 0;
-}
-
-:deep(.el-table) {
-  margin-top: 8px;
-  flex: 1;
-  --el-table-border-color: #e8e8e8;
-}
-
-:deep(.el-table__body-wrapper) {
-  overflow: auto;
-}
-
-:deep(.el-table th.el-table__cell) {
-  background-color: #f5f5f5;
-  color: #003;
-  font-weight: 700;
-  font-size: 14px;
-  padding: 8px 0;
-  text-align: center;
-  border-right: 1px solid #e8e8e8;
-  border-bottom: 1px solid #e8e8e8;
-}
-
-:deep(.el-table td.el-table__cell) {
-  padding: 8px 0;
-  font-size: 14px;
-  color: #000;
-  border-right: 1px solid #e8e8e8;
-  border-bottom: 1px solid #e8e8e8;
-}
-
-:deep(.el-table--enable-row-hover .el-table__body tr:hover > td.el-table__cell) {
-  background-color: #f5faff;
-}
-
-:deep(.el-table--border) {
-  border: 1px solid #e8e8e8;
-}
-
-/* 分页区域 */
-.table-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 6px 0;
-  margin-top: 6px;
-  flex-shrink: 0;
-}
-
-.total-info {
-  font-size: 14px;
-  color: #000;
-}
-
-:deep(.el-pagination) {
-  padding: 0;
-}
-
-:deep(.el-pagination.is-background .el-pager li:not(.is-disabled).is-active) {
-  background-color: #409eff;
-}
-
-:deep(.el-pagination .el-select .el-input) {
-  width: 100px;
-}
-</style>

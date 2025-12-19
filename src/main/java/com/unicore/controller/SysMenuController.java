@@ -52,6 +52,6 @@ public class SysMenuController {
 
     @GetMapping("/delete/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable String id) {
-        return WrapperResponse.success(menuService.removeById(id));
+        return WrapperResponse.success(menuService.deleteMenu(id));
     }
 }

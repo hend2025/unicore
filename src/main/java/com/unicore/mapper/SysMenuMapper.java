@@ -9,7 +9,6 @@ import java.util.List;
 @Mapper
 public interface SysMenuMapper extends BaseMapper<SysMenu> {
     List<SysMenu> selectMenusByUserId(@Param("userId") Integer userId);
-    List<String> selectMenuIdsByRoleId(@Param("roleId") Integer roleId);
     
     /**
      * 查询指定父节点下的最大菜单ID

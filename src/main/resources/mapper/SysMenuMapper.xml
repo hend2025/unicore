@@ -39,10 +39,6 @@
         ORDER BY m.PARENT_ID, m.ORDER_NUM
     </select>
 
-    <select id="selectMenuIdsByRoleId" resultType="java.lang.String">
-        SELECT MENU_ID FROM sys_role_menu WHERE ROLE_ID = #{roleId}
-    </select>
-
     <select id="selectMaxMenuId" resultType="java.lang.String">
         SELECT MAX(MENU_ID) FROM sys_menu 
         WHERE SYS_ID = #{sysId} 

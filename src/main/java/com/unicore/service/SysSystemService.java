@@ -16,4 +16,9 @@ public interface SysSystemService extends IService<SysSystem> {
      * @return 系统列表
      */
     List<SysSystem> selectSystemListByUserId(Integer userId);
+
+    /**
+     * 删除应用（校验是否被菜单引用）
+     */
+    boolean deleteSystem(Integer sysId);
 }

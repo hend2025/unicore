@@ -19,7 +19,6 @@
             </el-form-item>
             <el-form-item>
               <div class="form-options">
-                <el-checkbox v-model="form.rememberMe">记住密码</el-checkbox>
                 <el-checkbox v-model="form.agreed">
                   我已阅读并同意 <a href="#" class="link">《平台用户协议》</a>
                 </el-checkbox>
@@ -52,9 +51,8 @@ const loading = ref(false)
 const systemTitle = ref('统一门户管理系统')
 
 const form = reactive({
-  username: '',
-  password: '',
-  rememberMe: false,
+  username: import.meta.env.DEV ? 'admin' : '',
+  password: import.meta.env.DEV ? '1qaz#EDC' : '',
   agreed: true
 })
 
@@ -76,20 +74,8 @@ const fetchSystemTitle = async () => {
   }
 }
 
-// 从 localStorage 读取记住的账号密码
 onMounted(() => {
   fetchSystemTitle()
-  const remembered = localStorage.getItem('rememberedUser')
-  if (remembered) {
-    try {
-      const { username, password } = JSON.parse(remembered)
-      form.username = username || ''
-      form.password = password || ''
-      form.rememberMe = true
-    } catch (e) {
-      localStorage.removeItem('rememberedUser')
-    }
-  }
 })
 
 const handleLogin = async () => {
@@ -106,15 +92,6 @@ const handleLogin = async () => {
       captchaKey: '',
       captchaCode: ''
     })
-    // 记住密码
-    if (form.rememberMe) {
-      localStorage.setItem('rememberedUser', JSON.stringify({
-        username: form.username,
-        password: form.password
-      }))
-    } else {
-      localStorage.removeItem('rememberedUser')
-    }
     ElMessage.success('登录成功')
     router.push('/')
   } catch (error) {

@@ -28,4 +28,9 @@ public interface SysMenuService extends IService<SysMenu> {
      * 新增菜单（自动生成ID）
      */
     boolean saveMenu(SysMenu menu);
+
+    /**
+     * 删除菜单（校验是否被角色使用）
+     */
+    boolean deleteMenu(String menuId);
 }

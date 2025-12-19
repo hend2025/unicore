@@ -51,7 +51,6 @@ public class SysOrgController {
 
     @GetMapping("/delete/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable Integer id) {
-        // MyBatis-Plus会自动进行逻辑删除
-        return WrapperResponse.success(orgService.removeById(id));
+        return WrapperResponse.success(orgService.deleteOrg(id));
     }
 }

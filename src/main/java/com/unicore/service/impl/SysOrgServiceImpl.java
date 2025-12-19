@@ -4,14 +4,20 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.unicore.entity.SysOrg;
+import com.unicore.entity.SysUser;
 import com.unicore.mapper.SysOrgMapper;
+import com.unicore.mapper.SysUserMapper;
 import com.unicore.service.SysOrgService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> implements SysOrgService {
+
+    @Autowired
+    private SysUserMapper userMapper;
 
     @Override
     public Page<SysOrg> selectOrgPage(Page<SysOrg> page, SysOrg org) {
@@ -61,5 +67,18 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
             .filter(o -> parentId.equals(o.getPrntOrgId()))
             .peek(o -> o.setChildren(buildTree(orgs, o.getOrgId())))
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean deleteOrg(Integer orgId) {
+        // 校验机构是否被用户引用
+        LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysUser::getOrgId, orgId);
+        wrapper.eq(SysUser::getValiFlag, "1");
+        Long count = userMapper.selectCount(wrapper);
+        if (count > 0) {
+            throw new RuntimeException("该机构已被用户使用，无法删除");
+        }
+        return removeById(orgId);
     }
 }

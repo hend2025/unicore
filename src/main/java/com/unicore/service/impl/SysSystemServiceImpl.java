@@ -98,4 +98,17 @@ public class SysSystemServiceImpl extends ServiceImpl<SysSystemMapper, SysSystem
         wrapper.orderByAsc(SysSystem::getOrderNum);
         return list(wrapper);
     }
+
+    @Override
+    public boolean deleteSystem(Integer sysId) {
+        // 校验应用是否被菜单引用
+        LambdaQueryWrapper<SysMenu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(SysMenu::getSysId, sysId);
+        wrapper.eq(SysMenu::getValiFlag, "1");
+        Long count = menuMapper.selectCount(wrapper);
+        if (count > 0) {
+            throw new RuntimeException("该应用下存在菜单，无法删除");
+        }
+        return removeById(sysId);
+    }
 }
