@@ -1,13 +1,5 @@
 import request from '@/utils/request'
-
-/**
- * Base64编码工具函数
- * @param {string} str - 要编码的字符串
- * @returns {string} Base64编码后的字符串
- */
-function encodeBase64(str) {
-  return btoa(unescape(encodeURIComponent(str)))
-}
+import { encodeBase64 } from '@/utils/crypto'
 
 /**
  * 登录数据

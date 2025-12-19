@@ -99,6 +99,7 @@ import PageCard from '@/components/PageCard.vue'
 import SearchForm from '@/components/SearchForm.vue'
 import DataTable from '@/components/DataTable.vue'
 import { userApi, roleApi, admdvsApi, orgApi, areaApi } from '@/api/system'
+import { passwordValidator } from '@/utils/validators'
 
 const loading = ref(false)
 const submitLoading = ref(false)
@@ -115,21 +116,10 @@ const formRef = ref(null)
 const queryParams = reactive({ pageNum: 1, pageSize: 10, userName: '', realName: '', admdvsCode: '', stasFlag: '' })
 const form = reactive({ userId: null, userName: '', realName: '', password: '', admdvsCode: '', orgId: null, areaCode: '', roleIds: [], stasFlag: '1' })
 
-const validatePassword = (rule, value, callback) => {
-  if (!value) { callback(new Error('请输入密码')); return }
-  if (value.length < 8) { callback(new Error('密码长度至少8个字符')); return }
-  let complexity = 0
-  if (/[0-9]/.test(value)) complexity++
-  if (/[a-zA-Z]/.test(value)) complexity++
-  if (/[^0-9a-zA-Z]/.test(value)) complexity++
-  if (complexity < 3) { callback(new Error('密码必须包含数字、字母、特殊符号')); return }
-  callback()
-}
-
 const rules = {
   userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
   realName: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
-  password: [{ required: true, validator: validatePassword, trigger: 'blur' }],
+  password: [{ required: true, validator: passwordValidator, trigger: 'blur' }],
   admdvsCode: [{ required: true, message: '请选择医保区划', trigger: 'change' }]
 }
 

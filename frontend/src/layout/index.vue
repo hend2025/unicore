@@ -235,6 +235,8 @@ import { useUserStore } from '@/stores/user'
 import { changePassword, getSystems } from '@/api/auth'
 // 递归菜单组件
 import MenuItem from '@/components/MenuItem.vue'
+// 验证器
+import { passwordValidator, createConfirmPasswordValidator } from '@/utils/validators'
 
 /**
  * ==================== 内部页面组件映射表 ====================
@@ -356,52 +358,15 @@ const pwdForm = ref({                // 密码表单数据
 })
 
 /**
- * 密码复杂度验证器
- * 规则：至少 8 个字符，必须包含数字、字母、特殊符号
- */
-const validateNewPassword = (rule, value, callback) => {
-  if (!value) {
-    callback(new Error('请输入新密码'))
-    return
-  }
-  if (value.length < 8) {
-    callback(new Error('密码长度至少8个字符'))
-    return
-  }
-  // 计算密码复杂度
-  let complexity = 0
-  if (/[0-9]/.test(value)) complexity++           // 包含数字
-  if (/[a-zA-Z]/.test(value)) complexity++        // 包含字母
-  if (/[^0-9a-zA-Z]/.test(value)) complexity++    // 包含特殊符号
-  
-  if (complexity < 3) {
-    callback(new Error('密码必须包含数字、字母、特殊符号'))
-    return
-  }
-  callback()  // 验证通过
-}
-
-/**
  * 密码表单验证规则
  */
 const pwdRules = {
   oldPassword: [{ required: true, message: '请输入原密码', trigger: 'blur' }],
   newPassword: [
-    { required: true, validator: validateNewPassword, trigger: 'blur' }
+    { required: true, validator: passwordValidator, trigger: 'blur' }
   ],
   confirmPassword: [
-    { required: true, message: '请再次输入新密码', trigger: 'blur' },
-    { 
-      // 自定义验证器：确认密码必须与新密码一致
-      validator: (rule, value, callback) => {
-        if (value !== pwdForm.value.newPassword) {
-          callback(new Error('两次输入的密码不一致'))
-        } else {
-          callback()
-        }
-      }, 
-      trigger: 'blur' 
-    }
+    { required: true, validator: createConfirmPasswordValidator(() => pwdForm.value.newPassword), trigger: 'blur' }
   ]
 }
 

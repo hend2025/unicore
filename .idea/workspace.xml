@@ -6,38 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="c40dc8fd-5d22-4ae7-b727-b885b2ff3978" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/DataTable.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/DataTable.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/SearchForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/SearchForm.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/api/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/layout/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layout/index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/styles/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles/index.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/log/apilog/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/log/apilog/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/log/loginlog/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/log/loginlog/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/log/operlog/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/log/operlog/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/login/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/login/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/admdvs/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/admdvs/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/area/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/area/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/config/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/config/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/menu/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/menu/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/notice/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/notice/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/org/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/org/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/para/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/para/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/post/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/post/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/role/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/role/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/system/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/system/index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/views/system/user/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/user/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysAdmdvsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysAdmdvsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysAreaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysAreaController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysMenuController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysOrgController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysOrgController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysSystemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysSystemController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/mapper/SysMenuMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/mapper/SysMenuMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/service/SysMenuService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/service/SysMenuService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/service/SysOrgService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/service/SysOrgService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/service/SysSystemService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/service/SysSystemService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysMenuServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysMenuServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysOrgServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysOrgServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysRoleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysRoleServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysSystemServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysSystemServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/SysMenuMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/SysMenuMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
