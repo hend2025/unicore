@@ -1,12 +1,10 @@
 package com.unicore.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.hsa.hsaf.core.framework.web.WrapperResponse;
 import com.unicore.entity.SysDict;
 import com.unicore.entity.SysDictType;
-import com.unicore.mapper.SysDictMapper;
-import com.unicore.mapper.SysDictTypeMapper;
+import com.unicore.service.SysDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -16,10 +14,7 @@ import java.util.List;
 public class SysDictController {
 
     @Autowired
-    private SysDictMapper dictMapper;
-
-    @Autowired
-    private SysDictTypeMapper dictTypeMapper;
+    private SysDictService dictService;
 
     @GetMapping("/type/page")
     public WrapperResponse<Page<SysDictType>> typePage(
@@ -27,36 +22,31 @@ public class SysDictController {
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) String dicTypeName) {
         Page<SysDictType> page = new Page<>(pageNum, pageSize);
-        LambdaQueryWrapper<SysDictType> wrapper = new LambdaQueryWrapper<>();
-        if (dicTypeName != null && !dicTypeName.isEmpty()) {
-            wrapper.like(SysDictType::getDicTypeName, dicTypeName);
-        }
-        return WrapperResponse.success(dictTypeMapper.selectPage(page, wrapper));
+        return WrapperResponse.success(dictService.selectTypePage(page, dicTypeName));
     }
 
     @GetMapping("/type/list")
     public WrapperResponse<List<SysDictType>> typeList() {
-        return WrapperResponse.success(dictTypeMapper.selectList(null));
+        return WrapperResponse.success(dictService.selectTypeList());
     }
 
     @PostMapping("/type")
     public WrapperResponse<?> addType(@RequestBody SysDictType dictType) {
-        // 检查字典类型编码是否已存在
-        if (dictTypeMapper.selectById(dictType.getDicTypeCode()) != null) {
-            return WrapperResponse.fail("字典类型编码已存在", null);
+        try {
+            return WrapperResponse.success(dictService.addType(dictType));
+        } catch (RuntimeException e) {
+            return WrapperResponse.fail(e.getMessage(), null);
         }
-        return WrapperResponse.success(dictTypeMapper.insert(dictType) > 0);
     }
 
-    @PostMapping("/type/update")
+    @PutMapping("/type")
     public WrapperResponse<Boolean> updateType(@RequestBody SysDictType dictType) {
-        return WrapperResponse.success(dictTypeMapper.updateById(dictType) > 0);
+        return WrapperResponse.success(dictService.updateType(dictType));
     }
 
-    @GetMapping("/type/delete/{code}")
+    @DeleteMapping("/type/{code}")
     public WrapperResponse<Boolean> deleteType(@PathVariable String code) {
-        // MyBatis-Plus会自动进行逻辑删除
-        return WrapperResponse.success(dictTypeMapper.deleteById(code) > 0);
+        return WrapperResponse.success(dictService.deleteType(code));
     }
 
     @GetMapping("/data/page")
@@ -67,48 +57,30 @@ public class SysDictController {
             @RequestParam(required = false) String dicName,
             @RequestParam(required = false) String dicValue) {
         Page<SysDict> page = new Page<>(pageNum, pageSize);
-        LambdaQueryWrapper<SysDict> wrapper = new LambdaQueryWrapper<>();
-        if (dicTypeCode != null && !dicTypeCode.isEmpty()) {
-            wrapper.eq(SysDict::getDicTypeCode, dicTypeCode);
-        }
-        if (dicName != null && !dicName.isEmpty()) {
-            wrapper.like(SysDict::getDicName, dicName);
-        }
-        if (dicValue != null && !dicValue.isEmpty()) {
-            wrapper.like(SysDict::getDicValue, dicValue);
-        }
-        wrapper.orderByAsc(SysDict::getOrderNum);
-        return WrapperResponse.success(dictMapper.selectPage(page, wrapper));
+        return WrapperResponse.success(dictService.selectDataPage(page, dicTypeCode, dicName, dicValue));
     }
 
     @GetMapping("/data/list/{typeCode}")
     public WrapperResponse<List<SysDict>> dataList(@PathVariable String typeCode) {
-        LambdaQueryWrapper<SysDict> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysDict::getDicTypeCode, typeCode);
-        wrapper.orderByAsc(SysDict::getOrderNum);
-        return WrapperResponse.success(dictMapper.selectList(wrapper));
+        return WrapperResponse.success(dictService.selectDataListByTypeCode(typeCode));
     }
 
     @PostMapping("/data")
     public WrapperResponse<?> addData(@RequestBody SysDict dict) {
-        // 检查同一字典类型下是否存在相同的字典值
-        LambdaQueryWrapper<SysDict> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysDict::getDicTypeCode, dict.getDicTypeCode());
-        wrapper.eq(SysDict::getDicValue, dict.getDicValue());
-        if (dictMapper.selectCount(wrapper) > 0) {
-            return WrapperResponse.fail("该字典类型下已存在相同的字典值", null);
+        try {
+            return WrapperResponse.success(dictService.addData(dict));
+        } catch (RuntimeException e) {
+            return WrapperResponse.fail(e.getMessage(), null);
         }
-        return WrapperResponse.success(dictMapper.insert(dict) > 0);
     }
 
-    @PostMapping("/data/update")
+    @PutMapping("/data")
     public WrapperResponse<Boolean> updateData(@RequestBody SysDict dict) {
-        return WrapperResponse.success(dictMapper.updateById(dict) > 0);
+        return WrapperResponse.success(dictService.updateData(dict));
     }
 
-    @GetMapping("/data/delete/{id}")
+    @DeleteMapping("/data/{id}")
     public WrapperResponse<Boolean> deleteData(@PathVariable String id) {
-        // MyBatis-Plus会自动进行逻辑删除
-        return WrapperResponse.success(dictMapper.deleteById(id) > 0);
+        return WrapperResponse.success(dictService.deleteData(id));
     }
 }

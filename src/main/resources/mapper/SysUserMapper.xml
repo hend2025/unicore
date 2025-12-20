@@ -14,7 +14,7 @@
         AND m.STAS_FLAG = '1'
     </select>
 
-    <select id="selectUserList" resultType="com.unicore.entity.SysUser">
+    <select id="selectUserPage" resultType="com.unicore.entity.SysUser">
         SELECT u.*, o.ORG_NAME as orgName, a.ADMDVS_NAME as admdvsName
         FROM sys_user u
         LEFT JOIN sys_org o ON u.ORG_ID = o.ORG_ID
@@ -37,4 +37,6 @@
         </if>
         ORDER BY u.CRTE_TIME DESC
     </select>
+
+
 </mapper>

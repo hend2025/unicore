@@ -49,12 +49,12 @@ public class SysPostController {
         return WrapperResponse.success(postMapper.insert(post) > 0);
     }
 
-    @PostMapping("/update")
+    @PutMapping
     public WrapperResponse<Boolean> update(@RequestBody SysPost post) {
         return WrapperResponse.success(postMapper.updateById(post) > 0);
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable Integer id) {
         // MyBatis-Plus会自动进行逻辑删除
         return WrapperResponse.success(postMapper.deleteById(id) > 0);

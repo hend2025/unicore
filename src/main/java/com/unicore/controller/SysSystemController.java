@@ -44,12 +44,12 @@ public class SysSystemController {
         return WrapperResponse.success(systemService.save(system));
     }
 
-    @PostMapping("/update")
+    @PutMapping
     public WrapperResponse<Boolean> update(@RequestBody SysSystem system) {
         return WrapperResponse.success(systemService.updateById(system));
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable Integer id) {
         return WrapperResponse.success(systemService.deleteSystem(id));
     }

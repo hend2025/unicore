@@ -27,12 +27,12 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-;import java.util.Arrays;
+import java.util.Arrays;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@ConditionalOnProperty(name = {"security.type"}, havingValue = "unicore-sso", matchIfMissing = true)
-public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
+@ConditionalOnProperty(name = { "security.type" }, havingValue = "unicore-sso", matchIfMissing = true)
+public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private SecurityAuthenticationProvider provider;
@@ -43,7 +43,7 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
         loginSuccessHandler.setAlwaysUseDefaultTargetUrl(true);
         http.antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/", "/home","/login","/logout","/user/forceLogout**","/captcha","/api/auth/**",
+                .antMatchers("/", "/home", "/login", "/logout", "/user/forceLogout**", "/captcha", "/api/auth/**",
                         "/index.html", "/assets/**", "/favicon.ico",
                         "/doc.html",
                         "/swagger-ui.html",
@@ -54,8 +54,7 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/swagger-resources",
                         "/**/swagger-resources/configuration/ui",
                         "/**/swagger-resources/configuration/security",
-                        "/api/sys/config/key/**"
-                )
+                        "/api/sys/config/key/**")
                 .permitAll()
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
@@ -75,7 +74,7 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterAfter(new UserContextFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(new RefererFilter(), UserContextFilter.class)
-                //配置没有权限的自定义处理类
+                // 配置没有权限的自定义处理类
                 .exceptionHandling()
                 .accessDeniedPage("/403");
 
@@ -83,23 +82,23 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().configurationSource(corsConfigurationSource()).and()
                 // 禁用 CSRF（前后端分离项目通常不需要 CSRF）
                 .csrf().disable();
-        //单用户登录，新登录会踢掉旧session
+        // 单用户登录，新登录会踢掉旧session
         http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/assets/**","/statics/assets/**","/favicon.ico");
+        web.ignoring().antMatchers("/assets/**", "/statics/assets/**", "/favicon.ico");
     }
 
-    private CorsConfigurationSource corsConfigurationSource(){
+    private CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("*");
-        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowCredentials(false);
         configuration.setAllowedHeaders(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**",configuration);
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
@@ -114,17 +113,18 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 自定义验证逻辑
+     * 
      * @param auth
      * @throws Exception
      */
     @Override
-    protected void configure(AuthenticationManagerBuilder auth){
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(provider);
     }
 
     @Override
     @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception{
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManager();
     }
 
@@ -134,4 +134,3 @@ public class BrowerSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 }
-

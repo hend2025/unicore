@@ -44,12 +44,12 @@ public class SysOrgController {
         return WrapperResponse.success(orgService.save(org));
     }
 
-    @PostMapping("/update")
+    @PutMapping
     public WrapperResponse<Boolean> update(@RequestBody SysOrg org) {
         return WrapperResponse.success(orgService.updateById(org));
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable Integer id) {
         return WrapperResponse.success(orgService.deleteOrg(id));
     }

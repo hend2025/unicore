@@ -1,10 +1,9 @@
 package com.unicore.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.hsa.hsaf.core.framework.web.WrapperResponse;
 import com.unicore.entity.SysConfig;
-import com.unicore.mapper.SysConfigMapper;
+import com.unicore.service.SysConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class SysConfigController {
 
     @Autowired
-    private SysConfigMapper configMapper;
+    private SysConfigService configService;
 
     @GetMapping("/page")
     public WrapperResponse<Page<SysConfig>> page(
@@ -22,43 +21,31 @@ public class SysConfigController {
             @RequestParam(required = false) String configName,
             @RequestParam(required = false) String configKey) {
         Page<SysConfig> page = new Page<>(pageNum, pageSize);
-        LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysConfig::getValiFlag, "1");
-        if (configName != null) {
-            wrapper.like(SysConfig::getConfigName, configName);
-        }
-        if (configKey != null) {
-            wrapper.like(SysConfig::getConfigKey, configKey);
-        }
-        return WrapperResponse.success(configMapper.selectPage(page, wrapper));
+        return WrapperResponse.success(configService.selectPage(page, configName, configKey));
     }
 
     @GetMapping("/{id}")
     public WrapperResponse<SysConfig> getById(@PathVariable Integer id) {
-        return WrapperResponse.success(configMapper.selectById(id));
+        return WrapperResponse.success(configService.getById(id));
     }
 
     @GetMapping("/key/{key}")
     public WrapperResponse<SysConfig> getByKey(@PathVariable String key) {
-        LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysConfig::getConfigKey, key);
-        wrapper.eq(SysConfig::getValiFlag, "1");
-        return WrapperResponse.success(configMapper.selectOne(wrapper));
+        return WrapperResponse.success(configService.selectByKey(key));
     }
 
     @PostMapping
     public WrapperResponse<Boolean> add(@RequestBody SysConfig config) {
-        return WrapperResponse.success(configMapper.insert(config) > 0);
+        return WrapperResponse.success(configService.addConfig(config));
     }
 
-    @PostMapping("/update")
+    @PutMapping
     public WrapperResponse<Boolean> update(@RequestBody SysConfig config) {
-        return WrapperResponse.success(configMapper.updateById(config) > 0);
+        return WrapperResponse.success(configService.updateConfig(config));
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable Integer id) {
-        // MyBatis-Plus会自动进行逻辑删除
-        return WrapperResponse.success(configMapper.deleteById(id) > 0);
+        return WrapperResponse.success(configService.deleteConfig(id));
     }
 }

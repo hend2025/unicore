@@ -41,17 +41,17 @@ public class SysUserController {
         return WrapperResponse.success(userService.addUser(user));
     }
 
-    @PostMapping("/update")
+    @PutMapping
     public WrapperResponse<Boolean> update(@RequestBody SysUser user) {
         return WrapperResponse.success(userService.updateUser(user));
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable Integer id) {
         return WrapperResponse.success(userService.deleteUser(id));
     }
 
-    @PostMapping("/resetPwd")
+    @PutMapping("/resetPwd")
     public WrapperResponse<Boolean> resetPassword(@RequestBody SysUser user) {
         // 从配置表获取默认密码
         String defaultPassword = "Abc@12345678";
@@ -61,17 +61,18 @@ public class SysUserController {
         if (config != null && config.getConfigValue() != null && !config.getConfigValue().isEmpty()) {
             defaultPassword = config.getConfigValue();
         }
-        
-        String password = (user.getPassword() != null && !user.getPassword().isEmpty()) 
-            ? user.getPassword() : defaultPassword;
-        
+
+        String password = (user.getPassword() != null && !user.getPassword().isEmpty())
+                ? user.getPassword()
+                : defaultPassword;
+
         // 验证密码复杂度
         String decodedPassword = Base64Utils.decode(password);
         String pwdError = PasswordValidator.validate(decodedPassword);
         if (pwdError != null) {
             return WrapperResponse.fail(pwdError, null);
         }
-        
+
         return WrapperResponse.success(userService.resetPassword(user.getUserId(), password));
     }
 }

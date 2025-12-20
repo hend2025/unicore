@@ -15,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import cn.hsa.hsaf.auth.security.entity.PortalUserDetails;
 
-
 @Service
 public class SecurityAuthenticationProvider implements AuthenticationProvider {
 

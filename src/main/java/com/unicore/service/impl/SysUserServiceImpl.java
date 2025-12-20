@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -28,16 +28,20 @@ import org.springframework.util.StringUtils;
 import java.util.*;
 
 @Service
-public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService, UserDetailsService {
+public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser>
+        implements SysUserService, UserDetailsService {
 
     @Autowired
-     SysUserRoleMapper userRoleMapper;
+    SysUserRoleMapper userRoleMapper;
 
     @Autowired
-     SysUserMapper userMapper;
+    SysUserMapper userMapper;
 
     @Autowired
-     SysOrgMapper orgMapper;
+    SysOrgMapper orgMapper;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -57,7 +61,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         user.setOpterNo(sysUser.getSalt());
         user.setPoolAreaCodg(sysUser.getPassword());
 
-        if(!StringUtils.isEmpty(sysUser.getOrgId())){
+        if (!StringUtils.isEmpty(sysUser.getOrgId())) {
             SysOrg orgEntity = orgMapper.selectById(sysUser.getOrgId());
             user.setOrgUntID(ObjectUtil.isNull(orgEntity) ? null : String.valueOf(orgEntity.getOrgId()));
             user.setOrgCodg(Optional.ofNullable(orgEntity).map(SysOrg::getOrgCode).orElse(null));
@@ -71,17 +75,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public Page<SysUser> selectUserPage(Page<SysUser> page, SysUser user) {
-        List<SysUser> list = baseMapper.selectUserList(user);
-        long total = list.size();
-        int start = (int) ((page.getCurrent() - 1) * page.getSize());
-        int end = Math.min(start + (int) page.getSize(), list.size());
-        if (start >= list.size()) {
-            page.setRecords(java.util.Collections.emptyList());
-        } else {
-            page.setRecords(list.subList(start, end));
-        }
-        page.setTotal(total);
-        return page;
+        return (Page<SysUser>) baseMapper.selectUserPage(page, user);
     }
 
     @Override
@@ -91,13 +85,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         String decodedUserName = Base64Utils.decode(user.getUserName());
         String decodedPassword = Base64Utils.decode(user.getPassword());
         user.setUserName(decodedUserName);
-        
+
         // 验证密码复杂度
         String pwdError = PasswordValidator.validate(decodedPassword);
         if (pwdError != null) {
             throw new RuntimeException(pwdError);
         }
-        
+
         // 生成盐值并加密密码
         String salt = IdUtil.fastSimpleUUID().substring(0, 8);
         user.setSalt(salt);
@@ -120,7 +114,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // Base64解码用户名
         String decodedUserName = Base64Utils.decode(user.getUserName());
         user.setUserName(decodedUserName);
-        
+
         // 检查是否为admin用户
         SysUser existUser = getById(user.getUserId());
         if (existUser != null && "admin".equals(existUser.getUserName())) {
@@ -160,7 +154,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public boolean resetPassword(Integer userId, String password) {
         SysUser user = getById(userId);
-        if (user == null) return false;
+        if (user == null)
+            return false;
         // Base64解码密码
         String decodedPassword = Base64Utils.decode(password);
         String salt = IdUtil.fastSimpleUUID().substring(0, 8);
@@ -175,20 +170,22 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (user == null) {
             throw new RuntimeException("用户不存在");
         }
-        // 验证原密码 - 使用BCrypt的matches方法验证
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        if (!encoder.matches(oldPassword + user.getSalt(), user.getPassword())) {
+        // Base64解码密码
+        String decodedOldPassword = Base64Utils.decode(oldPassword);
+        String decodedNewPassword = Base64Utils.decode(newPassword);
+
+        if (!passwordEncoder.matches(decodedOldPassword + user.getSalt(), user.getPassword())) {
             throw new RuntimeException("原密码错误");
         }
         // 验证新密码复杂度
-        String pwdError = PasswordValidator.validate(newPassword);
+        String pwdError = PasswordValidator.validate(decodedNewPassword);
         if (pwdError != null) {
             throw new RuntimeException(pwdError);
         }
         // 设置新密码
         String salt = IdUtil.fastSimpleUUID().substring(0, 8);
         user.setSalt(salt);
-        user.setPassword(SecurityUtils.encryptPassword(newPassword + salt));
+        user.setPassword(SecurityUtils.encryptPassword(decodedNewPassword + salt));
         return updateById(user);
     }
 

@@ -1,10 +1,9 @@
 package com.unicore.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.hsa.hsaf.core.framework.web.WrapperResponse;
 import com.unicore.entity.SysNotice;
-import com.unicore.mapper.SysNoticeMapper;
+import com.unicore.service.SysNoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class SysNoticeController {
 
     @Autowired
-    private SysNoticeMapper noticeMapper;
+    private SysNoticeService noticeService;
 
     @GetMapping("/page")
     public WrapperResponse<Page<SysNotice>> page(
@@ -22,34 +21,26 @@ public class SysNoticeController {
             @RequestParam(required = false) String noticeTitle,
             @RequestParam(required = false) String noticeType) {
         Page<SysNotice> page = new Page<>(pageNum, pageSize);
-        LambdaQueryWrapper<SysNotice> wrapper = new LambdaQueryWrapper<>();
-        if (noticeTitle != null) {
-            wrapper.like(SysNotice::getNoticeTitle, noticeTitle);
-        }
-        if (noticeType != null) {
-            wrapper.eq(SysNotice::getNoticeType, noticeType);
-        }
-        wrapper.orderByDesc(SysNotice::getCrteTime);
-        return WrapperResponse.success(noticeMapper.selectPage(page, wrapper));
+        return WrapperResponse.success(noticeService.selectPage(page, noticeTitle, noticeType));
     }
 
     @GetMapping("/{id}")
     public WrapperResponse<SysNotice> getById(@PathVariable Integer id) {
-        return WrapperResponse.success(noticeMapper.selectById(id));
+        return WrapperResponse.success(noticeService.getById(id));
     }
 
     @PostMapping
     public WrapperResponse<Boolean> add(@RequestBody SysNotice notice) {
-        return WrapperResponse.success(noticeMapper.insert(notice) > 0);
+        return WrapperResponse.success(noticeService.addNotice(notice));
     }
 
-    @PostMapping("/update")
+    @PutMapping
     public WrapperResponse<Boolean> update(@RequestBody SysNotice notice) {
-        return WrapperResponse.success(noticeMapper.updateById(notice) > 0);
+        return WrapperResponse.success(noticeService.updateNotice(notice));
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable Integer id) {
-        return WrapperResponse.success(noticeMapper.deleteById(id) > 0);
+        return WrapperResponse.success(noticeService.deleteNotice(id));
     }
 }

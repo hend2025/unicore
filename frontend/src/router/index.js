@@ -27,7 +27,7 @@ const router = createRouter({
 
 router.beforeEach((to, _from, next) => {
   NProgress.start()
-  const token = localStorage.getItem('access_token')
+  const token = localStorage.getItem(STORAGE_KEYS.TOKEN)
 
   // 登录页直接放行
   if (to.path === '/login') {

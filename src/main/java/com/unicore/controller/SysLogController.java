@@ -1,12 +1,10 @@
 package com.unicore.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import cn.hsa.hsaf.core.framework.web.WrapperResponse;
 import com.unicore.entity.SysLog;
 import com.unicore.entity.SysLogininfor;
-import com.unicore.mapper.SysLogMapper;
-import com.unicore.mapper.SysLogininforMapper;
+import com.unicore.service.SysLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,10 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class SysLogController {
 
     @Autowired
-    private SysLogMapper logMapper;
-
-    @Autowired
-    private SysLogininforMapper logininforMapper;
+    private SysLogService logService;
 
     @GetMapping("/page")
     public WrapperResponse<Page<SysLog>> page(
@@ -26,12 +21,7 @@ public class SysLogController {
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) String repUrl) {
         Page<SysLog> page = new Page<>(pageNum, pageSize);
-        LambdaQueryWrapper<SysLog> wrapper = new LambdaQueryWrapper<>();
-        if (repUrl != null) {
-            wrapper.like(SysLog::getRepUrl, repUrl);
-        }
-        wrapper.orderByDesc(SysLog::getCrteTime);
-        return WrapperResponse.success(logMapper.selectPage(page, wrapper));
+        return WrapperResponse.success(logService.selectOperLogPage(page, repUrl));
     }
 
     @GetMapping("/login/page")
@@ -40,39 +30,26 @@ public class SysLogController {
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) String userName) {
         Page<SysLogininfor> page = new Page<>(pageNum, pageSize);
-        LambdaQueryWrapper<SysLogininfor> wrapper = new LambdaQueryWrapper<>();
-        if (userName != null) {
-            wrapper.like(SysLogininfor::getUserName, userName);
-        }
-        wrapper.orderByDesc(SysLogininfor::getLoginTime);
-        return WrapperResponse.success(logininforMapper.selectPage(page, wrapper));
+        return WrapperResponse.success(logService.selectLoginLogPage(page, userName));
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public WrapperResponse<Boolean> delete(@PathVariable Long id) {
-        return WrapperResponse.success(logMapper.deleteById(id) > 0);
+        return WrapperResponse.success(logService.deleteOperLog(id));
     }
 
-    @GetMapping("/login/delete/{id}")
+    @DeleteMapping("/login/{id}")
     public WrapperResponse<Boolean> deleteLogin(@PathVariable Long id) {
-        return WrapperResponse.success(logininforMapper.deleteById(id) > 0);
+        return WrapperResponse.success(logService.deleteLoginLog(id));
     }
 
-    @GetMapping("/clear")
+    @DeleteMapping("/clear")
     public WrapperResponse<Boolean> clearOper(@RequestParam(required = false) Integer days) {
-        LambdaQueryWrapper<SysLog> wrapper = new LambdaQueryWrapper<>();
-        if (days != null && days > 0) {
-            wrapper.lt(SysLog::getCrteTime, java.time.LocalDateTime.now().minusDays(days));
-        }
-        return WrapperResponse.success(logMapper.delete(wrapper) >= 0);
+        return WrapperResponse.success(logService.clearOperLog(days));
     }
 
-    @GetMapping("/login/clear")
+    @DeleteMapping("/login/clear")
     public WrapperResponse<Boolean> clearLogin(@RequestParam(required = false) Integer days) {
-        LambdaQueryWrapper<SysLogininfor> wrapper = new LambdaQueryWrapper<>();
-        if (days != null && days > 0) {
-            wrapper.lt(SysLogininfor::getLoginTime, java.time.LocalDateTime.now().minusDays(days));
-        }
-        return WrapperResponse.success(logininforMapper.delete(wrapper) >= 0);
+        return WrapperResponse.success(logService.clearLoginLog(days));
     }
 }

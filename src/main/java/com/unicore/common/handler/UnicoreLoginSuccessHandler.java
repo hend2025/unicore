@@ -10,13 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
 public class UnicoreLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    public UnicoreLoginSuccessHandler() {}
+    public UnicoreLoginSuccessHandler() {
+    }
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+            Authentication authentication) throws ServletException, IOException {
         String json = "{\n" +
                 "        \"accessToken\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9\",\n" +
                 "        \"tokenType\": \"Bearer\",\n" +
