@@ -47,14 +47,14 @@
     
     <!-- 菜单搜索对话框 -->
     <MenuSearch
-      v-model:show="showMenuSearch"
+      v-model:visible="showMenuSearch"
       :menus="rawMenus"
       @select="handleMenuSelect"
     />
     
     <!-- 修改密码对话框 -->
     <ChangePassword
-      v-model:show="showChangePwd"
+      v-model:visible="showChangePwd"
       @success="handlePasswordChanged"
     />
   </el-container>
@@ -249,6 +249,8 @@ onMounted(async () => {
 </script>
 
 <style scoped lang="scss">
+@use "@/styles/variables.scss" as *;
+
 .layout-container {
   height: 100vh;
   display: flex;
@@ -263,7 +265,7 @@ onMounted(async () => {
 .content-container {
   display: flex;
   flex-direction: column;
-  background: #f0f2f5;
+  background: $bg-color;
   overflow: hidden;
 }
 

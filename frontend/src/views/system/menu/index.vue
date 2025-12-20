@@ -2,7 +2,7 @@
   <div class="page-container">
     <!-- 信息查询 -->
     <PageCard title="信息查询">
-      <SearchForm v-model="queryParams" @search="handleQuery" @reset="handleReset">
+      <SearchForm v-model="queryParams" @search="handleSearch" @reset="handleReset">
         <el-form-item label="所属系统">
           <el-select v-model="queryParams.sysId" placeholder="请选择系统" clearable>
             <el-option v-for="item in systemList" :key="item.sysId" :label="item.sysName" :value="item.sysId" />
@@ -20,7 +20,7 @@
     <!-- 菜单列表 -->
     <PageCard title="菜单列表" flex>
       <template #extra>
-        <el-button type="primary" @click="handleAdd()">新增菜单</el-button>
+        <el-button type="primary" @click="handleAdd(form)">新增菜单</el-button>
       </template>
       <DataTable
         :data="tableData"
@@ -53,15 +53,15 @@
         <el-table-column prop="orderNum" label="排序" width="80" show-overflow-tooltip />
         <el-table-column label="操作" width="120" align="center">
           <template #default="{ row }">
-            <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
-            <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
+            <el-button type="primary" link @click="handleEdit(row, form)">编辑</el-button>
+            <el-button type="danger" link @click="doDelete(row)">删除</el-button>
           </template>
         </el-table-column>
       </DataTable>
     </PageCard>
 
     <!-- 对话框 -->
-    <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" width="600px" @submit="handleSubmit">
+    <FormDialog v-model:visible="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" width="600px" @submit="doSubmit">
       <el-form-item label="菜单ID" prop="menuId" v-if="form.menuId">
         <el-input v-model="form.menuId" disabled />
       </el-form-item>
@@ -109,33 +109,72 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { menuApi, systemApi } from '@/api/system'
+import { useCrud } from '@/hooks/useCrud'
 
-const loading = ref(false)
-const submitLoading = ref(false)
-const tableData = ref([])
-const total = ref(0)
-const dialogVisible = ref(false)
-const dialogTitle = ref('')
+// 下拉数据
 const systemList = ref([])
 const menuTreeData = ref([])
 
-const queryParams = reactive({ menuName: '', menuUrl: '', sysId: '', pageNum: 1, pageSize: 10 })
-const form = reactive({ menuId: null, parentId: '0', menuName: '', menuType: '1', menuIcon: '', menuUrl: '', menuComp: '', menuPerms: '', orderNum: 0, stasFlag: '1', sysId: '' })
+// 表单数据
+const form = reactive({ 
+  menuId: null, 
+  parentId: '0', 
+  menuName: '', 
+  menuType: '1', 
+  menuIcon: '', 
+  menuUrl: '', 
+  menuComp: '', 
+  menuPerms: '', 
+  orderNum: 0, 
+  stasFlag: '1', 
+  sysId: '' 
+})
+
+// 表单校验规则
 const rules = { 
   menuName: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }],
   sysId: [{ required: true, message: '请选择所属系统', trigger: 'change' }]
 }
 
+// 菜单树选项
 const menuOptions = computed(() => [{ menuId: '0', menuName: '主类目', children: menuTreeData.value }])
 
+// 根据 sysId 获取系统名称
 const getSystemName = (sysId) => {
   const system = systemList.value.find(item => item.sysId === sysId)
   return system ? system.sysName : ''
 }
 
+// 使用 CRUD Hook
+const {
+  loading,
+  submitLoading,
+  tableData,
+  total,
+  dialogVisible,
+  dialogTitle,
+  queryParams,
+  loadData,
+  handleSearch,
+  handleReset,
+  handleAdd,
+  handleEdit,
+  handleSubmit,
+  handleDelete
+} = useCrud(menuApi, {
+  defaultQuery: { menuName: '', menuUrl: '', sysId: '' },
+  defaultForm: { parentId: '0', menuName: '', menuType: '1', menuIcon: '', menuUrl: '', menuComp: '', menuPerms: '', orderNum: 0, stasFlag: '1', sysId: '' },
+  rowKey: 'menuId',
+  title: '菜单',
+  afterSubmit: () => {
+    // 提交后刷新菜单树
+    loadMenuTree()
+  }
+})
+
+// 加载系统列表
 const loadSystemList = async () => {
   try {
     const res = await systemApi.list()
@@ -143,6 +182,7 @@ const loadSystemList = async () => {
   } catch (e) {}
 }
 
+// 加载菜单树
 const loadMenuTree = async () => {
   try {
     const res = await menuApi.tree()
@@ -150,67 +190,20 @@ const loadMenuTree = async () => {
   } catch (e) {}
 }
 
-const loadData = async () => {
-  loading.value = true
-  try {
-    const res = await menuApi.page(queryParams)
-    tableData.value = res.data?.records || res.data?.list || []
-    total.value = res.data?.total || 0
-  } finally {
-    loading.value = false
-  }
-}
-
-const handleQuery = () => {
-  queryParams.pageNum = 1
-  loadData()
-}
-
-const handleReset = () => {
-  loadData()
-}
-
-const handleAdd = (parentId = '0') => {
-  Object.assign(form, { menuId: null, parentId, menuName: '', menuType: '1', menuIcon: '', menuUrl: '', menuComp: '', menuPerms: '', orderNum: 0, stasFlag: '1', sysId: '' })
-  dialogTitle.value = '新增菜单'
-  dialogVisible.value = true
-}
-
-const handleEdit = (row) => {
-  Object.assign(form, row)
-  dialogTitle.value = '编辑菜单'
-  dialogVisible.value = true
-}
-
-const handleSubmit = async () => {
-  submitLoading.value = true
-  try {
-    if (form.menuId) {
-      await menuApi.update(form)
-    } else {
-      await menuApi.add(form)
-    }
-    ElMessage.success('操作成功')
-    dialogVisible.value = false
-    loadData()
-    loadMenuTree()
-  } finally {
-    submitLoading.value = false
-  }
-}
-
-const handleDelete = (row) => {
-  ElMessageBox.confirm('确认删除该菜单?', '提示', { type: 'warning' }).then(async () => {
-    await menuApi.delete(row.menuId)
-    ElMessage.success('删除成功')
-    loadData()
+// 删除（删除后也刷新菜单树）
+const doDelete = (row) => {
+  handleDelete(row, () => {
     loadMenuTree()
   })
+}
+
+// 表单提交
+const doSubmit = () => {
+  handleSubmit(form)
 }
 
 onMounted(() => {
   loadSystemList()
   loadMenuTree()
-  loadData()
 })
 </script>

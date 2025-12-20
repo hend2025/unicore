@@ -52,7 +52,7 @@
     </PageCard>
 
     <!-- 对话框 -->
-    <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" label-width="120px" @submit="handleSubmit">
+    <FormDialog v-model:visible="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" label-width="120px" @submit="handleSubmit">
       <el-form-item label="医保区划编码" prop="admdvsCode">
         <el-input v-model="form.admdvsCode" placeholder="请输入医保区划编码(6位)" maxlength="6" :disabled="!!form.admdvsCode && dialogTitle === '编辑医保区划'" />
       </el-form-item>

@@ -58,7 +58,7 @@
     </PageCard>
 
     <!-- 对话框 -->
-    <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" width="600px" @submit="handleSubmit">
+    <FormDialog v-model:visible="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" width="600px" @submit="handleSubmit">
       <el-form-item label="上级机构" prop="prntOrgId">
         <el-tree-select v-model="form.prntOrgId" :data="orgOptions" :props="{ label: 'orgName', value: 'orgId', children: 'children' }" check-strictly placeholder="选择上级机构" style="width: 100%" />
       </el-form-item>

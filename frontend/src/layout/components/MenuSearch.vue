@@ -1,6 +1,6 @@
 <template>
   <!-- 菜单搜索对话框 -->
-  <el-dialog v-model="visible" title="菜单搜索" width="600px" :close-on-click-modal="true">
+  <el-dialog v-model="dialogVisible" title="菜单搜索" width="600px" :close-on-click-modal="true">
     <!-- 搜索输入框 -->
     <el-input 
       v-model="keyword" 
@@ -31,22 +31,22 @@
 import { ref, computed, watch } from 'vue'
 
 const props = defineProps({
-  show: { type: Boolean, default: false },
+  visible: { type: Boolean, default: false },
   menus: { type: Array, default: () => [] }
 })
 
-const emit = defineEmits(['update:show', 'select'])
+const emit = defineEmits(['update:visible', 'select'])
 
 const keyword = ref('')
 const searchResults = ref([])
 
-const visible = computed({
-  get: () => props.show,
-  set: (val) => emit('update:show', val)
+const dialogVisible = computed({
+  get: () => props.visible,
+  set: (val) => emit('update:visible', val)
 })
 
 // 重置搜索状态
-watch(visible, (val) => {
+watch(dialogVisible, (val) => {
   if (!val) {
     keyword.value = ''
     searchResults.value = []
@@ -90,7 +90,7 @@ const handleSearch = () => {
  * 点击搜索结果
  */
 const handleResultClick = (item) => {
-  visible.value = false
+  dialogVisible.value = false
   emit('select', item.path)
 }
 </script>

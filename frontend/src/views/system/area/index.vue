@@ -52,7 +52,7 @@
     </PageCard>
 
     <!-- 对话框 -->
-    <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" @submit="handleSubmit">
+    <FormDialog v-model:visible="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" @submit="handleSubmit">
       <el-form-item label="地区编码" prop="areaCode">
         <el-input v-model="form.areaCode" placeholder="请输入地区编码" :disabled="!!form.areaCode && dialogTitle === '编辑地区'" />
       </el-form-item>

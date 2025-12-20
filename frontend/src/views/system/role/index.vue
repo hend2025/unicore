@@ -2,7 +2,7 @@
   <div class="page-container">
     <!-- 信息查询 -->
     <PageCard title="信息查询">
-      <SearchForm v-model="queryParams" @search="loadData" @reset="handleReset">
+      <SearchForm v-model="queryParams" @search="handleSearch" @reset="handleReset">
         <el-form-item label="角色名称">
           <el-input v-model="queryParams.roleName" placeholder="请输入角色名称" clearable />
         </el-form-item>
@@ -15,7 +15,7 @@
     <!-- 角色列表 -->
     <PageCard title="角色列表" flex>
       <template #extra>
-        <el-button type="primary" @click="handleAdd">新增角色</el-button>
+        <el-button type="primary" @click="openAddDialog">新增角色</el-button>
       </template>
       <DataTable
         :data="tableData"
@@ -36,7 +36,7 @@
         <el-table-column prop="crteTime" label="创建时间" width="180" show-overflow-tooltip />
         <el-table-column label="操作" width="128" align="center">
           <template #default="{ row }">
-            <el-button type="primary" link @click="handleEdit(row)">编辑</el-button>
+            <el-button type="primary" link @click="openEditDialog(row)">编辑</el-button>
             <el-button type="danger" link @click="handleDelete(row)">删除</el-button>
           </template>
         </el-table-column>
@@ -44,7 +44,7 @@
     </PageCard>
 
     <!-- 对话框 -->
-    <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" width="600px" @submit="handleSubmit" @close="handleDialogClose">
+    <FormDialog v-model:visible="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" width="600px" @submit="doSubmit" @close="handleDialogClose">
       <el-form-item label="角色名称" prop="roleName">
         <el-input v-model="form.roleName" placeholder="请输入角色名称" />
       </el-form-item>
@@ -79,61 +79,55 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { roleApi, menuApi } from '@/api/system'
+import { useCrud } from '@/hooks/useCrud'
 
-const loading = ref(false)
-const submitLoading = ref(false)
-const tableData = ref([])
-const total = ref(0)
-const dialogVisible = ref(false)
-const dialogTitle = ref('')
+// 菜单树相关
 const menuTree = ref([])
 const menuTreeRef = ref()
 const checkedMenuIds = ref([])
 
-const queryParams = reactive({ pageNum: 1, pageSize: 10, roleName: '', roleKey: '' })
+// 表单数据
 const form = reactive({ roleId: null, roleName: '', roleKey: '', menuIds: [], stasFlag: '1', remarks: '' })
+
+// 表单校验规则
 const rules = {
   roleName: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
   roleKey: [{ required: true, message: '请输入权限字符', trigger: 'blur' }]
 }
 
-const loadData = async () => {
-  loading.value = true
-  try {
-    const res = await roleApi.page(queryParams)
-    tableData.value = res.data.records
-    total.value = res.data.total
-  } finally {
-    loading.value = false
+// 使用 CRUD Hook
+const {
+  loading,
+  submitLoading,
+  tableData,
+  total,
+  dialogVisible,
+  dialogTitle,
+  queryParams,
+  loadData,
+  handleSearch,
+  handleReset,
+  handleAdd,
+  handleEdit,
+  handleSubmit,
+  handleDelete
+} = useCrud(roleApi, {
+  defaultQuery: { roleName: '', roleKey: '' },
+  defaultForm: { roleName: '', roleKey: '', menuIds: [], stasFlag: '1', remarks: '' },
+  rowKey: 'roleId',
+  title: '角色',
+  beforeSubmit: async (formData) => {
+    // 提交前从树组件获取选中的菜单ID
+    formData.menuIds = menuTreeRef.value.getCheckedKeys().concat(menuTreeRef.value.getHalfCheckedKeys())
+    return formData
   }
-}
+})
 
-const handleReset = () => {
-  loadData()
-}
-
+// 加载菜单树
 const loadMenuTree = async () => {
   const res = await menuApi.tree()
   menuTree.value = res.data
-}
-
-const handleAdd = () => {
-  Object.assign(form, { roleId: null, roleName: '', roleKey: '', menuIds: [], stasFlag: '1', remarks: '' })
-  checkedMenuIds.value = []
-  dialogTitle.value = '新增角色'
-  dialogVisible.value = true
-}
-
-const handleEdit = async (row) => {
-  const res = await roleApi.get(row.roleId)
-  Object.assign(form, res.data)
-  // 只设置叶子节点的选中状态，避免父节点被重复选中
-  const allMenuIds = res.data.menuIds || []
-  checkedMenuIds.value = filterLeafMenuIds(allMenuIds)
-  dialogTitle.value = '编辑角色'
-  dialogVisible.value = true
 }
 
 // 过滤出叶子节点ID（排除父节点）
@@ -151,37 +145,31 @@ const filterLeafMenuIds = (menuIds) => {
   return menuIds.filter(id => !allParentIds.has(id))
 }
 
+// 打开新增弹窗
+const openAddDialog = () => {
+  checkedMenuIds.value = []
+  handleAdd(form)
+}
+
+// 打开编辑弹窗
+const openEditDialog = async (row) => {
+  await handleEdit(row, form)
+  // 只设置叶子节点的选中状态
+  const allMenuIds = form.menuIds || []
+  checkedMenuIds.value = filterLeafMenuIds(allMenuIds)
+}
+
+// 弹窗关闭时清理
 const handleDialogClose = () => {
   checkedMenuIds.value = []
 }
 
-const handleSubmit = async () => {
-  submitLoading.value = true
-  try {
-    form.menuIds = menuTreeRef.value.getCheckedKeys().concat(menuTreeRef.value.getHalfCheckedKeys())
-    if (form.roleId) {
-      await roleApi.update(form)
-    } else {
-      await roleApi.add(form)
-    }
-    ElMessage.success('操作成功')
-    dialogVisible.value = false
-    loadData()
-  } finally {
-    submitLoading.value = false
-  }
-}
-
-const handleDelete = (row) => {
-  ElMessageBox.confirm('确认删除该角色?', '提示', { type: 'warning' }).then(async () => {
-    await roleApi.delete(row.roleId)
-    ElMessage.success('删除成功')
-    loadData()
-  })
+// 表单提交
+const doSubmit = () => {
+  handleSubmit(form)
 }
 
 onMounted(() => {
-  loadData()
   loadMenuTree()
 })
 </script>

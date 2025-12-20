@@ -1,6 +1,6 @@
 <template>
   <!-- 修改密码对话框 -->
-  <el-dialog v-model="visible" title="修改密码" width="450px" :close-on-click-modal="false">
+  <el-dialog v-model="dialogVisible" title="修改密码" width="450px" :close-on-click-modal="false">
     <el-form ref="formRef" :model="form" :rules="rules" label-width="100px" @submit.prevent>
       <el-form-item label="原密码" prop="oldPassword">
         <el-input v-model="form.oldPassword" type="password" placeholder="请输入原密码" show-password />
@@ -26,10 +26,10 @@ import { changePassword } from '@/api/auth'
 import { passwordValidator, createConfirmPasswordValidator } from '@/utils/validators'
 
 const props = defineProps({
-  show: { type: Boolean, default: false }
+  visible: { type: Boolean, default: false }
 })
 
-const emit = defineEmits(['update:show', 'success'])
+const emit = defineEmits(['update:visible', 'success'])
 
 const formRef = ref(null)
 const loading = ref(false)
@@ -50,13 +50,13 @@ const rules = {
   ]
 }
 
-const visible = computed({
-  get: () => props.show,
-  set: (val) => emit('update:show', val)
+const dialogVisible = computed({
+  get: () => props.visible,
+  set: (val) => emit('update:visible', val)
 })
 
 // 重置表单
-watch(visible, (val) => {
+watch(dialogVisible, (val) => {
   if (!val) {
     form.oldPassword = ''
     form.newPassword = ''
@@ -66,7 +66,7 @@ watch(visible, (val) => {
 })
 
 const handleClose = () => {
-  visible.value = false
+  dialogVisible.value = false
 }
 
 const handleSubmit = async () => {
@@ -82,7 +82,7 @@ const handleSubmit = async () => {
     })
     
     ElMessage.success('密码修改成功，请重新登录')
-    visible.value = false
+    dialogVisible.value = false
     emit('success')
   } catch (error) {
     // 错误已在 request 拦截器中处理

@@ -101,7 +101,7 @@
     </el-tabs>
 
     <!-- 数据字典对话框 -->
-    <FormDialog v-model:show="dataDialogVisible" :title="dataDialogTitle" :rules="dataRules" :modelValue="dataForm" :loading="dataSubmitLoading" @submit="handleDataSubmit">
+    <FormDialog v-model:visible="dataDialogVisible" :title="dataDialogTitle" :rules="dataRules" :modelValue="dataForm" :loading="dataSubmitLoading" @submit="handleDataSubmit">
       <el-form-item label="字典类型" prop="dicTypeCode">
         <el-select v-model="dataForm.dicTypeCode" placeholder="请选择字典类型" style="width: 100%" @change="handleTypeChange">
           <el-option v-for="item in dictTypeList" :key="item.dicTypeCode" :label="item.dicTypeName" :value="item.dicTypeCode" />
@@ -125,7 +125,7 @@
     </FormDialog>
 
     <!-- 字典类型对话框 -->
-    <FormDialog v-model:show="typeDialogVisible" :title="typeDialogTitle" :rules="typeRules" :modelValue="typeForm" :loading="typeSubmitLoading" @submit="handleTypeSubmit">
+    <FormDialog v-model:visible="typeDialogVisible" :title="typeDialogTitle" :rules="typeRules" :modelValue="typeForm" :loading="typeSubmitLoading" @submit="handleTypeSubmit">
       <el-form-item label="字典类型" prop="dicTypeCode">
         <el-input v-model="typeForm.dicTypeCode" placeholder="请输入字典类型" :disabled="typeDialogTitle === '编辑字典类型'" />
       </el-form-item>

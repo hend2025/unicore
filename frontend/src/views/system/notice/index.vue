@@ -52,7 +52,7 @@
     </PageCard>
 
     <!-- 对话框 -->
-    <FormDialog v-model:show="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" width="700px" @submit="handleSubmit(form)">
+    <FormDialog v-model:visible="dialogVisible" :title="dialogTitle" :rules="rules" :modelValue="form" :loading="submitLoading" width="700px" @submit="handleSubmit(form)">
       <el-form-item label="公告标题" prop="noticeTitle">
         <el-input v-model="form.noticeTitle" placeholder="请输入公告标题" />
       </el-form-item>

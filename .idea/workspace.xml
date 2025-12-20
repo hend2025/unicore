@@ -6,27 +6,25 @@
   <component name="ChangeListManager">
     <list default="true" id="c40dc8fd-5d22-4ae7-b727-b885b2ff3978" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/api/system.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/system.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/DataTable.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/DataTable.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/FormDialog.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/FormDialog.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/SearchForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/SearchForm.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/hooks/useCrud.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/hooks/useCrud.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/PageCard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/PageCard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/layout/components/ChangePassword.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layout/components/ChangePassword.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/layout/components/MenuSearch.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layout/components/MenuSearch.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/layout/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layout/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/router/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/stores/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/stores/user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/styles/variables.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles/variables.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/utils/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/utils/request.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles/index.scss" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles/index.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/views/system/admdvs/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/admdvs/index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/views/system/area/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/area/index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/views/system/config/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/config/index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/views/system/dict/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/dict/index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/views/system/menu/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/menu/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/notice/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/notice/index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/views/system/org/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/org/index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/views/system/para/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/para/index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/views/system/post/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/post/index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/views/system/role/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/role/index.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/views/system/system/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/system/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/user/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/user/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,7 +131,8 @@
       <workItem from="1766105975005" duration="2939000" />
       <workItem from="1766110826984" duration="7288000" />
       <workItem from="1766137740987" duration="1384000" />
-      <workItem from="1766147520332" duration="150000" />
+      <workItem from="1766147520332" duration="1611000" />
+      <workItem from="1766196032736" duration="39000" />
     </task>
     <servers />
   </component>

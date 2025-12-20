@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="visible" :width="width" :close-on-click-modal="false" @close="handleClose" class="custom-dialog">
+  <el-dialog v-model="dialogVisible" :width="width" :close-on-click-modal="false" @close="handleClose" class="custom-dialog">
     <template #header>
       <slot name="header">
         <div class="dialog-title">
@@ -25,7 +25,7 @@ import { ref, computed, useSlots } from 'vue'
 
 const props = defineProps({
   modelValue: { type: Object, default: () => ({}) },
-  show: { type: Boolean, default: false },
+  visible: { type: Boolean, default: false },
   title: { type: String, default: '' },
   width: { type: String, default: '500px' },
   labelWidth: { type: String, default: '100px' },
@@ -36,21 +36,21 @@ const props = defineProps({
   submitText: { type: String, default: '保存' }
 })
 
-const emit = defineEmits(['update:show', 'submit', 'close'])
+const emit = defineEmits(['update:visible', 'submit', 'close'])
 const slots = useSlots()
 
 const formRef = ref()
 
-const visible = computed({
-  get: () => props.show,
-  set: (val) => emit('update:show', val)
+const dialogVisible = computed({
+  get: () => props.visible,
+  set: (val) => emit('update:visible', val)
 })
 
 const handleClose = () => {
   if (props.resetOnClose) {
     formRef.value?.resetFields()
   }
-  emit('update:show', false)
+  emit('update:visible', false)
   emit('close')
 }
 
@@ -71,30 +71,32 @@ const clearValidate = (props) => formRef.value?.clearValidate(props)
 defineExpose({ formRef, validate, resetFields, clearValidate })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@use "@/styles/variables.scss" as *;
+
 .dialog-title {
   display: flex;
   align-items: center;
   font-size: 16px;
   font-weight: 600;
-  color: #000;
+  color: $text-primary;
 }
 
 .title-bar {
   width: 4px;
   height: 18px;
-  background: #0b7ef0ff;
+  background: $primary-color;
   margin-right: 8px;
-  border-radius: 2px;
+  border-radius: $border-radius-sm;
 }
 
 :deep(.el-dialog) {
-  border-radius: 8px;
+  border-radius: $border-radius-lg;
 }
 
 :deep(.el-dialog__header) {
   padding: 16px 20px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid $border-color;
   margin-right: 0;
 }
 
@@ -104,7 +106,7 @@ defineExpose({ formRef, validate, resetFields, clearValidate })
 
 :deep(.el-dialog__footer) {
   padding: 12px 20px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid $border-color;
 }
 
 :deep(.el-form-item) {
@@ -112,7 +114,7 @@ defineExpose({ formRef, validate, resetFields, clearValidate })
 }
 
 :deep(.el-form-item__label) {
-  color: #000;
+  color: $text-primary;
   font-size: 14px;
   white-space: nowrap;
   flex-shrink: 0;
@@ -121,35 +123,35 @@ defineExpose({ formRef, validate, resetFields, clearValidate })
 :deep(.el-input__wrapper),
 :deep(.el-select__wrapper),
 :deep(.el-textarea__inner) {
-  border-radius: 4px;
-  box-shadow: 0 0 0 1px #dcdfe6 inset;
+  border-radius: $border-radius-sm;
+  box-shadow: 0 0 0 1px $border-dark inset;
 }
 
 :deep(.el-input__wrapper:hover),
 :deep(.el-select__wrapper:hover),
 :deep(.el-textarea__inner:hover) {
-  box-shadow: 0 0 0 1px #c0c4cc inset;
+  box-shadow: 0 0 0 1px $text-placeholder inset;
 }
 
 :deep(.el-input__wrapper.is-focus),
 :deep(.el-select__wrapper.is-focus),
 :deep(.el-textarea__inner:focus) {
-  box-shadow: 0 0 0 1px #2b5a9e inset;
+  box-shadow: 0 0 0 1px $primary-color inset;
 }
 
 :deep(.el-button--primary) {
-  background-color: #2b5a9e;
-  border-color: #2b5a9e;
-  border-radius: 6px;
+  background-color: $primary-color;
+  border-color: $primary-color;
+  border-radius: $border-radius-md;
 }
 
 :deep(.el-button--primary:hover),
 :deep(.el-button--primary:focus) {
-  background-color: #3a6db5;
-  border-color: #3a6db5;
+  background-color: $primary-hover;
+  border-color: $primary-hover;
 }
 
 :deep(.el-button--default) {
-  border-radius: 6px;
+  border-radius: $border-radius-md;
 }
 </style>
