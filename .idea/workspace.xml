@@ -6,28 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="c40dc8fd-5d22-4ae7-b727-b885b2ff3978" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/api/system.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api/system.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/router/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/common/handler/UnicoreLoginSuccessHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/handler/UnicoreLoginSuccessHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/common/oauth/BrowerSecurityConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/common/oauth/SecurityAuthenticationProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/common/oauth/SecurityAuthenticationProvider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysAdmdvsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysAdmdvsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysApiLogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysApiLogController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysAreaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysAreaController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysConfigController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysConfigController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysDictController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysDictController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysLogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysLogController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysMenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysMenuController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysNoticeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysNoticeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysOrgController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysOrgController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysParaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysParaController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysPostController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysPostController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysRoleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysRoleController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysSystemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysSystemController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/controller/SysUserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/mapper/SysUserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/mapper/SysUserMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysUserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/unicore/service/impl/SysUserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mapper/SysUserMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapper/SysUserMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/SearchForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/SearchForm.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/hooks/useCrud.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/hooks/useCrud.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/log/apilog/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/log/apilog/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/log/loginlog/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/log/loginlog/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/log/operlog/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/log/operlog/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/admdvs/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/admdvs/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/area/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/area/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/org/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/org/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,6 +60,7 @@
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Spring Boot.UnicoreApplication.executor&quot;: &quot;Debug&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
@@ -135,7 +125,9 @@
       <workItem from="1766110826984" duration="7288000" />
       <workItem from="1766137740987" duration="1384000" />
       <workItem from="1766147520332" duration="1611000" />
-      <workItem from="1766196032736" duration="4604000" />
+      <workItem from="1766196032736" duration="4687000" />
+      <workItem from="1766204018149" duration="4432000" />
+      <workItem from="1766364174426" duration="732000" />
     </task>
     <servers />
   </component>

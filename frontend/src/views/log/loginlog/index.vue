@@ -68,6 +68,7 @@ const loadData = async () => {
 }
 
 const handleReset = () => {
+  queryParams.pageNum = 1
   loadData()
 }
 

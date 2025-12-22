@@ -71,6 +71,7 @@ export function useCrud(api, options = {}) {
 
   // 重置查询
   const handleReset = () => {
+    queryParams.pageNum = PAGINATION.DEFAULT_PAGE_NUM
     loadData()
   }
 
