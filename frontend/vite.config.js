@@ -20,15 +20,7 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
-      '/api': {
-        target: 'http://localhost:7081/uniportal',
-        changeOrigin: true
-      },
-      '/login': {
-        target: 'http://localhost:7081/uniportal',
-        changeOrigin: true
-      },
-      '/logout': {
+      '^/(api|login|logout)': {
         target: 'http://localhost:7081/uniportal',
         changeOrigin: true
       }

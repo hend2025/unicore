@@ -6,16 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c40dc8fd-5d22-4ae7-b727-b885b2ff3978" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/SearchForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/SearchForm.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/hooks/useCrud.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/hooks/useCrud.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/log/apilog/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/log/apilog/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/log/loginlog/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/log/loginlog/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/log/operlog/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/log/operlog/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/admdvs/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/admdvs/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/area/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/area/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/system/org/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/system/org/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/__tests__/components.spec.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -127,7 +118,9 @@
       <workItem from="1766147520332" duration="1611000" />
       <workItem from="1766196032736" duration="4687000" />
       <workItem from="1766204018149" duration="4432000" />
-      <workItem from="1766364174426" duration="732000" />
+      <workItem from="1766364174426" duration="5274000" />
+      <workItem from="1766454992183" duration="488000" />
+      <workItem from="1766456077401" duration="468000" />
     </task>
     <servers />
   </component>
