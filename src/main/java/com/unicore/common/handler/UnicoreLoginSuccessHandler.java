@@ -8,6 +8,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Cookie;
 import java.io.IOException;
 
 public class UnicoreLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -18,12 +19,16 @@ public class UnicoreLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws ServletException, IOException {
+        String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9";
         String json = "{\n" +
-                "        \"accessToken\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9\",\n" +
+                "        \"accessToken\": \"" + accessToken + "\",\n" +
                 "        \"tokenType\": \"Bearer\",\n" +
                 "        \"refreshToken\": null,\n" +
                 "        \"expires\": null\n" +
                 "    }";
+        Cookie cookie = new Cookie("Token", accessToken);
+        cookie.setPath("/");
+        response.addCookie(cookie);
         WrapperResponse wrapperResponse = WrapperResponse.success("登录成功!", JSON.parse(json));
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().println(JSON.toJSONString(wrapperResponse));

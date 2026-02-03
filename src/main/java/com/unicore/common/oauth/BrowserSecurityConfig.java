@@ -80,8 +80,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 设置跨域问题
         http.cors().configurationSource(corsConfigurationSource()).and()
-                // 禁用 CSRF（前后端分离项目通常不需要 CSRF）
-                .csrf().disable();
+                .csrf().csrfTokenRepository(cookieCsrfTokenRepository());
         // 单用户登录，新登录会踢掉旧session
         http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
     }

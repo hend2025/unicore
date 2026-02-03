@@ -20,12 +20,31 @@ const redirectToLogin = () => {
   })
 }
 
+// 读取 Cookie 工具函数
+const getCookie = (name) => {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
+  return match ? decodeURIComponent(match[2]) : null
+}
+
 service.interceptors.request.use(
   config => {
     const token = localStorage.getItem(STORAGE_KEYS.TOKEN)
     if (token) {
       config.headers['Authorization'] = token
     }
+    
+    // 从 Cookie 中获取 Token 并写入 Header
+    const cookieToken = getCookie('Token')
+    if (cookieToken) {
+      config.headers['Token'] = cookieToken
+    }
+    
+    // 从 Cookie 中获取 XSRF-TOKEN 并写入 Header
+    const xsrfToken = getCookie('XSRF-TOKEN')
+    if (xsrfToken) {
+      config.headers['XSRF-TOKEN'] = xsrfToken
+    }
+
     return config
   },
   error => {
