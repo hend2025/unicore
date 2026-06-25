@@ -25,7 +25,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public Page<SysRole> selectRolePage(Page<SysRole> page, SysRole role) {
         LambdaQueryWrapper<SysRole> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysRole::getValiFlag, "1");
         if (role.getRoleName() != null) {
             wrapper.like(SysRole::getRoleName, role.getRoleName());
         }

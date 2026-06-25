@@ -23,7 +23,6 @@ public class SysPostController {
             @RequestParam(required = false) String postName) {
         Page<SysPost> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<SysPost> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysPost::getValiFlag, "1");
         if (postName != null) {
             wrapper.like(SysPost::getPostName, postName);
         }
@@ -34,7 +33,6 @@ public class SysPostController {
     @GetMapping("/list")
     public WrapperResponse<List<SysPost>> list() {
         LambdaQueryWrapper<SysPost> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysPost::getValiFlag, "1");
         wrapper.orderByAsc(SysPost::getOrderNum);
         return WrapperResponse.success(postMapper.selectList(wrapper));
     }

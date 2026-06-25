@@ -23,7 +23,6 @@ public class SysParaController {
             @RequestParam(required = false) String paraCode) {
         Page<SysPara> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<SysPara> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysPara::getValiFlag, "1");
         if (paraName != null) {
             wrapper.like(SysPara::getParaName, paraName);
         }

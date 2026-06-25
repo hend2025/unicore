@@ -34,7 +34,6 @@ public class SysAdmdvsController {
             @RequestParam(required = false) String admdvsName) {
         Page<SysAdmdvs> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<SysAdmdvs> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysAdmdvs::getValiFlag, "1");
         if (admdvsName != null) {
             wrapper.like(SysAdmdvs::getAdmdvsName, admdvsName);
         }
@@ -44,7 +43,6 @@ public class SysAdmdvsController {
     @GetMapping("/tree")
     public WrapperResponse<List<SysAdmdvs>> tree() {
         LambdaQueryWrapper<SysAdmdvs> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysAdmdvs::getValiFlag, "1");
         List<SysAdmdvs> list = admdvsMapper.selectList(wrapper);
         return WrapperResponse.success(buildTree(list, null));
     }
@@ -69,14 +67,12 @@ public class SysAdmdvsController {
         // 校验医保区划是否被机构引用
         LambdaQueryWrapper<SysOrg> orgWrapper = new LambdaQueryWrapper<>();
         orgWrapper.eq(SysOrg::getAdmdvsCode, code);
-        orgWrapper.eq(SysOrg::getValiFlag, "1");
         if (orgMapper.selectCount(orgWrapper) > 0) {
             throw new RuntimeException("该医保区划已被机构使用，无法删除");
         }
         // 校验医保区划是否被用户引用
         LambdaQueryWrapper<SysUser> userWrapper = new LambdaQueryWrapper<>();
         userWrapper.eq(SysUser::getAdmdvsCode, code);
-        userWrapper.eq(SysUser::getValiFlag, "1");
         if (userMapper.selectCount(userWrapper) > 0) {
             throw new RuntimeException("该医保区划已被用户使用，无法删除");
         }

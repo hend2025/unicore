@@ -43,7 +43,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public IPage<SysMenu> selectMenuPage(IPage<SysMenu> page, SysMenu menu) {
         LambdaQueryWrapper<SysMenu> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysMenu::getValiFlag, "1");
         if (menu.getSysId() != null) {
             wrapper.eq(SysMenu::getSysId, menu.getSysId());
         }
@@ -53,9 +52,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (StringUtils.hasText(menu.getMenuUrl())) {
             wrapper.like(SysMenu::getMenuUrl, menu.getMenuUrl());
         }
-        if (StringUtils.hasText(menu.getStasFlag())) {
-            wrapper.eq(SysMenu::getStasFlag, menu.getStasFlag());
-        }
+//        if (StringUtils.hasText(menu.getStasFlag())) {
+//            wrapper.eq(SysMenu::getStasFlag, menu.getStasFlag());
+//        }
         wrapper.orderByAsc(SysMenu::getSysId, SysMenu::getMenuId);
         return page(page, wrapper);
     }
@@ -155,7 +154,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public List<SysMenu> selectMenuTree(Integer sysId) {
         LambdaQueryWrapper<SysMenu> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysMenu::getValiFlag, "1");
         if (sysId != null) {
             wrapper.eq(SysMenu::getSysId, sysId);
         }
@@ -190,7 +188,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
     private List<SysMenu> selectAllMenus(Long sysId) {
         LambdaQueryWrapper<SysMenu> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysMenu::getValiFlag, "1");
         wrapper.eq(SysMenu::getStasFlag, "1");
         wrapper.in(SysMenu::getMenuType, "1", "2");
         wrapper.eq(SysMenu::getIsShow, "1");

@@ -34,7 +34,6 @@ public class SysAreaController {
             @RequestParam(required = false) String areaName) {
         Page<SysArea> page = new Page<>(pageNum, pageSize);
         LambdaQueryWrapper<SysArea> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysArea::getValiFlag, "1");
         if (areaName != null) {
             wrapper.like(SysArea::getAreaName, areaName);
         }
@@ -44,7 +43,6 @@ public class SysAreaController {
     @GetMapping("/tree")
     public WrapperResponse<List<SysArea>> tree() {
         LambdaQueryWrapper<SysArea> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysArea::getValiFlag, "1");
         List<SysArea> list = areaMapper.selectList(wrapper);
         return WrapperResponse.success(buildTree(list, null));
     }
@@ -69,14 +67,12 @@ public class SysAreaController {
         // 校验地区是否被机构引用
         LambdaQueryWrapper<SysOrg> orgWrapper = new LambdaQueryWrapper<>();
         orgWrapper.eq(SysOrg::getAreaCode, code);
-        orgWrapper.eq(SysOrg::getValiFlag, "1");
         if (orgMapper.selectCount(orgWrapper) > 0) {
             throw new RuntimeException("该地区已被机构使用，无法删除");
         }
         // 校验地区是否被用户引用
         LambdaQueryWrapper<SysUser> userWrapper = new LambdaQueryWrapper<>();
         userWrapper.eq(SysUser::getAreaCode, code);
-        userWrapper.eq(SysUser::getValiFlag, "1");
         if (userMapper.selectCount(userWrapper) > 0) {
             throw new RuntimeException("该地区已被用户使用，无法删除");
         }

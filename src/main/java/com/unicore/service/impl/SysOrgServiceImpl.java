@@ -22,7 +22,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     @Override
     public Page<SysOrg> selectOrgPage(Page<SysOrg> page, SysOrg org) {
         LambdaQueryWrapper<SysOrg> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysOrg::getValiFlag, "1");
+        
         if (org.getOrgName() != null && !org.getOrgName().isEmpty()) {
             wrapper.like(SysOrg::getOrgName, org.getOrgName());
         }
@@ -39,7 +39,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     @Override
     public List<SysOrg> selectOrgTree() {
         LambdaQueryWrapper<SysOrg> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysOrg::getValiFlag, "1");
+        
         wrapper.orderByAsc(SysOrg::getOrderNum);
         List<SysOrg> orgs = list(wrapper);
         return buildTree(orgs, 0);
@@ -48,7 +48,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     @Override
     public List<SysOrg> selectOrgList(SysOrg org) {
         LambdaQueryWrapper<SysOrg> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysOrg::getValiFlag, "1");
+        
         if (org.getOrgName() != null) {
             wrapper.like(SysOrg::getOrgName, org.getOrgName());
         }
@@ -74,7 +74,6 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         // 校验机构是否被用户引用
         LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysUser::getOrgId, orgId);
-        wrapper.eq(SysUser::getValiFlag, "1");
         Long count = userMapper.selectCount(wrapper);
         if (count > 0) {
             throw new RuntimeException("该机构已被用户使用，无法删除");

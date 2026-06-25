@@ -18,7 +18,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     @Override
     public Page<SysConfig> selectPage(Page<SysConfig> page, String configName, String configKey) {
         LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysConfig::getValiFlag, "1");
+        
         if (StringUtils.hasText(configName)) {
             wrapper.like(SysConfig::getConfigName, configName);
         }
@@ -32,7 +32,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     public SysConfig selectByKey(String key) {
         LambdaQueryWrapper<SysConfig> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysConfig::getConfigKey, key);
-        wrapper.eq(SysConfig::getValiFlag, "1");
+        
         return getOne(wrapper);
     }
 

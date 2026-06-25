@@ -29,7 +29,6 @@ public class SysSystemServiceImpl extends ServiceImpl<SysSystemMapper, SysSystem
     @Override
     public Page<SysSystem> selectSystemPage(Page<SysSystem> page, SysSystem system) {
         LambdaQueryWrapper<SysSystem> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysSystem::getValiFlag, "1");
         if (system.getSysName() != null) {
             wrapper.like(SysSystem::getSysName, system.getSysName());
         }
@@ -43,7 +42,6 @@ public class SysSystemServiceImpl extends ServiceImpl<SysSystemMapper, SysSystem
     @Override
     public List<SysSystem> selectSystemTree() {
         LambdaQueryWrapper<SysSystem> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysSystem::getValiFlag, "1");
         wrapper.orderByAsc(SysSystem::getOrderNum);
         List<SysSystem> systems = list(wrapper);
         return buildTree(systems, 0);
@@ -59,7 +57,6 @@ public class SysSystemServiceImpl extends ServiceImpl<SysSystemMapper, SysSystem
     @Override
     public List<SysSystem> selectSystemList() {
         LambdaQueryWrapper<SysSystem> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysSystem::getValiFlag, "1");
         wrapper.eq(SysSystem::getStasFlag, "1");
         wrapper.orderByAsc(SysSystem::getOrderNum);
         return list(wrapper);
@@ -92,7 +89,6 @@ public class SysSystemServiceImpl extends ServiceImpl<SysSystemMapper, SysSystem
         
         // 查询对应的系统信息
         LambdaQueryWrapper<SysSystem> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(SysSystem::getValiFlag, "1");
         wrapper.eq(SysSystem::getStasFlag, "1");
         wrapper.in(SysSystem::getSysId, sysIds);
         wrapper.orderByAsc(SysSystem::getOrderNum);
@@ -104,7 +100,6 @@ public class SysSystemServiceImpl extends ServiceImpl<SysSystemMapper, SysSystem
         // 校验应用是否被菜单引用
         LambdaQueryWrapper<SysMenu> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SysMenu::getSysId, sysId);
-        wrapper.eq(SysMenu::getValiFlag, "1");
         Long count = menuMapper.selectCount(wrapper);
         if (count > 0) {
             throw new RuntimeException("该应用下存在菜单，无法删除");
