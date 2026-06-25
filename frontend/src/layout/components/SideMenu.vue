@@ -6,7 +6,7 @@
       :default-active="activeMenu" 
       :default-openeds="defaultOpeneds" 
       :collapse="isCollapse" 
-      :unique-opened="true" 
+      :unique-opened="false" 
       @select="handleMenuSelect" 
       background-color="#1b6eb3" 
       text-color="rgba(255,255,255,0.9)" 
@@ -42,8 +42,32 @@ const emit = defineEmits(['menu-select', 'update:width'])
 const width = ref(210)
 const isResizing = ref(false)
 
-// 计算默认展开的菜单
+// 计算默认展开的菜单 - 根据当前激活的菜单项找到其父菜单
 const defaultOpeneds = computed(() => {
+  // 如果有激活的菜单，找到它所属的父菜单并展开
+  if (props.activeMenu) {
+    const parentMenuIds = []
+    const findParentMenus = (menus, targetUrl, parents = []) => {
+      for (const menu of menus) {
+        if (menu.menuUrl === targetUrl) {
+          parentMenuIds.push(...parents)
+          return true
+        }
+        if (menu.children && menu.children.length) {
+          if (findParentMenus(menu.children, targetUrl, [...parents, String(menu.menuId)])) {
+            return true
+          }
+        }
+      }
+      return false
+    }
+    findParentMenus(props.menus, props.activeMenu)
+    if (parentMenuIds.length > 0) {
+      return parentMenuIds
+    }
+  }
+  
+  // 默认展开第一个有子菜单的菜单项
   if (props.menus.length > 0 && props.menus.length < 5) {
     const firstMenu = props.menus[0]
     if (firstMenu && firstMenu.children && firstMenu.children.length) {

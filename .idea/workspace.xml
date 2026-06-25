@@ -6,8 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="c40dc8fd-5d22-4ae7-b727-b885b2ff3978" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/__tests__/components.spec.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/vite.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/layout/components/SideMenu.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/layout/components/SideMenu.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom-buildAll.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom-buildAll.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom-buildSingle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom-buildSingle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,8 +23,9 @@
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
+        <option name="customMavenHome" value="D:\software\apache-maven-3.8.9" />
         <option name="localRepository" value="D:\software\apache-maven-3.8.9\repository" />
-        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+        <option name="mavenHomeTypeForPersistence" value="CUSTOM" />
         <option name="userSettingsFile" value="D:\software\apache-maven-3.8.9\conf\settings.xml" />
       </MavenGeneralSettings>
     </option>
@@ -41,6 +45,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Maven.unicore [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.unicore [install].executor&quot;: &quot;Run&quot;,
     &quot;Maven.unicore [package].executor&quot;: &quot;Run&quot;,
     &quot;Maven.unicore [validate].executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
@@ -56,7 +61,7 @@
     &quot;Spring Boot.UnicoreApplication.executor&quot;: &quot;Debug&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/unicore&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/workspace/unicore&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -65,7 +70,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\IntelliJ IDEA 2025.2.4\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -121,6 +126,8 @@
       <workItem from="1766364174426" duration="5274000" />
       <workItem from="1766454992183" duration="488000" />
       <workItem from="1766456077401" duration="468000" />
+      <workItem from="1779679320838" duration="1602000" />
+      <workItem from="1781436780294" duration="974000" />
     </task>
     <servers />
   </component>

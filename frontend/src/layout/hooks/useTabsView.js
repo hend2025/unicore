@@ -9,6 +9,21 @@ import { ROUTES } from '@/constants'
 // 导出以便其他组件使用
 export { componentMap, menuTitleMap }
 
+const getCookie = (name) => {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
+    return match ? decodeURIComponent(match[2]) : null
+}
+
+const appendCsrfToken = (url, token) => {
+    if (!token) return url
+    const hashIndex = url.indexOf('#')
+    const beforeHash = hashIndex !== -1 ? url.substring(0, hashIndex) : url
+    const afterHash = hashIndex !== -1 ? url.substring(hashIndex) : ''
+    
+    const separator = beforeHash.includes('?') ? '&' : '?'
+    return `${beforeHash}${separator}_csrf=${token}${afterHash}`
+}
+
 /**
  * 多标签页管理 Hook
  * @param {Object} options - 配置项
@@ -65,6 +80,12 @@ export function useTabsView(options = {}) {
                     externalUrl = '/' + externalUrl
                 }
                 externalUrl = window.location.origin + externalUrl
+            }
+
+            // 获取 csrf token 并追加到 URL 的 query 中（必须在 hash 之前，以供 getQueryString 读取）
+            const xsrfToken = getCookie('XSRF-TOKEN')
+            if (xsrfToken) {
+                externalUrl = appendCsrfToken(externalUrl, xsrfToken)
             }
 
             const menuId = menuItem?.menuId || Date.now()
